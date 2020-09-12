@@ -14,11 +14,9 @@ import {
     siegeOrAttack,
     develop,
     combatCard,
-    showCombatCard, showPlanCard
+    showCombatCard, showPlanCard, takeDamage
 } from "./moves";
 import * as util from "./util";
-import {getCurrentPlayerID} from "./util";
-import {MAX_ROUND} from "../constants/general";
 import {PlayerView} from "boardgame.io/dist/esm/core";
 import {drawPhaseForSong} from "./util";
 import {drawPhaseForJinn} from "./util";
@@ -38,6 +36,7 @@ export const SongJinn = {
         combatCard: combatCard,
         showCombatCard: showCombatCard,
         showPlanCard:showPlanCard,
+        takeDamage:takeDamage,
     },
     playerView: PlayerView.STRIP_SECRETS,
     phases: {

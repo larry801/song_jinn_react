@@ -17,11 +17,12 @@ import {
     splitTroopFrom,
     getSongRangeDamage,
     getJinnRangeDamage,
-    getJinnTackleDamage, getSongTackleDamage,
+    getJinnMeleeDamage, getSongMeleeDamage,
 } from "./util";
 import {getRegionById} from "../constants/regions";
 import {getJinnCardById, getSongCardById} from "../constants/cards";
 import {canChoosePlan} from "../constants/plan";
+import {canTakeDamage} from "../components/modals/takeDamage";
 
 export const choosePlayerWhoMovesFirst = {
     move: (G, ctx, firstPlayerID) => {
@@ -443,11 +444,11 @@ export const showCombatCard = {
                     G.combatInfo.song.pendingDamage = jDmg;
                 }
                 if(sDmg===0&&jDmg===0){
-                    let sDmg = getSongTackleDamage(G,ctx)
+                    let sDmg = getSongMeleeDamage(G,ctx)
                     if(sDmg>0){
                         G.combatInfo.jinn.pendingDamage = sDmg;
                     }
-                    let jDmg = getJinnTackleDamage(G,ctx);
+                    let jDmg = getJinnMeleeDamage(G,ctx);
                     if(jDmg>0){
                         G.combatInfo.song.pendingDamage = jDmg;
                     }
@@ -512,4 +513,32 @@ export function chooseTakeCardTiming(G, ctx, timing) {
 
 export function takeCardFromDeck(G, ctx, cardID) {
 
+}
+
+export const takeDamage = {
+    move:(G,ctx,arg)=>{
+        if(!canTakeDamage(G,ctx,arg))return INVALID_MOVE;
+        let pub;
+        let combatInfo;
+        if(arg.eliminated.length ===0 && arg.defeated.length===0){
+                return INVALID_MOVE;
+            }else{
+            let all = arg.eliminated.concat(arg.defeated)
+            if(all[0].owner==='song'){
+                pub = G.pub.song;
+                combatInfo = G.combatInfo.song;
+            }else {
+                pub=G.pub.jinn
+                combatInfo = G.combatInfo.jinn;
+            }
+        }
+        arg.eliminated.forEach((i,idx,arr)=>{
+            combatInfo.troop.units[i.type]--;
+            pub.reserveBank[i.type]++;
+        })
+        arg.defeated.forEach((i,idx,arr)=>{
+            combatInfo.troop.units[i.type]--;
+            pub.supplementBank[i.type]++;
+        })
+    },
 }

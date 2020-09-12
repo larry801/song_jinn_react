@@ -599,17 +599,21 @@ export function unitsFromTroop(troop) {
 }
 
 export function troopEndurance(G, ctx, troop) {
-    let terrainType = getRegionById(troop.region).terrainType;
+    let terrainType;
+    if (troop.region === 0){
+        terrainType = getRegionById(getCityByID(troop.city).region).terrainType
+    }else{
+        terrainType = getRegionById(troop.region).terrainType;
+    }
     let unitEndurance;
     if (troop.units.length === 7) {
         unitEndurance = [2, 1, 2, 0, 0, 1, 1];
         if (terrainType === SWAMP) {
             unitEndurance[3] = 2;
         }
-
     } else {
         unitEndurance = [2, 1, 1, 0, 0, 2]
-        if (G.song.activeEvents.indexOf("普及重步兵") !== -1) {
+        if (G.song.activeEvents.includes("普及重步兵")) {
             unitEndurance[0] = 3;
         }
         if (terrainType === SWAMP) {
@@ -840,7 +844,6 @@ export function getSongRangeDamage(G, ctx) {
 
 export function getJinnRangeStrength(G, ctx) {
     let t = G.combatInfo.jinn.troop;
-    let terrain = t.region === 0 ? RAMPART : getRegionById(t.region).terrainType;
     let strength = 0;
     if (G.combatInfo.jinn.isAttacker) {
         if (G.combatInfo.isSiege) {
@@ -881,10 +884,10 @@ export function getSongWuLinDamage(G, ctx) {
 
 }
 
-export function getSongTackleStrength(G, ctx) {
+export function getSongMeleeStrength(G, ctx) {
     let t = G.combatInfo.jinn.troop;
     let terrain = t.region === 0 ? RAMPART : getRegionById(t.region).terrainType;
-    let strength = 0;
+    let strength;
     if (G.combatInfo.song.isAttacker) {
         if (G.combatInfo.isSiege) {
             strength = t.units.reduce(accumulator);
@@ -900,12 +903,13 @@ export function getSongTackleStrength(G, ctx) {
             strength = rangeStrength(G, ctx, t) + meleeStrength(G, ctx, t);
         }
     }
+    return strength;
 }
 
-export function getSongTackleDamage(G, ctx) {
+export function getSongMeleeDamage(G, ctx) {
     return 0;
 }
 
-export function getJinnTackleDamage(G, ctx) {
+export function getJinnMeleeDamage(G, ctx) {
     return 0;
 }

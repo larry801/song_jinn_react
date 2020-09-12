@@ -12,6 +12,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import {troopToString} from "../../auto/util";
 import {unitsToTroop} from "./moveArmy";
+import {canTakeDamage} from "./takeDamage";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -116,7 +117,10 @@ export function TakeDamageTroopList(props){
         <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
             <Grid item>{takeDamageList('击溃', defeated,handleDefeated)}</Grid>
             <Grid item>{takeDamageList('消灭', eliminated,handleEliminate)}</Grid>
-            <Grid item><Button variant={"outlined"}
+            <Grid item><Button variant={"outlined"} disabled={canTakeDamage(props.G,props.ctx, {
+                eliminated: eliminated,
+                defeated: defeated,
+            })}
                 onClick={()=>props.callback([defeated,eliminated,])}
             >确定</Button></Grid>
         </Grid>

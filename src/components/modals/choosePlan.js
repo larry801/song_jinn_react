@@ -21,23 +21,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ChoosePlanModal(props){
+export default function ChoosePlanModal(props) {
 
     const classes = useStyles();
+    const [open, setOpen] = React.useState(true);
     const [state, setState] = React.useState(
-        props.G.player[props.ctx.currentPlayer].availablePlans.map((id)=>{
+        props.G.player[props.ctx.currentPlayer].availablePlans.map((id) => {
             return {
-                name:getPlanByID(id).name,
-                id:id,
-                desc:getPlanByID(id).desc,
-                checked:false,
+                name: getPlanByID(id).name,
+                id: id,
+                desc: getPlanByID(id).desc,
+                checked: false,
             }
         })
     );
 
     const handleChange = (event) => {
-        let newState = state.map(p=>{
-            if (p.name === event.target.name){
+        let newState = state.map(p => {
+            if (p.name === event.target.name) {
                 p.checked = !p.checked;
             }
             return p;
@@ -45,53 +46,58 @@ export default function ChoosePlanModal(props){
         setState(newState);
     };
 
-    const planLimit = () =>{
-        if (curPub(props.G,props.ctx).lastTurnPlans.includes(21)){
+    const planLimit = () => {
+        if (curPub(props.G, props.ctx).lastTurnPlans.includes(21)) {
             return 2;
-        }else{
+        } else {
             return 1;
         }
     }
 
     const error = state.filter(v => v.checked).length > planLimit() || state.filter(v => v.checked).length === 0;
 
-    const noPlanToChoose = state.filter(v => canChoosePlan(props.G,props.ctx,v.id,props.ctx.currentPlayer)).length === 0;
+    const noPlanToChoose = state.filter(v => canChoosePlan(props.G, props.ctx, v.id, props.ctx.currentPlayer)).length === 0;
 
-    const helperText = () =>{
-        if(noPlanToChoose) return "无法选择作战计划 请跳过"
-        if(planLimit()===2){
+    const helperText = () => {
+        if (noPlanToChoose) return "无法选择作战计划 请跳过"
+        if (planLimit() === 2) {
             return "可以选择2张作战计划"
-        }else{
-            if(planLimit() === 1)
+        } else {
+            if (planLimit() === 1)
                 return "请选择1张作战计划"
         }
     }
 
-    return<Dialog onClose={()=>{}} open={true}>
-            <FormControl required error={error} component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">{helperText()}</FormLabel>
-                <FormGroup >
-                    {state.map((p)=>
-                        <Tooltip title={p.desc} key={p.id} leaveDelay={50}>
-                        <FormControlLabel disabled={!canChoosePlan(props.G,props.ctx,p.id,props.ctx.currentPlayer)} key={p.id} id={p.id}
-                            control={<Checkbox checked={p.checked} onChange={handleChange} name={p.name} />}
-                            label={p.name}
+    return <div>
+        <Button variant="outlined" color="primary" onClick={()=>setOpen(true)}>
+            选择计划
+        </Button><Dialog onClose={() => setOpen(false)} open={open}>
+        <FormControl required error={error} component="fieldset" className={classes.formControl}>
+            <FormLabel component="legend">{helperText()}</FormLabel>
+            <FormGroup>
+                {state.map((p) =>
+                    <Tooltip title={p.desc} key={p.id} leaveDelay={50}>
+                        <FormControlLabel disabled={!canChoosePlan(props.G, props.ctx, p.id, props.ctx.currentPlayer)}
+                                          key={p.id} id={p.id}
+                                          control={<Checkbox checked={p.checked} onChange={handleChange}
+                                                             name={p.name}/>}
+                                          label={p.name}
                         />
-                        </Tooltip>)}
-                </FormGroup>
-            </FormControl>
+                    </Tooltip>)}
+            </FormGroup>
+        </FormControl>
+        {noPlanToChoose ? <Button onClick={() => {
+                props.moves.chooseStrategicPlans([])
+            }}>跳过</Button> :
             <Button hidden={noPlanToChoose} disabled={error} onClick={() => {
                 props.moves.chooseStrategicPlans(
-                    state.filter( v => v.checked)
-                    .map(v => v.id)
+                    state.filter(v => v.checked)
+                        .map(v => v.id)
                 )
             }}>确认
-            </Button>
-        <Button hidden={!noPlanToChoose} onClick={() => {
-            props.moves.chooseStrategicPlans([])
-        }}>跳过
-        </Button>
-        </Dialog>
+            </Button>}
+    </Dialog>
+    </div>
 
 
 }

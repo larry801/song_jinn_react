@@ -17,7 +17,7 @@ import {
     splitTroopFrom,
     getSongRangeDamage,
     getJinnRangeDamage,
-    getSongTackleStrength, getJinnTackleDamage, getSongTackleDamage,
+    getJinnTackleDamage, getSongTackleDamage,
 } from "./util";
 import {getRegionById} from "../constants/regions";
 import {getJinnCardById, getSongCardById} from "../constants/cards";
@@ -27,11 +27,13 @@ export const choosePlayerWhoMovesFirst = {
     move: (G, ctx, firstPlayerID) => {
         G.firstPlayerID = firstPlayerID;
         if (firstPlayerID === '0') {
+            G.playerOrder = ['0','1']
             G.secondPlayerID = '1';
         } else {
+            G.playerOrder = ['1','0']
             G.secondPlayerID = '0';
         }
-        ctx.events.endPhase();
+        G.orderChosen = true;
     },
     undoable: false
 };
@@ -159,7 +161,7 @@ export const useOp = {
 }
 export const recruitOrMarch = {
     move: (G, ctx, choice) => {
-        if (choice === 'recruit' || choice === 'march') {
+        if (choice === 'recruit' || choice === 'march' || choice === 'recruitVassal') {
             ctx.events.setStage(choice);
         } else {
             return INVALID_MOVE
@@ -365,6 +367,7 @@ export const march = {
 
         if (combatOrLimitReached) {
             G.combatInfo.stage = "combatCard"
+            G.combatInfo.pendingCombat = true;
             ctx.events.setStage('combatCard');
         } else {
             if (G.opForRecruitAndMarch > 0) {
@@ -401,12 +404,12 @@ export const combatCard = {
 
 export const showPlanCard = {
     undoable:false,
-    move:(G,ctx,) => {
+    move:(G,ctx,cards) => {
         let p = ctx.currentPlayer;
         if (p === G.songPlayer) {
-            G.pub.song.currentPlans = G.player[p].planChosen;
+            G.pub.song.currentPlans = cards;
         } else {
-            G.pub.jinn.currentPlans = G.player[p].planChosen;
+            G.pub.jinn.currentPlans = cards;
         }
         G.player[p].planChosen=[];
     }

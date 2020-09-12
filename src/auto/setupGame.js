@@ -9,6 +9,8 @@ import {INITIAL_RECRUIT_COST, INITIAL_RECRUIT_PERMISSION} from "../constants/gen
 * */
 export function setupGame(ctx, setupData) {
     let initialState = {
+        playerOrder : ['0','1'],
+        orderChosen:false,
         useCombatResultTable:false,
         roundMarker: 1,
         turnMarker: 1,

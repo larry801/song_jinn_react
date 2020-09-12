@@ -23,12 +23,15 @@ export class SongJinnBoard extends React.Component {
 
     render() {
         let moves = this.props.moves;
-        let phase = this.props.ctx.phase;
+        //let phase = this.props.ctx.phase;
         let G = this.props.G;
         let ctx = this.props.ctx;
         let isActive = this.props.isActive;
         let playerID = this.props.playerID;
-
+        let p;
+        let player = G.player[playerID];
+        if(playerID === G.songPlayer)p=G.pub.song;
+        if(playerID === G.jinnPlayer)p=G.pub.jinn;
         let winner = '';
         if (ctx.gameover) {
             winner =
@@ -38,20 +41,21 @@ export class SongJinnBoard extends React.Component {
                     <div id="winner">Draw!</div>
                 );
         }
-
-
-        let chooseOrder;
-        if (ctx.phase === 'chooseOrder' && isActive) {
-            chooseOrder = <ChoosePlayerOrder
-                G={G} ctx={ctx} moves={moves} playerID={playerID}
-                isActive={isActive}
-            />
-        }
         if (isActive) {
             return (
                 <div>
-                    <Button onClick={()=>this.props.events.endTurn()}>结束行动</Button>
-                    {(phase !== null && phase.startsWith('drawPlan') && isActive) ?
+                    <ChoiceDialog
+                        callback={moves.choosePlayerWhoMovesFirst}
+                        choices={[
+                            {label: "宋", value: G.songPlayer, disabled: false, hidden: false,},
+                            {label: "金", value: G.jinnPlayer, disabled: false, hidden: false,},
+                        ]}
+                        default={G.songPlayer}
+                        show={!G.orderChosen && isActive && ctx.phase === 'chooseOrder'}
+                        title="请选择先手玩家"
+                        toggleText="选择先手"
+                    />
+                    {(ctx.phase ==='drawPlan' && isActive && !p.planChosen) ?
                         <ChoosePlanModal
                             G={G} ctx={ctx} moves={moves} playerID={playerID}
                             isActive={isActive}/> : ""}
@@ -63,7 +67,14 @@ export class SongJinnBoard extends React.Component {
                         ? <March
                             G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                         /> : ""}
-
+                    {isActive && playerID===ctx.currentPlayer ?
+                        <Button onClick={()=>this.props.events.endTurn()}>结束行动</Button>:""}
+                    {isActive && playerID===ctx.currentPlayer ?
+                        <Button onClick={()=>this.props.events.endPhase()}>结束阶段</Button>:""}
+                    {isActive && p.planChosen ?
+                        <Button onClick={()=>moves.showPlanCard(player.chosenPlans)}>展示计划</Button>
+                        :""
+                    }
                     <ChoiceDialog
                         callback={moves.recruitOrMarch}
                         choices={[
@@ -87,7 +98,6 @@ export class SongJinnBoard extends React.Component {
                         title="请选择要执行的操作"
                         toggleText="攻城或围城"
                     />
-                    {chooseOrder}
                     <PubInfo
                         G={G} ctx={ctx} moves={moves} playerID={playerID}
                         isActive={isActive}

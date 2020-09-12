@@ -91,17 +91,10 @@ export const SongJinn = {
                 chooseStrategicPlans: chooseStrategicPlans,
                 showPlanCard:showPlanCard,
             },
-            endIf: (G, ctx) => G.pub.song.planChosen && G.pub.jinn.planChosen,
             onEnd: (G, ctx) => {
-                G.pub.song.planChosen = false;
-                G.pub.jinn.planChosen = false;
-                G.pub.song.currentPlans = G.player[G.songPlayer].chosenPlans;
-                G.player[G.songPlayer].chosenPlans = [];
-                G.pub.jinn.currentPlans = G.player[G.jinnPlayer].chosenPlans;
-                G.player[G.jinnPlayer].chosenPlans = [];
+
             },
             turn: {
-                moveLimit: 1,
                 onBegin: (G, ctx) => {
                     util.drawStrategicPlans(G, ctx, ctx.currentPlayer)
                 },

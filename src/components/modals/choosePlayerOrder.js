@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export function ChoosePlayerOrder(props) {
-    const [value, setValue] = React.useState('0');
+    const [value, setValue] = React.useState(props.G.songPlayer);
     const classes = useStyles();
     const handleChange = (event) => {
         setValue(event.target.value);

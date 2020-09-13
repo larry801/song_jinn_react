@@ -86,7 +86,12 @@ export function TakeDamageTroopList(props){
         defeated: defeated,
     }
 
-    const canProceed = canTakeDamage(props.G,props.ctx,arg)
+    const t = (arg) => canTakeDamage(props.G,props.ctx,arg)
+
+    // TODO 多受创问题
+    const removeOneUnitCanProceed = false;
+
+    const canProceed = t(arg)
 
     const takeDamageList = (title, items, change) => (
         <Card>

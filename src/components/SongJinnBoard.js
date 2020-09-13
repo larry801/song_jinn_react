@@ -33,14 +33,14 @@ export class SongJinnBoard extends React.Component {
         let o;
         if (playerID === G.songPlayer) {
             isSong = true;
-            p = G.pub.song;
-            o = G.pub.jinn;
+            p = G.song;
+            o = G.jinn;
             c = G.combatInfo.song;
         }
         if (playerID === G.jinnPlayer) {
             isSong = false;
-            p = G.pub.jinn;
-            o = G.pub.song;
+            p = G.jinn;
+            o = G.song;
             c = G.combatInfo.jinn
         }
         let winner = '';

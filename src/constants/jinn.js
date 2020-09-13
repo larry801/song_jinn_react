@@ -32,8 +32,11 @@ export const jinnCards = [
         block:"",
         ban:"",
         fullDesc:"前置条件：宋国未控制开封 效果：宋国失去1国力。金国获得1国力，并提升1级内政等级。 解锁：【金兵来了】【张邦昌还政】【赵榛】",
-        pre: (G, ctx) => true,
-        event: (G, ctx, arg) => G,
+        pre: (G, ctx) => !G.song.cities.includes(21),
+        event: (G, ctx, arg) => {
+            G.jinn.activeEvents.push("靖康之变")
+            G.jinn.civil ++;
+        },
     },
     {
         id:2,

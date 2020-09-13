@@ -7,22 +7,21 @@ import {getSongCardById} from "../constants/cards";
 
 export class PubInfo extends React.Component {
     render() {
-        const p = this.props.G.pub;
         let G = this.props.G;
         let ctx = this.props.ctx;
-        let s=p.song;
-        let j=p.jinn;
+        let s=G.song;
+        let j=G.jinn;
         return <Grid container><Grid item><Paper>
             <label>宋</label>
-            <div><label>军事：</label>{p.song.military}</div>
-            <div><label>内政：</label>{p.song.civil}</div>
+            <div><label>军事：</label>{s.military}</div>
+            <div><label>内政：</label>{s.civil}</div>
             <div><label>政策：</label>{getPolicy(G, ctx)}</div>
             <div><label>国力：</label>{getSongNationalPower(G, ctx)}</div>
-            <div><label>腐败：</label>{p.song.corruption}</div>
-            <div><label>预备区：{unitsToString(p.song.supplementBank.slice(0, 6))}
-                {p.song.supplementBank.slice(6).map((idx) => <label key={idx}>{idx}</label>)}</label></div>
-            <div><label>本回合计划：{p.song.currentPlans.map(p => getPlanByID(p).name)}</label></div>
-            <div><label>完成计划：{p.song.completedPlans.map(p => getPlanByID(p).name)}</label></div>
+            <div><label>腐败：</label>{s.corruption}</div>
+            <div><label>预备区：{unitsToString(s.supplementBank.slice(0, 6))}
+                {s.supplementBank.slice(6).map((idx) => <label key={idx}>{idx}</label>)}</label></div>
+            <div><label>本回合计划：{s.currentPlans.map(p => getPlanByID(p).name)}</label></div>
+            <div><label>完成计划：{s.completedPlans.map(p => getPlanByID(p).name)}</label></div>
             <div><label>弃牌：{s.discard.map(p=>getSongCardById(p).name)}</label></div>
             <div><label>移除：{s.remove.map(p=>getSongCardById(p).name)}</label></div>
             <div><label>手牌数：</label></div>

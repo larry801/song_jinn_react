@@ -34,7 +34,7 @@ export class PlayerHand extends React.Component {
     }
 
     canPlayAsEvent(id) {
-        const isSong = this.props.playerID === '0';
+        const isSong = this.props.playerID === this.props.G.songPlayer;
         if (isSong) {
             return getSongCardById(id).pre(this.props.G, this.props.ctx);
         } else {

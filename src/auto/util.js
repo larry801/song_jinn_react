@@ -6,7 +6,7 @@ import {combatResultTable} from "../constants/crt";
 const accumulator = (accumulator, currentValue) => accumulator + currentValue;
 
 export function findLeadingPlayer(G) {
-    if (G.pub.jinn.civil > G.pub.song.civil) {
+    if (G.jinn.civil > G.song.civil) {
         return G.jinnPlayer;
     } else {
         return G.songPlayer;
@@ -23,15 +23,15 @@ export function curPlayerPrivate(G, ctx) {
 }
 
 export function curPub(G, ctx) {
-    if (getCurrentPlayerID(ctx) === '0') {
-        return G.pub.song;
+    if (getCurrentPlayerID(ctx) === G.songPlayer) {
+        return G.song;
     } else {
-        return G.pub.jinn;
+        return G.jinn;
     }
 }
 
 export function stackLimitReached(G, ctx, arg, dst) {
-    let limit = G.pub.song.activeEvents.includes("斥候铺") ? 12 : 10
+    let limit = G.song.activeEvents.includes("斥候铺") ? 12 : 10
     let newTroop = arg.all ? arg.src : arg.new;
     return countTroop(songTroopInRegion(G, ctx, dst)) + countTroop(newTroop) > limit;
 }
@@ -41,7 +41,7 @@ export function countTroop(troop) {
 }
 
 export function songTroopInCity(G, ctx, city) {
-    for (let troop of G.pub.song.troops) {
+    for (let troop of G.song.troops) {
         if (troop.city === city) {
             return troop;
         }
@@ -50,7 +50,7 @@ export function songTroopInCity(G, ctx, city) {
 }
 
 export function songTroopInRegion(G, ctx, region) {
-    for (let troop of G.pub.song.troops) {
+    for (let troop of G.song.troops) {
         if (troop.region === region) {
             return troop;
         }
@@ -59,7 +59,7 @@ export function songTroopInRegion(G, ctx, region) {
 }
 
 export function jinnTroopInCity(G, ctx, city) {
-    for (let troop of G.pub.jinn.troops) {
+    for (let troop of G.jinn.troops) {
         if (troop.city === city) {
             return troop;
         }
@@ -68,7 +68,7 @@ export function jinnTroopInCity(G, ctx, city) {
 }
 
 export function jinnTroopInRegion(G, ctx, region) {
-    for (let troop of G.pub.jinn.troops) {
+    for (let troop of G.jinn.troops) {
         if (troop.region === region) {
             return troop
         }
@@ -77,10 +77,10 @@ export function jinnTroopInRegion(G, ctx, region) {
 }
 
 export function getOpponentObj(G, ctx) {
-    if (getCurrentPlayerID(ctx) === '0') {
-        return G.pub.jinn;
+    if (getCurrentPlayerID(ctx) === G.songPlayer) {
+        return G.jinn;
     } else {
-        return G.pub.song;
+        return G.song;
     }
 }
 
@@ -207,8 +207,8 @@ export function removeTroop(G, ctx, troop) {
 }
 
 export function getPolicy(G, ctx) {
-    let policy = G.pub.song.policy
-    if (G.pub.song.activeEvents.includes("李纲")) {
+    let policy = G.song.policy
+    if (G.song.activeEvents.includes("李纲")) {
         return policy > 1 ? 3 : policy + 2;
     } else {
         return policy
@@ -238,24 +238,24 @@ export function songTroopStr(units) {
 export function getSongNationalPower(G, ctx) {
     let power = 0;
     let provinceWithPower = [1, 2, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15,];
-    if (G.pub.song.activeEvents.indexOf("建炎南渡") !== -1) {
+    if (G.song.activeEvents.indexOf("建炎南渡") !== -1) {
         power++;
     }
-    if (G.pub.song.activeEvents.indexOf("向海上发展") !== -1) {
+    if (G.song.activeEvents.indexOf("向海上发展") !== -1) {
         provinceWithPower.push(16);
     }
-    if (G.pub.song.emperor.exist) {
+    if (G.song.emperor.exist) {
         power++;
     }
-    for (let p of G.pub.song.provinces) {
+    for (let p of G.song.provinces) {
         if (provinceWithPower.indexOf(p) !== -1) {
             power++;
         }
     }
-    if (G.pub.song.civil > 5) {
+    if (G.song.civil > 5) {
         power++;
     }
-    if (G.pub.jinn.activeEvents.indexOf("靖康之变") !== -1) {
+    if (G.jinn.activeEvents.indexOf("靖康之变") !== -1) {
         power--;
     }
     return power;
@@ -264,24 +264,24 @@ export function getSongNationalPower(G, ctx) {
 export function getJinnNationalPower(G, ctx) {
     let power = 0;
     let provinceWithPower = [1, 2, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14, 15,];
-    if (G.pub.jinn.emperor.exist) {
+    if (G.jinn.emperor.exist) {
         power++;
     }
-    if (G.pub.jinn.civil > 5) {
+    if (G.jinn.civil > 5) {
         power++;
     }
-    if (G.pub.song.activeEvents.indexOf("向海上发展") !== -1) {
+    if (G.song.activeEvents.indexOf("向海上发展") !== -1) {
         provinceWithPower.push(16);
     }
-    for (let p of G.pub.jinn.provinces) {
+    for (let p of G.jinn.provinces) {
         if (provinceWithPower.indexOf(p) !== -1) {
             power++;
         }
     }
-    if (G.pub.jinn.activeEvents.indexOf("靖康之变") !== -1) {
+    if (G.jinn.activeEvents.indexOf("靖康之变") !== -1) {
         power++;
     }
-    if (G.pub.jinn.civil > 5) {
+    if (G.jinn.civil > 5) {
         power++;
     }
     return power;
@@ -357,10 +357,10 @@ export function currentPlayerInStage(ctx, stage) {
 
 export function getStateById(G, ctx, playerID) {
     if (G.songPlayer === playerID) {
-        return G.pub.song;
+        return G.song;
     } else {
         if (G.jinnPlayer === playerID) {
-            return G.pub.jinn;
+            return G.jinn;
         }
     }
 
@@ -487,15 +487,15 @@ export function isUnitCounterInsufficient(G, ctx, units) {
 }
 
 export function enumerateVassalRegions(G, ctx) {
-    return jinnControlCities(G, ctx,).filter((city) => city.colonizeLevel <= G.pub.jinn.military)
+    return jinnControlCities(G, ctx,).filter((city) => city.colonizeLevel <= G.jinn.military)
 }
 
 export function jinnControlProvince(G, ctx, province) {
-    return G.pub.jinn.provinces.includes(province)
+    return G.jinn.provinces.includes(province)
 }
 
 export function songControlProvince(G, ctx, province) {
-    return G.pub.song.provinces.includes(province)
+    return G.song.provinces.includes(province)
 }
 
 export function jinnControlCity(G, ctx, city) {
@@ -612,7 +612,7 @@ export function troopEndurance(G, ctx, troop) {
         }
     } else {
         unitEndurance = [2, 1, 1, 0, 0, 2]
-        if (G.pub.song.activeEvents.includes("普及重步兵")) {
+        if (G.song.activeEvents.includes("普及重步兵")) {
             unitEndurance[0] = 3;
         }
         if (terrainType === SWAMP) {
@@ -671,14 +671,14 @@ export function canPeaceTalk(G, ctx) {
 }
 
 export function songTroopInCountry(G, ctx, country) {
-    for (let troop of G.pub.song.troops) {
+    for (let troop of G.song.troops) {
         if (troop.otherCountry === country) return true;
     }
     return false;
 }
 
 export function jinnTroopInCountry(G, ctx, country) {
-    for (let troop of G.pub.jinn.troops) {
+    for (let troop of G.jinn.troops) {
         if (troop.otherCountry === country) return true;
     }
     return false;
@@ -689,7 +689,7 @@ export function playerTroopInCountry(G, ctx, playerID, country) {
 }
 
 export function playerTroopInRegion(G, ctx, playerID, region) {
-    let troops = playerID === G.songPlayer ? G.pub.song.troops : G.pub.jinn.troops;
+    let troops = playerID === G.songPlayer ? G.song.troops : G.jinn.troops;
     for (let troop of troops) {
         if (troop.region === region) return true;
     }
@@ -698,7 +698,7 @@ export function playerTroopInRegion(G, ctx, playerID, region) {
 
 export function canSubmitLetterOfCredence(G, ctx, playerID, country) {
     if (!G.otherCountries[country].exist) return false;
-    if (playerID === G.songPlayer && country === "高丽" && G.pub.jinn.activeEvents.includes("不见来使")) return false;
+    if (playerID === G.songPlayer && country === "高丽" && G.jinn.activeEvents.includes("不见来使")) return false;
     let troop = playerTroopInCountry(G, ctx, playerID, country);
     if (troop !== false) {
         return true;
@@ -760,7 +760,7 @@ export function canDevelop(G, ctx, arg) {
 export function getColonization(G, ctx, cityID) {
     // TODO　zz other country mountain pass
     let c = getCityByID(cityID);
-    if (G.pub.song.generals["宗泽"].exists) {
+    if (G.song.generals["宗泽"].exists) {
         let cityTroop = songTroopInCity(G, ctx, cityID)
         if (cityTroop !== false && cityTroop.general.includes("宗泽")) {
             return c.colonizeLevel + 1;
@@ -786,11 +786,11 @@ export function getCityDefense(G, ctx, cityID) {
     let c = getCityByID(cityID);
     let defense = c.capital ? 2 : 1;
     if (jinnTroopInCity(G, ctx, cityID) !== false) {
-        if (G.pub.jinn.emperor.city === cityID) {
+        if (G.jinn.emperor.city === cityID) {
             defense++;
         }
     }
-    if (songTroopInCity(G, ctx, cityID !== false && G.pub.song.emperor.city === cityID)) {
+    if (songTroopInCity(G, ctx, cityID !== false && G.song.emperor.city === cityID)) {
         defense++;
     }
     if (G.combat.generalOneTimeSkill.includes("奔睹")) {
@@ -874,7 +874,7 @@ export function getJinnRangeStrength(G, ctx) {
     if (i.jinn.isAttacker) {
         if (i.isSiege) {
             strength = t.units[1] + t.units[4]
-            if (G.pub.jinn.activeEvents.includes("建立大齐") && G.pub.jinn.military >= 5) {
+            if (G.jinn.activeEvents.includes("建立大齐") && G.jinn.military >= 5) {
                 strength += t.units[5];
                 strength += t.units[6];
             }
@@ -1038,7 +1038,7 @@ export function getJinnMeleeDamage(G, ctx) {
 }
 
 export function getSongBackupCount(G, ctx,) {
-    return G.pub.song.supplementBank.slice(0, 6).reduce(accumulator)
+    return G.song.supplementBank.slice(0, 6).reduce(accumulator)
 }
 
 export function placeTroop(G,ctx,arg){

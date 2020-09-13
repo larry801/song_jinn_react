@@ -24,9 +24,9 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：宋国未控制开封 效果：在两浙路或江南两路免费拥立。宋国获得1国力禁止金国以事件方式在两浙路放置部队。 解锁：【苗刘兵变】",
-        pre: (G, ctx) => !G.pub.song.cities.includes(21),
+        pre: (G, ctx) => !G.song.cities.includes(21),
         event: (G, ctx, arg) => {
-            G.pub.song.activeEvents.push('建炎南渡')
+            G.song.activeEvents.push('建炎南渡')
         },
     },
     {
@@ -48,8 +48,8 @@ export const songCards = [
             return G.turnMarker < 7
         },
         event: (G, ctx, arg) => {
-            G.pub.song.corruption--;
-            G.pub.song.activeEvents.push('李纲')
+            G.song.corruption--;
+            G.song.activeEvents.push('李纲')
         },
     },
     {
@@ -69,8 +69,8 @@ export const songCards = [
         fullDesc: "前置条件：政策倾向为和议 效果：腐败值变为0 ,每因此减少1点腐败值就提升1级政策倾向。",
         pre: (G, ctx) => getPolicy(G, ctx) < 1,
         event: (G, ctx, arg) => {
-            G.pub.song.policy += G.pub.song.corruption;
-            G.pub.song.corruption = 0;
+            G.song.policy += G.song.corruption;
+            G.song.corruption = 0;
         },
     },
     {
@@ -88,9 +88,9 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: " 效果：【三年之约】作为事件打出时行动点数减1。每当回合结束阶段时，宋国在陕西六路放置1个步兵。",
-        pre: (G, ctx) => !G.pub.jinn.activeEvents.includes("曲端之死"),
+        pre: (G, ctx) => !G.jinn.activeEvents.includes("曲端之死"),
         event: (G, ctx, arg) => {
-            G.pub.song.activeEvents.push("西军曲端")
+            G.song.activeEvents.push("西军曲端")
         },
     },
     {
@@ -133,14 +133,14 @@ export const songCards = [
         pre: (G, ctx) => true,
         event: (G, ctx, arg) => {
             let hasExistingTroop = false;
-            for (let troop of G.pub.song.troops) {
+            for (let troop of G.song.troops) {
                 if (troop.city === arg.dst) {
                     hasExistingTroop = true;
                     troop.units[4] += 1;
                 }
             }
             if (!hasExistingTroop) {
-                G.pub.song.troops.push({
+                G.song.troops.push({
                     units: [0, 0, 0, 0, 1, 0],
                     city: arg.dst,
                 })
@@ -164,7 +164,7 @@ export const songCards = [
         fullDesc: "前置条件：夏季 效果：移除斡离不。",
         pre: (G, ctx) => G.roundMarker === 4 || G.roundMarker === 8,
         event: (G, ctx, arg) => {
-            removeGeneral(G, ctx, G.pub.jinn, "斡离不");
+            removeGeneral(G, ctx, G.jinn, "斡离不");
         },
     },
     {
@@ -182,22 +182,22 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：【靖康之变】发生后 效果：金国在开封的军团移动到大同府或大定府，宋国在开封放置1个步兵。",
-        pre: (G, ctx) => G.pub.jinn.activeEvents.includes("靖康之变"),
+        pre: (G, ctx) => G.jinn.activeEvents.includes("靖康之变"),
         event: (G, ctx, arg) => {
-            for (let troop of G.pub.jinn.troops) {
+            for (let troop of G.jinn.troops) {
                 if (troop.city === 21) {
                     troop.city = arg.dst;
                     troop.region = getCityByID(arg.dst).region;
                 }
                 let troopInKaiFeng = false;
-                for (let troop of G.pub.song.troops) {
+                for (let troop of G.song.troops) {
                     if (troop.city === 21) {
                         troopInKaiFeng = true;
                         troop.units[0]++;
                     }
                 }
                 if (!troopInKaiFeng) {
-                    G.pub.song.troops.push({
+                    G.song.troops.push({
                         units: [1, 0, 0, 0, 0, 0],
                         city: 21,
                         region: 43,
@@ -269,7 +269,7 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：宋国皇帝在场 效果：宋国按照补充规则，在宋国控制且殖民难度大于金国殖民能力的城市，放置预备兵。",
-        pre: (G, ctx) => G.pub.song.emperor.exist,
+        pre: (G, ctx) => G.song.emperor.exist,
         event: (G, ctx, arg) => G,
     },
     {
@@ -287,7 +287,7 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：宗泽在场 效果：战斗牌在平原，宋国每个步兵战斗力加1。",
-        pre: (G, ctx) => G.pub.song.generals["宗泽"].present,
+        pre: (G, ctx) => G.song.generals["宗泽"].present,
         event: (G, ctx, arg) => G,
     },
     {
@@ -326,17 +326,17 @@ export const songCards = [
         pre: (G, ctx) => G.otherCountries["大理"].state !== 'jinn',
         event: (G, ctx, arg) => {
             if (G.otherCountries["大理"].state === 'song') {
-                if(getSongBackupCount(G,ctx,) < G.pub.song.civil){
-                    G.pub.song.reserveBank[2] -= 1;
-                    G.pub.song.supplementBank[2] += 1;
+                if(getSongBackupCount(G,ctx,) < G.song.civil){
+                    G.song.reserveBank[2] -= 1;
+                    G.song.supplementBank[2] += 1;
                 }
             } else {
                 let count;
-                if (G.pub.song.reserveBank[2] < 2) {
-                    count = G.pub.song.reserveBank[2];
+                if (G.song.reserveBank[2] < 2) {
+                    count = G.song.reserveBank[2];
                 }
-                G.pub.song.reserveBank[2] -= count;
-                G.pub.song.supplementBank[2] += count;
+                G.song.reserveBank[2] -= count;
+                G.song.supplementBank[2] += count;
             }
         },
     },
@@ -357,7 +357,7 @@ export const songCards = [
         fullDesc: " 效果：在河北两路的1个区域，放置2个步兵。【刘錡】伤害加1。",
         pre: (G, ctx) => true,
         event: (G, ctx, arg) => {
-            G.pub.song.activeEvents.push("八字军");
+            G.song.activeEvents.push("八字军");
 
         },
     },
@@ -376,7 +376,7 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：【靖康之变】发生后 效果：在1个未完成殖民的金国城市，放置2个步兵，这个城市所在的路结算控制权。",
-        pre: (G, ctx) => G.pub.jinn.activeEvents.includes("靖康之变"),
+        pre: (G, ctx) => G.jinn.activeEvents.includes("靖康之变"),
         event: (G, ctx, arg) => G,
     },
     {
@@ -396,9 +396,9 @@ export const songCards = [
         fullDesc: "前置条件：第5回合开始之后 效果：移除粘罕，选择金国内政等级、军事等级或殖民能力降低1级。 解锁：【完颜昌主和】【天眷新政】 禁止：【金太宗】 撤销：【金太宗】",
         pre: (G, ctx) => G.turnMarker > 4,
         event: (G, ctx, arg) => {
-            removeGeneral(G, ctx, G.pub.jinn, "粘罕");
+            removeGeneral(G, ctx, G.jinn, "粘罕");
             if(arg.target === 'civil' || arg.target==='military' || arg.target==='colonization'){
-                G.pub.jinn[arg.target] --;
+                G.jinn[arg.target] --;
             }
 
         },
@@ -418,7 +418,7 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：【建立大齐】发生后 效果：移除1个齐状态标志物，结算这个路的控制权，消灭2个齐军。若此时齐控制的城市不多于4个，则金国失去齐军征募许可。",
-        pre: (G, ctx) => G.pub.jinn.activeEvents.includes("建立大齐"),
+        pre: (G, ctx) => G.jinn.activeEvents.includes("建立大齐"),
         event: (G, ctx, arg) => {
 
         },
@@ -438,9 +438,9 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：宋国军事等级不低于4 效果：移除宗泽，在准南两路或荆湖两路放置岳飞。",
-        pre: (G, ctx) => G.pub.song.military >= 4,
+        pre: (G, ctx) => G.song.military >= 4,
         event: (G, ctx, arg) => {
-            removeGeneral(G, ctx, G.pub.song, "宗泽");
+            removeGeneral(G, ctx, G.song, "宗泽");
 
         },
 
@@ -478,7 +478,7 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：宋国皇帝在场 效果：在宋国皇帝所在的区域放置韩世忠。若相邻区域有金国部队，则放置2个步兵到该城市。",
-        pre: (G, ctx) => G.pub.song.emperor.exist,
+        pre: (G, ctx) => G.song.emperor.exist,
         event: (G, ctx, arg) => G,
     },
     {
@@ -947,7 +947,7 @@ export const songCards = [
         ban: "",
         fullDesc: " 效果：移除银术可。",
         pre: (G, ctx) => true,
-        event: (G, ctx, arg) => removeGeneral(G, ctx, G.pub.jinn, "银术可"),
+        event: (G, ctx, arg) => removeGeneral(G, ctx, G.jinn, "银术可"),
     },
     {
         id: 48,
@@ -964,9 +964,9 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：宋国控制洛阳 效果：用此牌执行发展，宋国摸1张牌。",
-        pre: (G, ctx) => G.pub.song.cities.includes(18),
+        pre: (G, ctx) => G.song.cities.includes(18),
         event: (G, ctx, arg) => {
-            G.pub.song.developCards.push(48);
+            G.song.developCards.push(48);
             drawCardForSong(G, ctx);
         },
     },
@@ -985,8 +985,8 @@ export const songCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：宋国控制析津 效果：放在宋国完成的作战计划堆最上面。绍兴和议时，宋国额外获得1胜利分数。",
-        pre: (G, ctx) => G.pub.song.cities.includes(4),
-        event: (G, ctx, arg) => G.pub.song.activeEvents.push("燕京以南 号令不行"),
+        pre: (G, ctx) => G.song.cities.includes(4),
+        event: (G, ctx, arg) => G.song.activeEvents.push("燕京以南 号令不行"),
     },
     {
         id: 50,

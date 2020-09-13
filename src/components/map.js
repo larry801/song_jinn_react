@@ -41,36 +41,61 @@ export class SongJinnMap extends React.Component {
                     color: '#888'
                 }
             },
-
+            geo: {
+                map: 'songJinn',
+                show: true,
+                roam: true,
+                center: [118.380432, 28.251167],
+                zoom: 6,
+                scaleLimit: {
+                    min: 4,
+                    max: 60,
+                },
+                regions: [{
+                    name: '福建',
+                    itemStyle: {
+                        borderWidth: 2,
+                        areaColor: 'red',
+                        color: 'blue'
+                    }
+                }],
+                boundingCoords: [
+                    // 定位左上角经纬度
+                    [60, 60],
+                    // 定位右下角经纬度
+                    [180, 0]
+                ],
+            },
             series: [
-                {
-                    //coordinateSystem: 'cartesian2d',
-                    type: 'graph',
-                    layout: 'none',
-                    animation: false,
-                    draggable: false,
-                    roam: true,
-                    focusNodeAdjacency: true,
-                    categories: provinces.map((p)=>{
-                        return {
-                            name:p.name,
-                            symbol:'circle',
-                            symbolSize:5,
-                        }
-                    }),
-                    data: regions.map((r)=>{
-                        return {
-                            name:r.name,
-                            category:r.provinceID,
-                            symbolSize:35,
-                            fixed:true,
-                            symbol:'roundRect',
-                            x:r.x,
-                            y:r.y,
-                        }
-                    }),
-                    links:links(),
-                }
+                // {
+                //     //coordinateSystem: 'cartesian2d',
+                //     type: 'graph',
+                //     layout: 'none',
+                //     animation: false,
+                //     draggable: false,
+                //     roam: true,
+                //     focusNodeAdjacency: true,
+                //     categories: provinces.map((p)=>{
+                //         return {
+                //             name:p.name,
+                //             symbol:'circle',
+                //             symbolSize:5,
+                //         }
+                //     }),
+                //     data: regions.map((r)=>{
+                //         return {
+                //             name:r.name,
+                //             category:r.provinceID,
+                //             symbolSize:35,
+                //             fixed:true,
+                //             symbol:'roundRect',
+                //             x:r.x,
+                //             y:r.y,
+                //         }
+                //     }),
+                //     links:links(),
+                // }
+
             ]
         }
     }
@@ -82,8 +107,7 @@ export class SongJinnMap extends React.Component {
             notMerge={true}
             lazyUpdate={false}
             theme={"cool"}
-            style={{height: '650px', width: '100%'}}
-            onChartReady={this.onChartReadyCallback}
+            style={{height: '650px', width: '1020px'}}
             opts={{renderer: 'canvas'}}/>
     }
 }

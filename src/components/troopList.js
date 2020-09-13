@@ -10,12 +10,12 @@ import {Typography} from "@material-ui/core";
 export class TroopList extends Component{
 
     render() {
-        const isSong = this.props.playerID === '0';
+        const isSong = this.props.playerID === this.props.G.songPlayer;
         let troops = [];
         if (isSong) {
-            troops = this.props.G.pub.song.troops;
+            troops = this.props.G.song.troops;
         } else {
-            troops = this.props.G.pub.jinn.troops;
+            troops = this.props.G.jinn.troops;
         }
 
 

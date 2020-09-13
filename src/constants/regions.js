@@ -1175,6 +1175,9 @@ export const regions = [
         y:241,
     },
 ];
+export const mountainPasses = [
+
+]
 const nameToIdMap = new Map();
 const idToRegionMap = new Map();
 regions.forEach((region)=>{

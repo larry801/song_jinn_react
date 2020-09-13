@@ -25,24 +25,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d640c4b6-4363-4b63-8893-54cb419a8732" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/modals/settleDevelop.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/modals/takeDamage.test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.test.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/game.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/moves.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/moves.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/setupGame.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/setupGame.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/util.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/util.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/SongJinnBoard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SongJinnBoard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/combatCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/combatCard.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/combatPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/combatPanel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/fieldOperation.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/map.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/modals/march.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/march.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/takeDamage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/takeDamage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pubInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pubInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/troopList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/troopList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/jinn.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/jinn.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/constants/regions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/regions.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/constants/song.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/song.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,7 +243,7 @@
       <workItem from="1599784754158" duration="37451000" />
       <workItem from="1599868792758" duration="24949000" />
       <workItem from="1599910795476" duration="9026000" />
-      <workItem from="1599954231993" duration="10120000" />
+      <workItem from="1599954231993" duration="14216000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1599870956015</created>
@@ -269,7 +266,14 @@
       <option name="project" value="LOCAL" />
       <updated>1599895362691</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Take damage UI">
+      <created>1599964714937</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1599964714937</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -320,10 +324,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="206" y="207" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1024.738@0.0.1024.738" timestamp="1599474344917" />
-    <state x="0" y="0" key="CommitChangelistDialog2" timestamp="1599895361704">
+    <state x="0" y="0" key="CommitChangelistDialog2" timestamp="1599964713490">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1599895361704" />
+    <state x="0" y="0" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1599964713490" />
     <state x="92" y="92" width="840" height="554" key="DiffContextDialog" timestamp="1599913050082">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
@@ -332,22 +336,22 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="291" y="138" key="FileChooserDialogImpl/0.0.1024.738@0.0.1024.738" timestamp="1599707490136" />
-    <state width="1002" height="218" key="GridCell.Tab.0.bottom" timestamp="1599963725223">
+    <state width="1002" height="2" key="GridCell.Tab.0.bottom" timestamp="1599970124913">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state width="1002" height="218" key="GridCell.Tab.0.bottom/0.0.1024.738@0.0.1024.738" timestamp="1599963725223" />
-    <state width="1002" height="218" key="GridCell.Tab.0.center" timestamp="1599963725223">
+    <state width="1002" height="2" key="GridCell.Tab.0.bottom/0.0.1024.738@0.0.1024.738" timestamp="1599970124913" />
+    <state width="1002" height="2" key="GridCell.Tab.0.center" timestamp="1599970124912">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state width="1002" height="218" key="GridCell.Tab.0.center/0.0.1024.738@0.0.1024.738" timestamp="1599963725223" />
-    <state width="1002" height="218" key="GridCell.Tab.0.left" timestamp="1599963725222">
+    <state width="1002" height="2" key="GridCell.Tab.0.center/0.0.1024.738@0.0.1024.738" timestamp="1599970124912" />
+    <state width="1002" height="2" key="GridCell.Tab.0.left" timestamp="1599970124912">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state width="1002" height="218" key="GridCell.Tab.0.left/0.0.1024.738@0.0.1024.738" timestamp="1599963725222" />
-    <state width="1002" height="218" key="GridCell.Tab.0.right" timestamp="1599963725223">
+    <state width="1002" height="2" key="GridCell.Tab.0.left/0.0.1024.738@0.0.1024.738" timestamp="1599970124912" />
+    <state width="1002" height="2" key="GridCell.Tab.0.right" timestamp="1599970124912">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state width="1002" height="218" key="GridCell.Tab.0.right/0.0.1024.738@0.0.1024.738" timestamp="1599963725223" />
+    <state width="1002" height="2" key="GridCell.Tab.0.right/0.0.1024.738@0.0.1024.738" timestamp="1599970124912" />
     <state width="1002" height="262" key="GridCell.Tab.1.bottom" timestamp="1599920905352">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
@@ -416,10 +420,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="64" y="14" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1024.738@0.0.1024.738" timestamp="1599487406965" />
-    <state x="0" y="0" width="1024" height="738" key="find.popup" timestamp="1599964281629">
+    <state x="0" y="0" width="1024" height="738" key="find.popup" timestamp="1599970450715">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1599964281629" />
+    <state x="0" y="0" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1599970450715" />
     <state x="168" y="159" key="run.anything.popup" timestamp="1599723802401">
       <screen x="0" y="0" width="1024" height="738" />
     </state>

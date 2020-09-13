@@ -12,9 +12,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 export function CombatCard(props){
     //const shown = curPlayerInStage(props.ctx,'combatCard') && props.isActive;
     const shown = props.G.combatInfo.stage ==='combatCard' && props.isActive;
-    const chosen = props.G.songPlayer === props.playerID ? props.G.pub.song.combatCardChosen : props.G.pub.jinn.combatCardChosen
+    const chosen = props.G.songPlayer === props.playerID ? props.G.song.combatCardChosen : props.G.jinn.combatCardChosen
     const [open,setOpen] = React.useState(true);
-    const card = props.playerID === '0'? getSongCardById: getJinnCardById;
+    const card = props.playerID === props.G.songPlayer? getSongCardById: getJinnCardById;
     const helperText = () =>{
         if(noCombatCard) {
             return "无法选择战斗牌 请跳过"

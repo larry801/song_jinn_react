@@ -8,7 +8,7 @@ import {Typography} from "@material-ui/core";
 export class RecruitModal extends React.Component {
     constructor(props) {
         super(props);
-        if (props.playerID === '0') {
+        if (props.playerID === props.G.songPlayer) {
             this.state = {
                 owner: 0,
                 unitsToRecruit: [0, 0, 0, 0, 0, 0]

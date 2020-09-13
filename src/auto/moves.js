@@ -111,8 +111,8 @@ export const playAsEvent = {
 
 export const NewEmperor = {
     move: (G, ctx, city) => {
-        G.pub.song.emperor.exist = true;
-        G.pub.song.emperor.region = city;
+        G.song.emperor.exist = true;
+        G.song.emperor.region = city;
     },
     undoable: false
 }
@@ -146,16 +146,13 @@ export const develop = {
 export const useOp = {
     move: (G, ctx, arg) => {
         let card;
-        let pid;
-        if (ctx.currentPlayer === '0') {
-            pid = 0;
+        if (G.jinnPlayer === ctx.currentPlayer) {
             card = getJinnCardById(arg);
         } else {
-            pid = 1;
             card = getSongCardById(arg);
         }
         G.opForRecruitAndMarch = card.op;
-        let hands = G.player[pid].hands;
+        let hands = G.player[ctx.currentPlayer].hands;
         hands.splice(hands.indexOf(arg), 1)
         ctx.events.setStage('recruitOrMarch');
     },
@@ -284,7 +281,7 @@ export const march = {
                 } else {
                     if (song !== false) {
                         mergeTroopTo(G, ctx, arg.src, newTroop);
-                        G.pub.song.troops.push(newTroop);
+                        G.song.troops.push(newTroop);
                         if (stackLimitReached(G, ctx, arg, region)) {
                             ctx.events.setStage('overStackLimit')
                         } else {
@@ -314,7 +311,7 @@ export const march = {
                     } else {
                         mergeTroopTo(G, ctx, arg.src, newTroop);
                         removeTroop(G, ctx, arg.src)
-                        G.pub.jinn.troops.push(newTroop);
+                        G.jinn.troops.push(newTroop);
                         if (stackLimitReached(G, ctx, arg, region)) {
                             // TODO record over limit troop in G
                             combatOrLimitReached = true;
@@ -468,23 +465,23 @@ function meleeStage(G, ctx) {
 export const combatCard = {
     move: (G, ctx, cards, player) => {
         if (player === G.songPlayer) {
-            G.pub.song.combatCardChosen = true;
+            G.song.combatCardChosen = true;
             G.player[player].combatCards = cards;
         } else {
-            G.pub.jinn.combatCardChosen = true;
+            G.jinn.combatCardChosen = true;
             G.player[player].combatCards = cards;
         }
         let hands = G.player[player].hands;
         for (let card of cards) {
             hands.splice(hands.indexOf(card), 1);
         }
-        if (G.pub.song.combatCardChosen && G.pub.jinn.combatCardChosen) {
+        if (G.song.combatCardChosen && G.jinn.combatCardChosen) {
             G.combatInfo.stage = "showCombatCard";
             if (!G.workAroundIssue795) {
-                G.pub.song.combatCardChosen = false;
+                G.song.combatCardChosen = false;
                 G.combatInfo.song.combatCards = G.player[G.songPlayer].combatCards;
                 G.player[G.songPlayer].combatCards = [];
-                G.pub.jinn.combatCardChosen = false;
+                G.jinn.combatCardChosen = false;
                 G.combatInfo.jinn.combatCards = G.player[G.jinnPlayer].combatCards;
                 G.player[G.jinnPlayer].combatCards = [];
 
@@ -501,9 +498,9 @@ export const showPlanCard = {
     move: (G, ctx, cards) => {
         let p = ctx.currentPlayer;
         if (p === G.songPlayer) {
-            G.pub.song.currentPlans = cards;
+            G.song.currentPlans = cards;
         } else {
-            G.pub.jinn.currentPlans = cards;
+            G.jinn.currentPlans = cards;
         }
         G.player[p].planChosen = [];
     }
@@ -513,14 +510,14 @@ export const showCombatCard = {
     move: (G, ctx,) => {
         let p = ctx.currentPlayer;
         if (p === G.songPlayer) {
-            G.pub.song.combatCardChosen = false;
+            G.song.combatCardChosen = false;
             G.combatInfo.song.combatCards = G.player[p].combatCards;
         } else {
-            G.pub.jinn.combatCardChosen = false;
+            G.jinn.combatCardChosen = false;
             G.combatInfo.jinn.combatCards = G.player[p].combatCards;
         }
         G.player[p].combatCards = [];
-        if (G.pub.song.combatCardChosen === false && G.pub.jinn.combatCardChosen === false) {
+        if (G.song.combatCardChosen === false && G.jinn.combatCardChosen === false) {
             rangeStage(G, ctx);
         }
     },
@@ -582,11 +579,11 @@ export const takeDamage = {
         } else {
             let all = arg.eliminated.concat(arg.defeated)
             if (all[0].owner === 'song') {
-                pub = G.pub.song;
+                pub = G.song;
                 combatInfo = G.combatInfo.song;
                 opponentInfo = G.combatInfo.jinn;
             } else {
-                pub = G.pub.jinn
+                pub = G.jinn
                 combatInfo = G.combatInfo.jinn;
                 opponentInfo = G.combatInfo.song;
             }

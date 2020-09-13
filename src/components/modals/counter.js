@@ -1,5 +1,6 @@
 import React, {useReducer} from "react";
 import {Button, Typography} from "@material-ui/core";
+import PropTypes from 'prop-types'
 
 function reducer(state, action) {
     switch (action.type) {
@@ -16,10 +17,15 @@ function Counter(props) {
     const [state, dispatch] = useReducer(reducer, {count:props.count});
     return (
         <>
-            <Button disabled={!props.canRemove} onClick={() => dispatch({type: 'decrement'})}>-</Button>
+            <Button disabled={!props.canMinus} onClick={() => dispatch({type: 'decrement'})}>-</Button>
             <Typography>{state.count}</Typography>
             <Button disabled={!props.canAdd} onClick={() => dispatch({type: 'increment'})}>+</Button>
         </>
     );
 }
 
+Counter.propTypes ={
+    canAdd:PropTypes.func.isRequired,
+    canMinus:PropTypes.func.isRequired,
+    count:PropTypes.number.isRequired,
+}

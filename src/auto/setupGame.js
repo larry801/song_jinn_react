@@ -56,6 +56,7 @@ export function setupGame(ctx, setupData) {
         opForRecruitAndMarch: 0,
         eventActionInfo: {},
         combatInfo:{
+            mountainPass:0,
             isRoundTwo:false,
             pendingCombat:false,
             stage:null,
@@ -65,11 +66,11 @@ export function setupGame(ctx, setupData) {
             isRescue:false,
             generalOneTimeSkill:[],
             song:{
-                pendingDamage:0,
+                pendingDamage:3,
                 combatCards:[],
                 dices:[],
                 troop:{
-                    units: [0, 0, 0, 0, 0, 0],
+                    units: [2, 2, 0, 0, 0, 0],
                     general: [],
                     region: 0,
                     city: 0,

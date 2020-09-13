@@ -83,3 +83,19 @@ ChoiceDialog.propTypes = {
     title:PropTypes.string.isRequired,
     toggleText: PropTypes.string.isRequired,
 };
+
+export const YueFeiForceRoundTwoDialog = ({G, ctx, moves, events, log, isActive, playerID })=>(
+    <ChoiceDialog
+        callback={moves.forceRoundTwo}
+        choices={[
+            {label: "是", value: "yes", disabled: false, hidden: false,},
+            {label: "否", value: "no", disabled: false, hidden: false,},
+            ]}
+        default={"yes"}
+        show={G.combatInfo.jinn.isAttacker && G.combatInfo.song.troop.general.includes("岳飞")}
+        title="是否强制第二轮？"
+        toggleText="岳飞技能"
+    />
+)
+
+

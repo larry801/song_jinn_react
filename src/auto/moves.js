@@ -157,6 +157,25 @@ export const useOp = {
         ctx.events.setStage('recruitOrMarch');
     },
 }
+
+export const forceRoundTwo = {
+    move:(G,ctx,arg)=>{
+        if(arg==="yes"){
+            G.combatInfo.stage = "combatCard";
+            ctx.events.setStage("combatCard");
+        }else{
+
+        }
+
+    }
+}
+
+export const placeTroop = {
+    move: (G, ctx) => {
+
+    }
+}
+
 export const recruitOrMarch = {
     move: (G, ctx, choice) => {
         if (choice === 'recruit' || choice === 'march' || choice === 'recruitVassal') {

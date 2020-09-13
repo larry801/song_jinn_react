@@ -14,7 +14,7 @@ import {
     siegeOrAttack,
     develop,
     combatCard,
-    showCombatCard, showPlanCard, takeDamage
+    showCombatCard, showPlanCard, takeDamage, resultOfDevelopment
 } from "./moves";
 import * as util from "./util";
 import {PlayerView} from "boardgame.io/dist/esm/core";
@@ -34,6 +34,7 @@ export const SongJinn = {
         recruitOrMarch: recruitOrMarch,
         siegeOrAttack: siegeOrAttack,
         combatCard: combatCard,
+        resultOfDevelopment:resultOfDevelopment,
         showCombatCard: showCombatCard,
         showPlanCard:showPlanCard,
         takeDamage:takeDamage,
@@ -41,7 +42,6 @@ export const SongJinn = {
     playerView: PlayerView.STRIP_SECRETS,
     phases: {
         drawEventCard1: {
-            // start: true,
             moves: {
                 chooseTakeCardTiming: chooseTakeCardTiming,
                 takeCardFromDeck: takeCardFromDeck
@@ -66,11 +66,7 @@ export const SongJinn = {
             next: 'chooseOrder'
         },
         chooseOrder: {
-            start: true,
-            onBegin: (G, ctx) => {
-                drawPhaseForJinn(G, ctx);
-                drawPhaseForSong(G, ctx);
-            },
+
             onEnd: (G, ctx) => {
             },
             moves: {
@@ -106,7 +102,11 @@ export const SongJinn = {
             next: 'doOperations'
         },
         doOperations: {
-
+            start: true,
+            onBegin: (G, ctx) => {
+                drawPhaseForJinn(G, ctx);
+                drawPhaseForSong(G, ctx);
+            },
             onEnd: (G, ctx) => G,
             turn: {
                 onBegin: (G, ctx) => G,
@@ -120,7 +120,7 @@ export const SongJinn = {
                     siegeOrAttack: siegeOrAttack,
                     diplomacy: diplomacy,
                     combatCard: combatCard,
-
+                    resultOfDevelopment:resultOfDevelopment,
                 },
                 order: {
                     first: (G, ctx) => 0,

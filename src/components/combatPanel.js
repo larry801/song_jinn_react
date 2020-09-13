@@ -3,7 +3,7 @@ import Paper from "@material-ui/core/Paper";
 import {troopToString} from "../auto/util";
 import {Grid} from "@material-ui/core";
 import {getJinnCardById, getSongCardById} from "../constants/cards";
-import {getRegionById} from "../constants/regions";
+import {getRegionById, mountainPasses} from "../constants/regions";
 import {getCityByID} from "../constants/cities";
 
 export function CombatPanel(props) {
@@ -33,11 +33,17 @@ export function CombatPanel(props) {
     const region = () =>{
         let atk = info.song.isAttacker ? info.song : info.jinn;
         let def = info.song.isAttacker ? info.jinn : info.song;
+        if(info.mountainPass !==0){
+            return mountainPasses[info.mountainPass].name
+        }
         if(info.isSiege){
             return getCityByID(def.troop.city).name
         }
+        if(info.isBreakthrough){
+            return getCityByID(def.troop.region).name
+        }
         if(info.isRescue){
-
+            return getCityByID(def.troop.city).name
         }
         if(info.isField){
             return getRegionById(atk.troop.region).name;

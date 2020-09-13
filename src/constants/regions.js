@@ -1176,6 +1176,12 @@ export const regions = [
     },
 ];
 export const mountainPasses = [
+    {id:0,name:"",adjRegion:[]},
+    {id:1,name:"居庸关",adjRegion:[2,3],},
+    {id:2,name:"潼关",adjRegion:[2,3],},
+    {id:3,name:"武关",adjRegion:[2,3],},
+    {id:4,name:"大散关",adjRegion:[2,3],},
+    {id:5,name:"剑门关",adjRegion:[2,3],},
 
 ]
 const nameToIdMap = new Map();

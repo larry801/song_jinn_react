@@ -8,7 +8,7 @@ export const regions = [
     {
         id:0,
         name:"",
-        terrainType:MOUNTAINS,
+        terrainType:RAMPART,
         landAdjacent:[],
         waterAdjacent:[],
         mountainAdjacent:[],

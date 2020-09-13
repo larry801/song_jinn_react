@@ -11,7 +11,6 @@ import {March} from "./modals/moveArmy";
 import {Button} from "@material-ui/core";
 import {CombatPanel} from "./combatPanel";
 import {TakeDamageModal} from "./modals/takeDamage";
-// import {TakeDamageTroopList} from "./modals/march";
 
 export class SongJinnBoard extends React.Component {
 
@@ -28,9 +27,22 @@ export class SongJinnBoard extends React.Component {
         let isActive = this.props.isActive;
         let playerID = this.props.playerID;
         let p;
+        let c;
         let player = G.player[playerID];
-        if(playerID === G.songPlayer)p=G.pub.song;
-        if(playerID === G.jinnPlayer)p=G.pub.jinn;
+        let isSong;
+        let o;
+        if (playerID === G.songPlayer) {
+            isSong = true;
+            p = G.pub.song;
+            o = G.pub.jinn;
+            c = G.combatInfo.song;
+        }
+        if (playerID === G.jinnPlayer) {
+            isSong = false;
+            p = G.pub.jinn;
+            o = G.pub.song;
+            c = G.combatInfo.jinn
+        }
         let winner = '';
         if (ctx.gameover) {
             winner =
@@ -54,7 +66,7 @@ export class SongJinnBoard extends React.Component {
                         title="请选择先手玩家"
                         toggleText="选择先手"
                     />
-                    {(ctx.phase ==='drawPlan' && isActive && !p.planChosen) ?
+                    {(ctx.phase === 'drawPlan' && isActive && !p.planChosen) ?
                         <ChoosePlanModal
                             G={G} ctx={ctx} moves={moves} playerID={playerID}
                             isActive={isActive}/> : ""}
@@ -93,27 +105,53 @@ export class SongJinnBoard extends React.Component {
                         G={G} ctx={ctx} moves={moves} playerID={playerID}
                         isActive={isActive}
                     />
-                    {G.combatInfo.stage ==="showPlanCard"?
-                        <Button onClick={()=>moves.showPlanCard()}>展示计划牌</Button>
-                        :""}
-                    {G.combatInfo.stage ==="showCombatCard"?
-                        <Button onClick={()=>moves.showCombatCard()} >显示战斗牌</Button>
-                        :""}
+                    {isActive && curPlayerInStage(ctx, "drawPlan") && G.combatInfo.stage === "showPlanCard" ?
+                        <Button onClick={() => moves.showPlanCard()}>展示计划牌</Button>
+                        : ""}
+                    {isActive && curPlayerInStage(ctx, "combatCard") && G.combatInfo.stage === "showCombatCard" ?
+                        <Button onClick={() => moves.showCombatCard()}>显示战斗牌</Button>
+                        : ""}
                     <CombatPanel
                         G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                     />
-                    {isActive && playerID===ctx.currentPlayer ?
-                        <Button onClick={()=>this.props.events.endTurn()}>结束行动</Button>:""}
-                    {isActive && playerID===ctx.currentPlayer ?
-                        <Button onClick={()=>this.props.events.endPhase()}>结束阶段</Button>:""}
+                    {isActive && playerID === ctx.currentPlayer ?
+                        <Button onClick={() => this.props.events.endTurn()}>结束行动</Button> : ""}
+                    {isActive && playerID === ctx.currentPlayer ?
+                        <Button onClick={() => this.props.events.endPhase()}>结束阶段</Button> : ""}
                     {isActive && p.planChosen ?
-                        <Button onClick={()=>moves.showPlanCard(player.chosenPlans)}>展示计划</Button>
-                        :""}
-                    {isActive && curPlayerInStage(ctx,"takeDamage")?
+                        <Button onClick={() => moves.showPlanCard(player.chosenPlans)}>展示计划</Button>
+                        : ""}
+                    {isActive && (
+                        true
+                        // curPlayerInStage(ctx, "takeDamage") ||
+                        //     G.combatInfo.stage.startsWith("takeDamage")
+                    ) && c.pendingDamage > 0 ?
                         <TakeDamageModal
                             G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                         />
-                        :""}
+                        : ""}
+                    {isActive && curPlayerInStage(ctx, "beatGong") ?
+                        <ChoiceDialog
+                            callback={moves.siegeOrAttack}
+                            choices={[
+                                {label: "坚守", value: "defence", disabled: false, hidden: false,},
+                                {label: "撤退", value: "retreat", disabled: false, hidden: false,},
+                                {
+                                    label: "继续作战", value: "continue", disabled: false, hidden: !(
+                                        c.isAttacker && (
+                                            p.military > o.military ||
+                                            c.troop.general.includes("岳飞") ||
+                                            c.troop.general.includes("兀术") ||
+                                            c.combatCards.includes(36)
+                                        )
+                                    ),
+                                },
+                            ]}
+                            default="attack"
+                            show={isActive && playerInStage(ctx, playerID, "siegeOrAttack")}
+                            title="请选择要执行的操作"
+                            toggleText="攻城或围城"
+                        /> : ""}
                     <CombatCard
                         G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                     />

@@ -10,7 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Grid from "@material-ui/core/Grid";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import {troopToString} from "../../auto/util";
+import {troopEndurance, troopToString} from "../../auto/util";
 import {unitsToTroop} from "./moveArmy";
 import {canTakeDamage} from "./takeDamage";
 
@@ -22,8 +22,6 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1, 2),
     },
     list: {
-        width: 120,
-        height: 230,
         backgroundColor: theme.palette.background.paper,
         overflow: 'auto',
     },
@@ -78,10 +76,17 @@ export function TakeDamageTroopList(props){
         if(defeatedIndex === -1){
             newDefeated.push(value)
         }else{
-            newDefeated.splice(eliminatedIndex,1);
+            newDefeated.splice(defeatedIndex,1);
         }
         setDefeated(newDefeated);
     }
+
+    const arg = {
+        eliminated: eliminated,
+        defeated: defeated,
+    }
+
+    const canProceed = canTakeDamage(props.G,props.ctx,arg)
 
     const takeDamageList = (title, items, change) => (
         <Card>
@@ -93,12 +98,15 @@ export function TakeDamageTroopList(props){
             <Divider/>
             <List className={classes.list} dense component="div" role="list">
                 {props.units.map((value) => {
-                    const labelId = `transfer-list-all-item-${value}-label`;
+                    const labelId = `transfer-list-all-item-${value.id}-label`;
                     return (
-                        <ListItem key={props.units.indexOf(value)} role="listitem" button onClick={change(value)}>
+                        <ListItem key={value.id}
+                                  role="listitem"
+                                  button onClick={change(value)}
+                                  disabled={!items.includes(value) && canProceed}>
                             <ListItemIcon>
                                 <Checkbox
-                                    checked={items.indexOf(value) !== -1}
+                                    checked={items.includes(value)}
                                     tabIndex={-1}
                                     disableRipple
                                     inputProps={{'aria-labelledby': labelId}}
@@ -115,13 +123,11 @@ export function TakeDamageTroopList(props){
 
     return <>
         <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
-            <Grid item>{takeDamageList('击溃', defeated,handleDefeated)}</Grid>
             <Grid item>{takeDamageList('消灭', eliminated,handleEliminate)}</Grid>
-            <Grid item><Button variant={"outlined"} disabled={canTakeDamage(props.G,props.ctx, {
-                eliminated: eliminated,
-                defeated: defeated,
-            })}
-                onClick={()=>props.callback([defeated,eliminated,])}
+            <Grid item>{takeDamageList('击溃', defeated,handleDefeated)}</Grid>
+            <Grid item><Button variant={"outlined"}
+           disabled={!canProceed}
+                onClick={()=>props.callback(arg)}
             >确定</Button></Grid>
         </Grid>
     </>

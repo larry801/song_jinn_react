@@ -1,6 +1,6 @@
 import {UNIT_FULL_NAME, UNIT_SHORTHAND} from "../constants/general";
 import {getCityByID} from "../constants/cities";
-import {getRegionById, HILLS, MOUNTAINS, FLATLAND, SWAMP, RAMPART} from "../constants/regions";
+import {FLATLAND, getRegionById, HILLS, MOUNTAINS, RAMPART, SWAMP} from "../constants/regions";
 import {combatResultTable} from "../constants/crt";
 
 const accumulator = (accumulator, currentValue) => accumulator + currentValue;
@@ -469,7 +469,6 @@ export function canRecruit(G, ctx, units, ignoreCivilTechLimit = false) {
     }
     let totalCost = getRecruitTotalCost(G, ctx, units);
     let result = totalCost <= G.opForRecruitAndMarch;
-    console.log(result);
     return result;
 }
 
@@ -600,9 +599,9 @@ export function unitsFromTroop(troop) {
 
 export function troopEndurance(G, ctx, troop) {
     let terrainType;
-    if (troop.region === 0){
+    if (troop.region === 0) {
         terrainType = getRegionById(getCityByID(troop.city).region).terrainType
-    }else{
+    } else {
         terrainType = getRegionById(troop.region).terrainType;
     }
     let unitEndurance;
@@ -613,7 +612,7 @@ export function troopEndurance(G, ctx, troop) {
         }
     } else {
         unitEndurance = [2, 1, 1, 0, 0, 2]
-        if (G.song.activeEvents.includes("普及重步兵")) {
+        if (G.pub.song.activeEvents.includes("普及重步兵")) {
             unitEndurance[0] = 3;
         }
         if (terrainType === SWAMP) {
@@ -778,16 +777,47 @@ export function getColonization(G, ctx, cityID) {
                 return c.colonizeLevel + 1;
             }
         }
-    }else {
+    } else {
         return c.colonizeLevel;
     }
+}
+
+export function getCityDefense(G, ctx, cityID) {
+    let c = getCityByID(cityID);
+    let defense = c.capital ? 2 : 1;
+    if (jinnTroopInCity(G, ctx, cityID) !== false) {
+        if (G.pub.jinn.emperor.city === cityID) {
+            defense++;
+        }
+    }
+    if (songTroopInCity(G, ctx, cityID !== false && G.pub.song.emperor.city === cityID)) {
+        defense++;
+    }
+    if (G.combat.generalOneTimeSkill.includes("奔睹")) {
+        defense *= 2;
+    }
+    return defense;
+}
+
+/*
+*
+* */
+export function crtDicesToDamage(dices, strength) {
+    let sum;
+    if (dices.length === 0) return 0;
+    if (dices.length === 1) sum = dices[0];
+    if (dices.length === 2) sum = dices[0] + dices[1];
+    if (dices.length > 2) {
+        dices.sort((a, b) => b - a);
+        sum = dices[0] + dices[1];
+    }
+    return combatResultTable(strength, sum);
 }
 
 export function getSongRangeStrength(G, ctx) {
     let t = G.combatInfo.song.troop;
     let terrain = t.region === 0 ? RAMPART : getRegionById(t.region).terrainType;
-    let oriStrength = rangeStrength(G, ctx, G.combatInfo.song.troop);
-    let strength = oriStrength;
+    let strength = rangeStrength(G, ctx, G.combatInfo.song.troop);
     if (G.combatInfo.song.troop.general.includes("李显忠")) {
         strength += t.units[5]
     }
@@ -821,11 +851,7 @@ export function getSongRangeStrength(G, ctx) {
 
 export function getSongRangeDice(G, ctx) {
     if (G.useCombatResultTable) {
-        if (G.combatInfo.jinn.combatCards.includes(14)) {
-            return 1;
-        } else {
-            return 2;
-        }
+        return songCRTDice(G, ctx);
     } else {
         return getSongRangeStrength(G, ctx);
     }
@@ -835,18 +861,18 @@ export function getSongRangeDamage(G, ctx) {
     let dices = ctx.random.D6(getSongRangeDice(G, ctx))
     G.combatInfo.song.dices = dices;
     if (G.useCombatResultTable) {
-        let sum = dices.reduce(accumulator);
-        return combatResultTable(getSongRangeStrength(G, ctx,), sum);
+        crtDicesToDamage(dices, getSongRangeStrength(G, ctx,));
     } else {
         return dices.filter((d) => d >= 5).length
     }
 }
 
 export function getJinnRangeStrength(G, ctx) {
-    let t = G.combatInfo.jinn.troop;
+    let i = G.combatInfo;
+    let t = i.jinn.troop;
     let strength = 0;
-    if (G.combatInfo.jinn.isAttacker) {
-        if (G.combatInfo.isSiege) {
+    if (i.jinn.isAttacker) {
+        if (i.isSiege) {
             strength = t.units[1] + t.units[4]
             if (G.pub.jinn.activeEvents.includes("建立大齐") && G.pub.jinn.military >= 5) {
                 strength += t.units[5];
@@ -858,34 +884,55 @@ export function getJinnRangeStrength(G, ctx) {
     } else {
         strength = rangeStrength(G, ctx, t)
     }
+    if (t.general.includes("兀术") && i.jinn.isAttacker) strength += 2;
     return strength;
 }
 
 export function getJinnRangeDice(G, ctx) {
     if (G.useCombatResultTable) {
-        return 2;
+        return jinnCRTDice(G, ctx);
     } else {
         return getJinnRangeStrength(G, ctx);
     }
 }
 
 export function getJinnRangeDamage(G, ctx) {
-    let dices = ctx.random.D6(getJinnRangeDice(G, ctx))
+    let countDice = getJinnRangeDice(G, ctx);
+    let dices = ctx.random.D6(countDice)
     G.combatInfo.jinn.dices = dices;
     if (G.useCombatResultTable) {
-        let sum = dices.reduce(accumulator);
-        return combatResultTable(getJinnRangeStrength(G, ctx,), sum);
+
     } else {
-        return dices.filter((d) => d >= 5).length
+        let drm = 0;
+        let i = G.combatInfo;
+        let region = i.jinn.troop.region;
+        let generals = i.jinn.troop.general;
+        if (i.isSiege && i.jinn.isAttacker && i.song.troop.general.includes("宗泽")) drm--;
+        if (generals.includes("娄室") && getRegionById(region).terrainType === MOUNTAINS) drm++;
+        if (generals.includes("粘罕") && getRegionById(region).terrainType === FLATLAND) drm++;
+        if (i.song.isAttacker && (i.isBreakthrough || i.isRescue) && generals.includes("银术可")) drm++;
+        return dices.filter((d) => d + drm >= 5).length
     }
 }
 
 export function getSongWuLinDamage(G, ctx) {
-
+    let t = G.combatInfo.song.troop;
+    let infantry = t.units[0];
+    let archer = t.units[1];
+    let pair = infantry > archer ? archer : infantry
+    if (pair === 0) return 0;
+    if (G.useCombatResultTable) {
+        let dices = ctx.random.D6(2);
+        return crtDicesToDamage(dices, pair);
+    } else {
+        let dices = ctx.random.D6(2).reduce(accumulator);
+        G.combatInfo.song.dices = dices;
+        return dices.filter((d) => d >= 5).length;
+    }
 }
 
 export function getSongMeleeStrength(G, ctx) {
-    let t = G.combatInfo.jinn.troop;
+    let t = G.combatInfo.song.troop;
     let terrain = t.region === 0 ? RAMPART : getRegionById(t.region).terrainType;
     let strength;
     if (G.combatInfo.song.isAttacker) {
@@ -898,7 +945,6 @@ export function getSongMeleeStrength(G, ctx) {
     } else {
         if (terrain === RAMPART) {
             strength = rangeStrength(G, ctx, t) + meleeStrength(G, ctx, t) + t.units[5] * 3;
-
         } else {
             strength = rangeStrength(G, ctx, t) + meleeStrength(G, ctx, t);
         }
@@ -906,10 +952,95 @@ export function getSongMeleeStrength(G, ctx) {
     return strength;
 }
 
+export function getSongMeleeDice(G, ctx) {
+    let i = G.combatInfo;
+    if (G.useCombatResultTable) {
+        return songCRTDice(G, ctx);
+    } else {
+        let additionalDice = 0;
+        if (i.song.troop.general.includes("韩世忠") && i.song.troop.units[3] > 0) additionalDice = i.song.troop.units[3];
+        return getSongRangeStrength(G, ctx) + getSongMeleeStrength(G, ctx) + additionalDice;
+    }
+}
+
 export function getSongMeleeDamage(G, ctx) {
-    return 0;
+    let i = G.combatInfo;
+    let addDamage = 0;
+    let region = i.song.troop.region;
+    let countDice = getSongMeleeDice(G, ctx);
+    let dices = ctx.random.D6(countDice)
+    G.combatInfo.song.dices = dices;
+    if (i.song.troop.general.includes("韩世忠") && getRegionById(region).terrainType === SWAMP) addDamage++;
+    if (i.song.troop.general.includes("岳飞")) addDamage++;
+    if (G.useCombatResultTable) {
+        return crtDicesToDamage(dices, getSongMeleeStrength(G, ctx,)) + addDamage;
+    } else {
+        let drm = 0;
+        return dices.filter((d) => d + drm >= 5).length + addDamage;
+    }
+}
+
+export function getJinnMeleeStrength(G, ctx) {
+    let i = G.combatInfo;
+    let t = i.jinn.troop;
+    let strength = 0;
+    strength = rangeStrength(G, ctx, t) + meleeStrength(G, ctx, t);
+    if (t.general.includes("兀术") && i.jinn.isAttacker) strength += 2;
+    if (t.general.includes("斡离不")) {
+        strength += t.units[1];
+        strength += t.units[2];
+    }
+    return strength
+}
+
+export function songCRTDice(G, ctx,) {
+    let count = 2;
+    let t = G.combatInfo.song.troop;
+    if (t.general.includes("韩世忠") && t.units[3] > 0) count++;
+    if (G.combatInfo.jinn.combatCards.includes(14)) count--;
+    return count;
+}
+
+export function jinnCRTDice(G, ctx) {
+    let i = G.combatInfo;
+    let t = i.jinn.troop;
+    let count = 2;
+    let region = t.region;
+    if (i.isSiege && i.jinn.isAttacker){
+        if(i.song.troop.general.includes("宗泽")) count--;
+        if (i.song.combatCards.includes(39)) count--;
+    }
+    if (t.general.includes("娄室") && getRegionById(region).terrainType === MOUNTAINS) count++;
+    if (t.general.includes("粘罕") && getRegionById(region).terrainType === FLATLAND) count++;
+    if (t.general.includes("银术可") && (i.isBreakthrough || i.isRescue)) count++;
+    return count;
+}
+
+export function getJinnMeleeDice(G, ctx) {
+    if (G.useCombatResultTable) {
+        return jinnCRTDice(G, ctx)
+    } else {
+        return getJinnMeleeStrength(G, ctx);
+    }
 }
 
 export function getJinnMeleeDamage(G, ctx) {
-    return 0;
+    let i = G.combatInfo;
+    let countDice = getJinnMeleeDice(G, ctx);
+    let dices = ctx.random.D6(countDice)
+    i.jinn.dices = dices;
+    if (G.useCombatResultTable) {
+        return crtDicesToDamage(dices, getJinnMeleeStrength(G, ctx,),);
+    } else {
+        let drm = 0;
+        return dices.filter((d) => d + drm >= 5).length
+    }
+}
+
+export function getSongBackupCount(G, ctx,) {
+    return G.pub.song.supplementBank.slice(0, 6).reduce(accumulator)
+}
+
+export function placeTroop(G,ctx,arg){
+
 }

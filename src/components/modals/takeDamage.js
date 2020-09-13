@@ -117,19 +117,10 @@ export function TakeDamageModal(props) {
         setOpen(true);
     };
 
-    const info = ()=>{
-        if(props.G.songPlayer === props.playerID){
-            return props.G.combatInfo.song
-        }else{
-            return props.G.combatInfo.jinn
-        }
-    }
+    const info = props.G.songPlayer === props.playerID?props.G.combatInfo.song:props.G.combatInfo.jinn
 
-    const callback = (eliminated, defeated) => {
-        props.moves.takeDamage({
-            eliminated: eliminated,
-            defeated: defeated,
-        })
+    const callback = (arg) => {
+        props.moves.takeDamage(arg)
     }
 
     return <div>
@@ -138,7 +129,7 @@ export function TakeDamageModal(props) {
         </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
             <TakeDamageTroopList
-                units={troopToUnits(info.troop)}
+                units={troopToUnits({...info.troop,general:[]})}
                 callback={callback}
                 G={props.G} ctx={props.ctx} playerID={props.playerID}
             />
@@ -161,10 +152,24 @@ export function canTakeDamage(G, ctx, arg) {
             combatInfo = G.combatInfo.jinn;
         }
         let eliminatedEndurance, defeatedEndurance, damage, endurance;
-        eliminatedEndurance = troopEndurance(unitsToTroop(arg.eliminated));
-        defeatedEndurance = troopEndurance(unitsToTroop(arg.defeated));
-        endurance =  troopEndurance(combatInfo.troop);
-        damage =  combatInfo.pendingDamage
+        if (arg.eliminated.length > 0) {
+            let eTroop = unitsToTroop(arg.eliminated);
+            eTroop.region = combatInfo.troop.region;
+            eTroop.city = combatInfo.troop.city;
+            eliminatedEndurance = troopEndurance(G,ctx,eTroop);
+        } else {
+            eliminatedEndurance = 0;
+        }
+        if (arg.defeated.length > 0) {
+            let dTroop = unitsToTroop(arg.defeated);
+            dTroop.region = combatInfo.troop.region;
+            dTroop.city = combatInfo.troop.city;
+            defeatedEndurance = troopEndurance(G,ctx,unitsToTroop(arg.defeated));
+        } else {
+            defeatedEndurance = 0;
+        }
+        endurance = troopEndurance(G,ctx,combatInfo.troop);
+        damage = combatInfo.pendingDamage
         damage = damage > endurance ? endurance : damage;
         if (!isSong && G.combatInfo.isSiege && G.combatInfo.jinn.isAttacker && G.combatInfo.jinn.troop.units[4] > 0) {
             if (eliminatedEndurance + defeatedEndurance >= damage) {
@@ -174,8 +179,7 @@ export function canTakeDamage(G, ctx, arg) {
                 return false;
             }
         } else {
-            return eliminatedEndurance + defeatedEndurance >= damage
-                && eliminatedEndurance >= defeatedEndurance;
+            return (eliminatedEndurance + defeatedEndurance >= damage && eliminatedEndurance >= defeatedEndurance);
         }
     }
 }

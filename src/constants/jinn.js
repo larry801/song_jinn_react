@@ -1,4 +1,4 @@
-import {jinnTroopInRegion, removeGeneral, removeTroop, songTroopInCity} from "../auto/util";
+import {getPolicy, jinnTroopInRegion, removeGeneral, removeTroop, songTroopInCity} from "../auto/util";
 import {getCityByID} from "./cities";
 import {getRegionById} from "./regions";
 
@@ -791,7 +791,7 @@ export const jinnCards = [
         block: "",
         ban: "",
         fullDesc: " 效果：用此牌发展，提供发展力等于实时殖民能力的2倍",
-        pre: (G, ctx) => true,
+        pre: (G, ctx) => false,
         event: (G, ctx, arg) => G,
     },
     {
@@ -845,7 +845,7 @@ export const jinnCards = [
         block: "【完颜昌主和】",
         ban: "",
         fullDesc: "前置条件：金国军事等级不低于5 效果：提升金国1级军事等级，本回合作战计划替换为【吴山立马】。 禁止：【完颜昌主和】",
-        pre: (G, ctx) => true,
+        pre: (G, ctx) => G.jinn.military >= 5,
         event: (G, ctx, arg) => G,
     },
     {
@@ -863,7 +863,7 @@ export const jinnCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：政策倾向为和议 效果：使用该卡牌的行动点数，对宋国军团执行进军，不能触发战斗，不能移动到缺乏的区域。",
-        pre: (G, ctx) => true,
+        pre: (G, ctx) => getPolicy(G,ctx) < 0,
         event: (G, ctx, arg) => G,
     },
     {
@@ -882,7 +882,11 @@ export const jinnCards = [
         ban: "",
         fullDesc: " 效果：降低1级政策倾向，使用这张牌的行动力执行征募和进军。",
         pre: (G, ctx) => true,
-        event: (G, ctx, arg) => G,
+        event: (G, ctx, arg) =>  {
+            if(G.song.policy > -3) G.song.policy --;
+            G.opForRecruitAndMarch = 3;
+            ctx.events.setStage('recruitOrMarch')
+        },
     },
     {
         id: 46,
@@ -918,7 +922,13 @@ export const jinnCards = [
         ban: "",
         fullDesc: " 效果：若政策倾向为和议，提升1级殖民能力。若政策倾向为主战或中立，降低1级政策倾向。",
         pre: (G, ctx) => true,
-        event: (G, ctx, arg) => G,
+        event: (G, ctx, arg) => {
+            if(getPolicy(G,ctx,)<0){
+                G.jinn.colonization ++;
+            }else{
+                if(G.song.policy>-3)G.song.policy--;
+            }
+        },
     },
     {
         id: 48,
@@ -936,7 +946,7 @@ export const jinnCards = [
         ban: "",
         fullDesc: " 效果：移除吴玠",
         pre: (G, ctx) => true,
-        event: (G, ctx, arg) => G,
+        event: (G, ctx, arg) => removeGeneral(G,ctx,G.jinn,"吴玠"),
     },
     {
         id: 49,
@@ -954,7 +964,7 @@ export const jinnCards = [
         ban: "",
         fullDesc: " 效果：宋国腐败值加1。",
         pre: (G, ctx) => true,
-        event: (G, ctx, arg) => G,
+        event: (G, ctx, arg) => G.song.corruption++,
     },
     {
         id: 50,
@@ -971,7 +981,7 @@ export const jinnCards = [
         block: "",
         ban: "",
         fullDesc: "前置条件：奔睹在场，且金国守城 效果：战斗牌先于任何战斗卡结算，宋国军团立即撤退，全部战斗结算结束。",
-        pre: (G, ctx) => true,
+        pre: (G, ctx) => G.jinn.generals["奔睹"].present && G.combatInfo.isSiege && G.combatInfo.song.isAttacker,
         event: (G, ctx, arg) => G,
     },
 ]

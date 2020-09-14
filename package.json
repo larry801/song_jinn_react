@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
-    "boardgame.io": "^0.39.16",
+    "boardgame.io": "^0.40.0",
     "echarts": "^4.9.0",
     "echarts-for-react": "^2.0.16",
     "esm": "^3.2.25",

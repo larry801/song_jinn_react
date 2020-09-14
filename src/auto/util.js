@@ -1044,3 +1044,13 @@ export function getSongBackupCount(G, ctx,) {
 export function placeTroop(G,ctx,arg){
 
 }
+
+export function songSupplementCities(G,ctx){
+    return songControlCities(G,ctx).filter(id=>!isCityUnderSiege(G,ctx,id));
+}
+
+export function jinnSupplementCities(G,ctx){
+    return jinnControlCities(G,ctx)
+        .filter(id=>G.jinn.colonization>getColonization(G,ctx,id))
+        .filter(id=>isCityUnderSiege(G,ctx,id));
+}

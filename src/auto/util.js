@@ -857,8 +857,22 @@ export function getSongRangeDice(G, ctx) {
     }
 }
 
-export function getSongRangeDamage(G, ctx) {
-    let dices = ctx.random.D6(getSongRangeDice(G, ctx))
+function dice(face,num){
+    let result = [];
+    for(let i=0;i<num;i++){
+        result.push(Math.ceil(Math.random()*face))
+    }
+    return result;
+}
+
+export function getSongRangeDamage(G, ctx, simulate=false) {
+    let dices;
+    let num = getSongRangeDice(G, ctx);
+    if(simulate){
+        dices = dice(6,num)
+    }else {
+        dices = ctx.random.D6(num)
+    }
     G.combatInfo.song.dices = dices;
     if (G.useCombatResultTable) {
         crtDicesToDamage(dices, getSongRangeStrength(G, ctx,));
@@ -896,9 +910,14 @@ export function getJinnRangeDice(G, ctx) {
     }
 }
 
-export function getJinnRangeDamage(G, ctx) {
-    let countDice = getJinnRangeDice(G, ctx);
-    let dices = ctx.random.D6(countDice)
+export function getJinnRangeDamage(G, ctx, simulate=false) {
+    let num = getJinnRangeDice(G, ctx);
+    let dices;
+    if(simulate){
+        dices = dice(6,num)
+    }else {
+        dices = ctx.random.D6(num)
+    }
     G.combatInfo.jinn.dices = dices;
     if (G.useCombatResultTable) {
 
@@ -915,17 +934,28 @@ export function getJinnRangeDamage(G, ctx) {
     }
 }
 
-export function getSongWuLinDamage(G, ctx) {
+export function getSongWuLinDamage(G, ctx, simulate=false) {
     let t = G.combatInfo.song.troop;
     let infantry = t.units[0];
     let archer = t.units[1];
     let pair = infantry > archer ? archer : infantry
     if (pair === 0) return 0;
     if (G.useCombatResultTable) {
-        let dices = ctx.random.D6(2);
+        let dices;
+        if(simulate){
+            dices = dice(6,2)
+        }else {
+            dices = ctx.random.D6(2)
+        }
+        G.combatInfo.song.dices = dices;
         return crtDicesToDamage(dices, pair);
     } else {
-        let dices = ctx.random.D6(2).reduce(accumulator);
+        let dices;
+        if(simulate){
+            dices = dice(6,pair)
+        }else {
+            dices = ctx.random.D6(pair)
+        }
         G.combatInfo.song.dices = dices;
         return dices.filter((d) => d >= 5).length;
     }
@@ -963,12 +993,17 @@ export function getSongMeleeDice(G, ctx) {
     }
 }
 
-export function getSongMeleeDamage(G, ctx) {
+export function getSongMeleeDamage(G, ctx, simulate=false) {
     let i = G.combatInfo;
     let addDamage = 0;
     let region = i.song.troop.region;
-    let countDice = getSongMeleeDice(G, ctx);
-    let dices = ctx.random.D6(countDice)
+    let num = getSongMeleeDice(G, ctx);
+    let dices;
+    if(simulate){
+        dices = dice(6,num)
+    }else {
+        dices = ctx.random.D6(num)
+    }
     G.combatInfo.song.dices = dices;
     if (i.song.troop.general.includes("韩世忠") && getRegionById(region).terrainType === SWAMP) addDamage++;
     if (i.song.troop.general.includes("岳飞")) addDamage++;
@@ -1024,10 +1059,15 @@ export function getJinnMeleeDice(G, ctx) {
     }
 }
 
-export function getJinnMeleeDamage(G, ctx) {
+export function getJinnMeleeDamage(G, ctx, simulate=false) {
     let i = G.combatInfo;
-    let countDice = getJinnMeleeDice(G, ctx);
-    let dices = ctx.random.D6(countDice)
+    let num = getJinnMeleeDice(G, ctx);
+    let dices;
+    if(simulate){
+        dices = dice(6,num)
+    }else {
+        dices = ctx.random.D6(num)
+    }
     i.jinn.dices = dices;
     if (G.useCombatResultTable) {
         return crtDicesToDamage(dices, getJinnMeleeStrength(G, ctx,),);

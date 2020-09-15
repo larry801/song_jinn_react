@@ -11,12 +11,14 @@ export class RecruitModal extends React.Component {
         if (props.playerID === props.G.songPlayer) {
             this.state = {
                 owner: 0,
-                unitsToRecruit: [0, 0, 0, 0, 0, 0]
+                unitsToRecruit: [0, 0, 0, 0, 0, 0],
+                open:true,
             }
         } else {
             this.state = {
                 owner: 1,
-                unitsToRecruit: [0, 0, 0, 0, 0, 0, 0]
+                unitsToRecruit: [0, 0, 0, 0, 0, 0, 0],
+                open:true,
             }
         }
     }
@@ -99,13 +101,15 @@ export class RecruitModal extends React.Component {
             unitCounterInsufficientWarning = <b color={"red"}>备用兵库不足 征募无效 浪费OP</b>
         }
         if (showModal) {
-            return <Dialog open={true}>
+            return <div>
+                <Button variant={"outlined"} onClick={()=>this.setState({open:false})}>征募</Button>
+                <Dialog open={this.state.open}>
                 <Typography>可以使用{this.props.G.opForRecruitAndMarch} OP 征募</Typography>
                 {recruitUI}
                 {resultUI}
                 {unitCounterInsufficientWarning}
                 <button onClick={()=>{this.onCloseModal()}}>确认</button>
-            </Dialog>
+            </Dialog></div>
         }else{
             return <div/>
         }

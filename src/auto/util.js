@@ -2,6 +2,7 @@ import {UNIT_FULL_NAME, UNIT_SHORTHAND} from "../constants/general";
 import {getCityByID} from "../constants/cities";
 import {FLATLAND, getRegionById, HILLS, MOUNTAINS, RAMPART, SWAMP} from "../constants/regions";
 import {combatResultTable} from "../constants/crt";
+import {func} from "prop-types";
 
 export const accumulator = (accumulator, currentValue) => accumulator + currentValue;
 
@@ -1099,3 +1100,24 @@ export function jinnSupplementCities(G,ctx){
         .filter(id=>isCityUnderSiege(G,ctx,id));
 }
 
+function basicSupply(G,ctx,cityID){
+    return getCityByID(cityID).capital ? 2:1
+}
+
+export function songCitySupply(G,ctx,cityID){
+    let sup = basicSupply(G,ctx,cityID);
+    if(G.song.emperor.exist&& G.song.emperor.city === cityID){
+        sup++;
+    }
+    const t =songTroopInCity(G,ctx,cityID);
+    if(t!==false&&t.general.includes("宗泽"))sup++;
+    return sup;
+}
+
+export function jinnCitySupply(G,ctx,cityID){
+    let sup = basicSupply(G,ctx,cityID);
+    if(G.jinn.emperor.exist&&G.jinn.emperor.city === cityID){
+        sup++;
+    }
+    return sup;
+}

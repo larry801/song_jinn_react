@@ -858,7 +858,7 @@ export const jinnCards = [
         eventProperty: "立即",
         precondition: "政策倾向为和议",
         combat: false,
-        effectText: "使用该卡牌的行动点数，对宋国军团执行进军，不能触发战斗，不能移动到缺乏的区域。",
+        effectText: "使用该卡牌的行动点数，对宋国军团执行进军，不能触发战斗，不能移动到缺乏补给的区域。",
         unlock: "",
         block: "",
         ban: "",

@@ -3,7 +3,7 @@ import {getCityByID} from "../constants/cities";
 import {FLATLAND, getRegionById, HILLS, MOUNTAINS, RAMPART, SWAMP} from "../constants/regions";
 import {combatResultTable} from "../constants/crt";
 
-const accumulator = (accumulator, currentValue) => accumulator + currentValue;
+export const accumulator = (accumulator, currentValue) => accumulator + currentValue;
 
 export function findLeadingPlayer(G) {
     if (G.jinn.civil > G.song.civil) {
@@ -1077,6 +1077,10 @@ export function getJinnMeleeDamage(G, ctx, simulate=false) {
     }
 }
 
+export function getJinnBackupCount(G,ctx,){
+    return G.jinn.supplementBank.slice(0, 7).reduce(accumulator)
+}
+
 export function getSongBackupCount(G, ctx,) {
     return G.song.supplementBank.slice(0, 6).reduce(accumulator)
 }
@@ -1094,3 +1098,4 @@ export function jinnSupplementCities(G,ctx){
         .filter(id=>G.jinn.colonization>getColonization(G,ctx,id))
         .filter(id=>isCityUnderSiege(G,ctx,id));
 }
+

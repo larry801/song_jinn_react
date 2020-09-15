@@ -19,6 +19,11 @@ export function setupGame(ctx, setupData) {
         jinnPlayer: '1',
         // Full log https://github.com/boardgameio/boardgame.io/issues/795
         workAroundIssue795:false,
+        pending:{
+            endTurn:false,
+            endPhase:false,
+            endStage:false,
+        },
         /*
         仅当前玩家可见状态 比如手牌
          */
@@ -51,6 +56,7 @@ export function setupGame(ctx, setupData) {
                 }
             }
         },
+
         recruitCost: INITIAL_RECRUIT_COST,
         recruitPermission: INITIAL_RECRUIT_PERMISSION,
         opForRecruitAndMarch: 0,
@@ -59,7 +65,7 @@ export function setupGame(ctx, setupData) {
             mountainPass:0,
             isRoundTwo:false,
             pendingCombat:false,
-            stage:null,
+            stage:"noCombat",
             isSiege:false,
             isBreakthrough:false,
             isField:false,

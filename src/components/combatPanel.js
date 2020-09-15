@@ -11,7 +11,6 @@ export function CombatPanel(props) {
     const info = props.G.combatInfo
 
     const battleType = () => {
-
         if (info.isSiege) return "攻城"
         if (info.isRescue) return "解围"
         if (info.isBreakthrough) return "突围"
@@ -53,8 +52,7 @@ export function CombatPanel(props) {
     return info.pendingCombat ? <div>
         <Grid container>
             <Grid item>
-                <div><label>{region}{battleType} 第{info.isRoundTwo ? 2 : 1}轮 {stage}阶段 </label></div>
-
+                <div><label>{region()} {battleType()} 第{info.isRoundTwo ? 2 : 1}轮 {stage}阶段 </label></div>
             </Grid>
 
             <Grid item>

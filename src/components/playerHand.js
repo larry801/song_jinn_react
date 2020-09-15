@@ -5,7 +5,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import {Button} from "@material-ui/core";
 import {getJinnCardById, getSongCardById} from "../constants/cards"
 import Grid from "@material-ui/core/Grid";
-import {canPeaceTalk, canSubmitLetterOfCredence} from "../auto/util";
+import {canPeaceTalk, canSubmitLetterOfCredence, getJinnBackupCount} from "../auto/util";
 import ChoiceDialog from "./modals/base";
 
 export class PlayerHand extends React.Component {
@@ -50,6 +50,7 @@ export class PlayerHand extends React.Component {
         let card = isSong ? getSongCardById : getJinnCardById
         let isActive = this.props.isActive;
         let ctx = this.props.ctx;
+        let moves = this.props.moves;
         let inPhase = ctx.phase === 'doOperations';
         let totalRounds = hands.length + this.props.G.roundMarker;
         let emptyRoundButton;
@@ -57,8 +58,8 @@ export class PlayerHand extends React.Component {
             emptyRoundButton =
                 <Grid item>
                     <Button
-                        disabled={!(this.props.ctx.phase === 'doOperations' && this.props.isActive)}
-                        onClick={() => this.props.moves.emptyRound()}>
+                        disabled={!(ctx.phase === 'doOperations' && isActive)}
+                        onClick={() => moves.emptyRound()}>
                         跳过
                     </Button>
                 </Grid>
@@ -90,15 +91,15 @@ export class PlayerHand extends React.Component {
                     </AccordionSummary>
                     <AccordionDetails>
                         <Button
-                            disabled={!(this.props.isActive && inPhase)}
-                            onClick={() => this.props.moves.useOp(id)}
+                            disabled={!(isActive && inPhase)}
+                            onClick={() => moves.useOp(id)}
                         >征募和进军</Button>
                         <Button
-                            disabled={!(this.canPlayAsEvent(id) && this.props.isActive && inPhase)}
+                            disabled={!(this.canPlayAsEvent(id) && isActive && inPhase)}
                             onClick={() => this.onPlayAsEvent(id)}
                         >事件</Button>
                         <Button
-                            disabled={!(this.props.isActive && inPhase)}
+                            disabled={!(isActive && inPhase)}
                         >派遣</Button>
                         <Button
                             disabled={!(isActive && inPhase && countries.length!==0)}
@@ -107,15 +108,14 @@ export class PlayerHand extends React.Component {
                             }}
                         >外交</Button>
                         <Button
-                            disabled={!(this.props.isActive && inPhase)}
-                            onClick={() => this.props.move.develop(id)}
+                            disabled={!(isActive && inPhase)}
+                            onClick={() => moves.develop(id)}
                         >发展</Button>
                         {isSong ? <Button
-                                disabled={!(this.props.isActive && inPhase && canPeaceTalk(this.props.G, this.props.ctx))}
+                                disabled={!(isActive && inPhase && canPeaceTalk(G, ctx))}
                             >和议</Button> :
                             <Button
-                                // TODO troop in supplement bank
-                                disabled={!(this.props.isActive && inPhase)}
+                                disabled={!(isActive && inPhase && getJinnBackupCount() > 0)}
                             >贴军</Button>}
                     </AccordionDetails></Accordion>
                 )}

@@ -30,18 +30,21 @@ export class SongJinnBoard extends React.Component {
         let c;
         let player = G.player[playerID];
         let isSong;
+        let oc;
         let o;
         if (playerID === G.songPlayer) {
             isSong = true;
             p = G.song;
             o = G.jinn;
             c = G.combatInfo.song;
+            oc = G.combatInfo.jinn;
         }
         if (playerID === G.jinnPlayer) {
             isSong = false;
             p = G.jinn;
             o = G.song;
             c = G.combatInfo.jinn
+            oc = G.combatInfo.jinn;
         }
         let winner = '';
         if (ctx.gameover) {
@@ -121,20 +124,21 @@ export class SongJinnBoard extends React.Component {
                     {isActive && p.planChosen ?
                         <Button onClick={() => moves.showPlanCard(player.chosenPlans)}>展示计划</Button>
                         : ""}
-                    {isActive && (
-                        true
-                        // curPlayerInStage(ctx, "takeDamage") ||
-                        //     G.combatInfo.stage.startsWith("takeDamage")
+                    {isActive && (curPlayerInStage(ctx, "takeDamage") ||
+                        G.combatInfo.stage.startsWith("takeDamage")
                     ) && c.pendingDamage > 0 ?
                         <TakeDamageModal
                             G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                         />
                         : ""}
-                    {isActive && curPlayerInStage(ctx, "beatGong") ?
+                    {isActive && ( curPlayerInStage(ctx, "beatGong") ||
+                            G.combatInfo.stage === "beatGong")
+                        ?
                         <ChoiceDialog
-                            callback={moves.siegeOrAttack}
+                            callback={moves.beatGong}
                             choices={[
                                 {label: "坚守", value: "defence", disabled: false, hidden: false,},
+                                // TODO can retreat
                                 {label: "撤退", value: "retreat", disabled: false, hidden: false,},
                                 {
                                     label: "继续作战", value: "continue", disabled: false, hidden: !(
@@ -143,14 +147,14 @@ export class SongJinnBoard extends React.Component {
                                             c.troop.general.includes("岳飞") ||
                                             c.troop.general.includes("兀术") ||
                                             c.combatCards.includes(36)
-                                        )
+                                        ) && !G.combatInfo.isRoundTwo
                                     ),
                                 },
                             ]}
                             default="attack"
-                            show={isActive && playerInStage(ctx, playerID, "siegeOrAttack")}
+                            show={true}
                             title="请选择要执行的操作"
-                            toggleText="攻城或围城"
+                            toggleText="鸣金阶段"
                         /> : ""}
                     <CombatCard
                         G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}

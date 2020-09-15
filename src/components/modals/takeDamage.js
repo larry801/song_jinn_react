@@ -8,9 +8,9 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Dialog from "@material-ui/core/Dialog";
-import {TakeDamageTroopList} from "./march";
+import {TakeDamageTroopList, TransferTroopList} from "./march";
 import {troopToUnits, unitsToTroop} from "./moveArmy";
-import {troopEndurance} from "../../auto/util";
+import {troopEndurance, unitsToString} from "../../auto/util";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -29,31 +29,37 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-    return ['选择承受伤害部队', '选择击溃部队'];
+    return ['选择受创部队', '选择被消灭部队'];
 }
 
-function getStepContent(step) {
-    switch (step) {
-        case 0:
-            return `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`;
-        case 1:
-            return 'An ad group contains one or more ads which target a shared set of keywords.';
-        case 2:
-            return `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`;
-        default:
-            return 'Unknown step';
+
+export const TakeDamageStepper = ({G, ctx, moves, events, log, isActive, playerID }) =>{
+
+    const [troop,setTroop] = React.useState([])
+    const [e,setE] = React.useState([])
+    const [d,setD] = React.useState([])
+
+    function getStepContent(step) {
+        switch (step) {
+            case 0:
+                return <TransferTroopList
+                    units={info.troop}
+                />;
+            case 1:
+                return <TransferTroopList
+                    units={troop}
+                />;
+            case 2:
+                return `死 ${unitsToString(e)} 溃 ${unitsToString(d)}`;
+            default:
+                return 'Unknown step';
+        }
     }
-}
-
-export default function VerticalLinearStepper() {
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = getSteps();
+
+    const info = G.songPlayer === playerID ? G.combatInfo.song: G.combatInfo.jinn;
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -75,6 +81,7 @@ export default function VerticalLinearStepper() {
                         <StepLabel>{label}</StepLabel>
                         <StepContent>
                             <Typography>{getStepContent(index)}</Typography>
+
                             <div className={classes.actionsContainer}>
                                 <div>
                                     <Button
@@ -82,7 +89,7 @@ export default function VerticalLinearStepper() {
                                         onClick={handleBack}
                                         className={classes.button}
                                     >
-                                        Back
+                                        上一步
                                     </Button>
                                     <Button
                                         variant="contained"
@@ -90,7 +97,7 @@ export default function VerticalLinearStepper() {
                                         onClick={handleNext}
                                         className={classes.button}
                                     >
-                                        {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                        {activeStep === steps.length - 1 ? '完成' : '下一步'}
                                     </Button>
                                 </div>
                             </div>
@@ -102,7 +109,7 @@ export default function VerticalLinearStepper() {
                 <Paper square elevation={0} className={classes.resetContainer}>
                     <Typography>All steps completed - you&apos;re finished</Typography>
                     <Button onClick={handleReset} className={classes.button}>
-                        Reset
+                        确定
                     </Button>
                 </Paper>
             )}

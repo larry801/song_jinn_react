@@ -179,6 +179,9 @@ export function removeGeneral(G, ctx, pub, name) {
             troop.general.splice(i, 1);
         }
     }
+    if (name === "岳飞" && G.song.activeEvents.includes(41)) {
+        G.song.activeEvents.splice(G.song.activeEvents.indexOf(41), 1);
+    }
 }
 
 export function troopToString(troop) {
@@ -877,7 +880,9 @@ export function getSongRangeDamage(G, ctx, simulate = false) {
     if (G.useCombatResultTable) {
         crtDicesToDamage(dices, getSongRangeStrength(G, ctx,));
     } else {
-        return dices.filter((d) => d >= 5).length
+        let drm = 0;
+        if (G.song.activeEvents.includes(41)) drm++;
+        return dices.filter((d) => d + drm >= 5).length
     }
 }
 
@@ -957,11 +962,13 @@ export function getSongWuLinDamage(G, ctx, simulate = false) {
             dices = ctx.random.D6(pair)
         }
         G.combatInfo.song.dices = dices;
-        return dices.filter((d) => d >= 5).length;
+        let drm = 0
+        if (G.song.activeEvents.includes(41)) drm++;
+        return dices.filter((d) => d + drm >= 5).length;
     }
 }
 
-export function meleeSong(G,ctx,diceCount,simulate=false){
+export function meleeSong(G, ctx, diceCount, simulate = false) {
     let dices;
     if (simulate) {
         dices = dice(6, diceCount)
@@ -979,13 +986,14 @@ export function meleeSong(G,ctx,diceCount,simulate=false){
         crtDicesToDamage(dices, diceCount);
     } else {
         let drm = 0;
+        if (G.song.activeEvents.includes(41)) drm++;
         return dices.filter((d) => d + drm >= 5).length + addDamage;
     }
 
 }
 
 export function getSongMeleeOnlyDamage(G, ctx, simulate = false) {
-    return meleeSong(G,ctx,getSongMeleeOnlyDiceCount(G,ctx),simulate);
+    return meleeSong(G, ctx, getSongMeleeOnlyDiceCount(G, ctx), simulate);
 }
 
 export function getSongMeleeOnlyDiceCount(G, ctx,) {
@@ -1046,7 +1054,7 @@ export function getSongMeleeDice(G, ctx) {
 }
 
 export function getSongMeleeDamage(G, ctx, simulate = false) {
-    return meleeSong(G,ctx,getSongMeleeDice(G,ctx),simulate);
+    return meleeSong(G, ctx, getSongMeleeDice(G, ctx), simulate);
 }
 
 export function getJinnMeleeStrength(G, ctx) {

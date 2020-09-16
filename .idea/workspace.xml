@@ -25,11 +25,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d640c4b6-4363-4b63-8893-54cb419a8732" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/auto/moves.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/moves.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/auto/setupGame.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/setupGame.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/util.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/util.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/combatPanel.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/combatPanel.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -242,7 +238,7 @@
       <workItem from="1600128985551" duration="602000" />
       <workItem from="1600167198128" duration="63000" />
       <workItem from="1600167340875" duration="6478000" />
-      <workItem from="1600214436830" duration="9600000" />
+      <workItem from="1600214436830" duration="9926000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1599870956015</created>
@@ -363,7 +359,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600224858209</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="驻队矢 melee only">
+      <created>1600226774548</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1600226774548</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -412,7 +415,8 @@
     <MESSAGE value="南人归南 北人归北" />
     <MESSAGE value="More helper text for take damage modal" />
     <MESSAGE value="Fix missing argument" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix missing argument" />
+    <MESSAGE value="驻队矢 melee only" />
+    <option name="LAST_COMMIT_MESSAGE" value="驻队矢 melee only" />
   </component>
   <component name="WindowStateProjectService">
     <state x="0" y="0" key="#Live_Templates" timestamp="1599978269850">
@@ -435,10 +439,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="206" y="207" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1024.738@0.0.1024.738" timestamp="1599474344917" />
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600224857616">
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600226773785">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600224857616" />
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600226773785" />
     <state x="92" y="92" width="840" height="554" key="DiffContextDialog" timestamp="1599913050082">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
@@ -531,10 +535,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="64" y="14" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1024.738@0.0.1024.738" timestamp="1599487406965" />
-    <state x="0" y="0" width="1024" height="738" key="find.popup" timestamp="1600226251997">
+    <state x="0" y="0" width="1024" height="738" key="find.popup" timestamp="1600226791361">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600226251997" />
+    <state x="0" y="0" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600226791361" />
     <state x="168" y="159" key="run.anything.popup" timestamp="1599723802401">
       <screen x="0" y="0" width="1024" height="738" />
     </state>

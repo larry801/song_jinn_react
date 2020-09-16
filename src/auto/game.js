@@ -14,7 +14,7 @@ import {
     siegeOrAttack,
     develop,
     combatCard,
-    showCombatCard, showPlanCard, takeDamage, resultOfDevelopment, beatGong
+    showCombatCard, showPlanCard, takeDamage, resultOfDevelopment, beatGong, dispatchGeneral
 } from "./moves";
 import * as util from "./util";
 import {PlayerView} from "boardgame.io/dist/esm/core";
@@ -35,10 +35,10 @@ export const SongJinn = {
         recruitOrMarch: recruitOrMarch,
         siegeOrAttack: siegeOrAttack,
         combatCard: combatCard,
-        resultOfDevelopment:resultOfDevelopment,
+        resultOfDevelopment: resultOfDevelopment,
         showCombatCard: showCombatCard,
-        showPlanCard:showPlanCard,
-        takeDamage:takeDamage,
+        showPlanCard: showPlanCard,
+        takeDamage: takeDamage,
         beatGong: beatGong,
     },
     playerView: PlayerView.STRIP_SECRETS,
@@ -49,12 +49,12 @@ export const SongJinn = {
                 takeCardFromDeck: takeCardFromDeck
             },
             onBegin: (G, ctx) => {
-                G.pending={
-                    endTurn:false,
-                    endPhase:false,
-                    endStage:false,
+                G.pending = {
+                    endTurn: false,
+                    endPhase: false,
+                    endStage: false,
                 };
-                signalEndPhase(G,ctx);
+                signalEndPhase(G, ctx);
             },
             onEnd: (G, ctx) => {
             },
@@ -66,12 +66,12 @@ export const SongJinn = {
                 takeCardFromDeck: takeCardFromDeck
             },
             onBegin: (G, ctx) => {
-                G.pending={
-                    endTurn:false,
-                    endPhase:false,
-                    endStage:false,
+                G.pending = {
+                    endTurn: false,
+                    endPhase: false,
+                    endStage: false,
                 };
-                changePhase(G,ctx,'chooseOrder');
+                changePhase(G, ctx, 'chooseOrder');
             },
             onEnd: (G, ctx) => {
             },
@@ -80,19 +80,19 @@ export const SongJinn = {
         chooseOrder: {
             start: true,
             onBegin: (G, ctx) => {
-                G.pending={
-                    endTurn:false,
-                    endPhase:false,
-                    endStage:false,
+                G.pending = {
+                    endTurn: false,
+                    endPhase: false,
+                    endStage: false,
                 };
                 drawPhaseForJinn(G, ctx);
                 drawPhaseForSong(G, ctx);
             },
             onEnd: (G, ctx) => {
-                G.pending={
-                    endTurn:false,
-                    endPhase:false,
-                    endStage:false,
+                G.pending = {
+                    endTurn: false,
+                    endPhase: false,
+                    endStage: false,
                 };
             },
             moves: {
@@ -110,16 +110,16 @@ export const SongJinn = {
         drawPlan: {
             moves: {
                 chooseStrategicPlans: chooseStrategicPlans,
-                showPlanCard:showPlanCard,
+                showPlanCard: showPlanCard,
             },
             turn: {
                 onBegin: (G, ctx) => {
-                    G.pending={
-                        endTurn:false,
-                        endPhase:false,
-                        endStage:false,
+                    G.pending = {
+                        endTurn: false,
+                        endPhase: false,
+                        endStage: false,
                     };
-                    if(!G.song.planChosen||!G.jinn.planChosen){
+                    if (!G.song.planChosen || !G.jinn.planChosen) {
                         util.drawStrategicPlans(G, ctx, ctx.currentPlayer);
                     }
                 },
@@ -132,8 +132,26 @@ export const SongJinn = {
             next: 'doOperations'
         },
         doOperations: {
+            onBegin: (G, ctx) => {
+                G.song.planChosen = false;
+                G.jinn.planChosen = false;
+                G.song.planShown = false;
+                G.jinn.planShown = false;
+                G.pending.endPhase = false;
+                G.pending = {
+                    endTurn: false,
+                    endPhase: false,
+                    endStage: false,
+                };
+            },
             turn: {
-
+                onBegin: (G, ctx) => {
+                    G.pending = {
+                        endTurn: false,
+                        endPhase: false,
+                        endStage: false,
+                    };
+                },
                 moves: {
                     emptyRound: emptyRound,
                     playAsEvent: playAsEvent,
@@ -142,7 +160,7 @@ export const SongJinn = {
                     siegeOrAttack: siegeOrAttack,
                     diplomacy: diplomacy,
                     combatCard: combatCard,
-                    resultOfDevelopment:resultOfDevelopment,
+                    resultOfDevelopment: resultOfDevelopment,
                     beatGong: beatGong,
                 },
                 order: {
@@ -151,10 +169,10 @@ export const SongJinn = {
                     playOrder: (G, ctx) => [G.firstPlayerID, G.secondPlayerID]
                 },
                 stages: {
-                    combatCard:{
-                        moves:{
-                            combatCard:combatCard,
-                            showCombatCard:showCombatCard,
+                    combatCard: {
+                        moves: {
+                            combatCard: combatCard,
+                            showCombatCard: showCombatCard,
                         }
                     },
                     recruitOrMarch: {
@@ -169,17 +187,17 @@ export const SongJinn = {
                     },
                     march: {
                         moves: {
-                            march:march
+                            march: march
                         }
                     },
-                    dispatch: {
-                        moves: {}
+                    dispatchGeneral: {
+                        moves: {
+                            dispatchGeneral: dispatchGeneral
+                        }
                     },
-                    //征募伪军
-                    placeVassalArmy: {}
                 }
             },
-            next: 'turnEnd',
+            next: 'settlePlan',
         },
         settlePlan: {
             next: 'diplomaticOperations'
@@ -195,10 +213,10 @@ export const SongJinn = {
         },
         turnEnd: {
             onBegin: (G, ctx) => {
-                G.pending={
-                    endTurn:false,
-                    endPhase:false,
-                    endStage:false,
+                G.pending = {
+                    endTurn: false,
+                    endPhase: false,
+                    endStage: false,
                 };
                 if (G.turnMarker === 2) {
                     util.addMidTermCard(G, ctx)
@@ -207,21 +225,21 @@ export const SongJinn = {
                     util.addLateTermCards(G, ctx)
                 }
                 if (G.turnMarker === 8) {
-                    changePhase(G,ctx,'finalSettlement')
+                    changePhase(G, ctx, 'finalSettlement')
                 }
                 G.turnMarker = G.turnMarker + 1;
                 //TODO 曲端
-                signalEndPhase(G,ctx);
+                signalEndPhase(G, ctx);
             },
             moves: {},
             next: "chooseOrder"
         },
         finalSettlement: {
             onBegin: (G, ctx) => {
-                G.pending={
-                    endTurn:false,
-                    endPhase:false,
-                    endStage:false,
+                G.pending = {
+                    endTurn: false,
+                    endPhase: false,
+                    endStage: false,
                 };
             }
         }

@@ -578,7 +578,7 @@ export const moveOpponentArmy = {
     undoable: false
 };
 
-export const dispatch = {
+export const dispatchGeneral = {
     move: (G, ctx, arg) => {
 
     },

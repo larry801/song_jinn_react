@@ -63,6 +63,7 @@ export const SettleDevelop = ({G, ctx, events, moves, log, playerID}) => {
             military: military,
             civil: civil,
             special: sp,
+            playerID:playerID,
         })
     }
 

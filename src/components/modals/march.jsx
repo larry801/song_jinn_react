@@ -41,7 +41,7 @@ function union(a, b) {
 }
 
 
-export function TakeDamageTroopList(props){
+export function TakeDamageTroopList({G,ctx,units,callback}){
     const classes = useStyles();
     const [eliminated,setEliminated] = React.useState([])
     const [defeated,setDefeated] = React.useState([])
@@ -84,7 +84,7 @@ export function TakeDamageTroopList(props){
         defeated: defeated,
     }
 
-    const t = (arg) => canTakeDamage(props.G,props.ctx,arg)
+    const t = (arg) => canTakeDamage(G,ctx,arg)
 
     // TODO 多受创问题
     const removeOneUnitCanProceed = false;
@@ -96,11 +96,11 @@ export function TakeDamageTroopList(props){
             <CardHeader
                 className={classes.cardHeader}
                 title={title}
-                subheader={troopToString(unitsToTroop(items))}
+                subheader={troopToString(unitsToTroop(items))} {}
             />
             <Divider/>
             <List className={classes.list} dense component="div" role="list">
-                {props.units.map((value) => {
+                {units.map((value) => {
                     const labelId = `transfer-list-all-item-${value.id}-label`;
                     return (
                         <ListItem key={value.id}
@@ -130,17 +130,17 @@ export function TakeDamageTroopList(props){
             <Grid item>{takeDamageList('击溃', defeated,handleDefeated)}</Grid>
             <Grid item><Button variant={"outlined"}
            disabled={!canProceed}
-                onClick={()=>props.callback(arg)}
+                onClick={()=>callback(arg)}
             >确定</Button></Grid>
         </Grid>
     </>
 }
 
-export function TransferTroopList(props){
+export function TransferTroopList({left,dispatch}){
     const classes = useStyles();
 
     const [checked, setChecked] = React.useState([]);
-    const [left, setLeft] = React.useState(props.left);
+    const [left, setLeft] = React.useState(left);
     const [right, setRight] = React.useState([]);
 
     const leftChecked = intersection(checked, left);
@@ -252,7 +252,7 @@ export function TransferTroopList(props){
     <Button
         variant="outlined"
         disabled={right.length === 0}
-        onClick={()=>props.dispatch({
+        onClick={()=>dispatch({
         type:'targetTroop',
         payload:right
     })}>下一步</Button>

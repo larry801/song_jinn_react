@@ -784,6 +784,20 @@ export function getColonization(G, ctx, cityID) {
     }
 }
 
+export function getCitySupply(G,ctx,cityID){
+    let c = getCityByID(cityID);
+    let supply = c.capital ? 2 : 1;
+    if (G.jinn.emperor.city === cityID) {
+        supply++;
+    }
+    let t =songTroopInCity(G, ctx, cityID);
+    if(t !== false){
+        if(G.song.emperor.city === cityID) supply++;
+        if(t.general.includes("宗泽")) supply++;
+    }
+    return supply;
+}
+
 export function getCityDefense(G, ctx, cityID) {
     let c = getCityByID(cityID);
     let defense = c.capital ? 2 : 1;

@@ -25,12 +25,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d640c4b6-4363-4b63-8893-54cb419a8732" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/modals/renforcement.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/modals/renforcement.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/game.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/moves.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/moves.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/util.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/util.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/base.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/base.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/recruit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/recruit.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SongJinnBoard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SongJinnBoard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/combatCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/combatCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/combatPanel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/combatPanel.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/log.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/log.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/map.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/map.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/base.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/base.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/choosePlan.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/choosePlan.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/choosePlayerOrder.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/choosePlayerOrder.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/counter.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/counter.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/developCountry.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/developCountry.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/diplomacy.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/diplomacy.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/march.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/march.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/moveArmy.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/moveArmy.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/rearrangePlan.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/rearrangePlan.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/recruit.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/recruit.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/recruitOrMarch.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/recruitOrMarch.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/settleDevelop.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/settleDevelop.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/takeDamage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/takeDamage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/takeDamage.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/takeDamage.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/playerHand.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/playerHand.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pubInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pubInfo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/troopList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/troopList.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,7 +82,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/auto" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/auto/util.js" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -76,6 +97,9 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="es6.move.members.recent.items">
+      <recent name="C:\Users\John\WebstormProjects\song_jinn_react\src\auto\util.js" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\John\WebstormProjects\song_jinn_react\src\auto" />
       <recent name="C:\Users\John\WebstormProjects\song_jinn_react\src" />
@@ -239,7 +263,8 @@
       <workItem from="1600041768621" duration="14092000" />
       <workItem from="1600128985551" duration="602000" />
       <workItem from="1600167198128" duration="63000" />
-      <workItem from="1600167340875" duration="4481000" />
+      <workItem from="1600167340875" duration="6478000" />
+      <workItem from="1600214436830" duration="1013000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1599870956015</created>
@@ -318,7 +343,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600171510134</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Add get supply for city">
+      <created>1600172039337</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1600172039337</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -361,7 +393,8 @@
     <MESSAGE value="bump boardgame.io version" />
     <MESSAGE value="Add simulator for damage" />
     <MESSAGE value="Fix some todo and minor issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix some todo and minor issue" />
+    <MESSAGE value="Add get supply for city" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add get supply for city" />
   </component>
   <component name="WindowStateProjectService">
     <state x="0" y="0" key="#Live_Templates" timestamp="1599978269850">
@@ -384,18 +417,18 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="206" y="207" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1024.738@0.0.1024.738" timestamp="1599474344917" />
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600171508896">
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600172038415">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600171508896" />
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600172038415" />
     <state x="92" y="92" width="840" height="554" key="DiffContextDialog" timestamp="1599913050082">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="92" y="92" width="840" height="554" key="DiffContextDialog/0.0.1024.738@0.0.1024.738" timestamp="1599913050082" />
-    <state x="291" y="138" key="FileChooserDialogImpl" timestamp="1599707490136">
+    <state x="291" y="138" key="FileChooserDialogImpl" timestamp="1600214848198">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="291" y="138" key="FileChooserDialogImpl/0.0.1024.738@0.0.1024.738" timestamp="1599707490136" />
+    <state x="291" y="138" key="FileChooserDialogImpl/0.0.1024.738@0.0.1024.738" timestamp="1600214848198" />
     <state width="1002" height="146" key="GridCell.Tab.0.bottom" timestamp="1600086487701">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
@@ -480,10 +513,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="64" y="14" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1024.738@0.0.1024.738" timestamp="1599487406965" />
-    <state x="0" y="0" width="1024" height="738" key="find.popup" timestamp="1600171769783">
+    <state x="0" y="0" width="1024" height="738" key="find.popup" timestamp="1600214822770">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600171769783" />
+    <state x="0" y="0" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600214822770" />
     <state x="168" y="159" key="run.anything.popup" timestamp="1599723802401">
       <screen x="0" y="0" width="1024" height="738" />
     </state>

@@ -9,8 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Dialog from "@material-ui/core/Dialog";
 import {TakeDamageTroopList, TransferTroopList} from "./march";
-import {troopToUnits, unitsToTroop} from "./moveArmy";
-import {troopEndurance, unitsToString} from "../../auto/util";
+import {troopToUnits, unitsToString} from "../../auto/util";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -144,49 +143,3 @@ export function TakeDamageModal(props) {
     </div>
 }
 
-export function canTakeDamage(G, ctx, arg) {
-    let combatInfo;
-    let isSong;
-    if (arg.eliminated.length === 0 && arg.defeated.length === 0) {
-        return false;
-    } else {
-        let all = arg.eliminated.concat(arg.defeated)
-        if (all[0].owner === 'song') {
-            isSong = true;
-            combatInfo = G.combatInfo.song;
-        } else {
-            isSong = false;
-            combatInfo = G.combatInfo.jinn;
-        }
-        let eliminatedEndurance, defeatedEndurance, damage, endurance;
-        if (arg.eliminated.length > 0) {
-            let eTroop = unitsToTroop(arg.eliminated);
-            eTroop.region = combatInfo.troop.region;
-            eTroop.city = combatInfo.troop.city;
-            eliminatedEndurance = troopEndurance(G,ctx,eTroop);
-        } else {
-            eliminatedEndurance = 0;
-        }
-        if (arg.defeated.length > 0) {
-            let dTroop = unitsToTroop(arg.defeated);
-            dTroop.region = combatInfo.troop.region;
-            dTroop.city = combatInfo.troop.city;
-            defeatedEndurance = troopEndurance(G,ctx,unitsToTroop(arg.defeated));
-        } else {
-            defeatedEndurance = 0;
-        }
-        endurance = troopEndurance(G,ctx,combatInfo.troop);
-        damage = combatInfo.pendingDamage
-        damage = damage > endurance ? endurance : damage;
-        if (!isSong && G.combatInfo.isSiege && G.combatInfo.jinn.isAttacker && G.combatInfo.jinn.troop.units[4] > 0) {
-            if (eliminatedEndurance + defeatedEndurance >= damage) {
-                let count = arg.eliminated.length + arg.defeated.length
-                return count < 3 || eliminatedEndurance >= defeatedEndurance;
-            } else {
-                return false;
-            }
-        } else {
-            return (eliminatedEndurance + defeatedEndurance >= damage && eliminatedEndurance >= defeatedEndurance);
-        }
-    }
-}

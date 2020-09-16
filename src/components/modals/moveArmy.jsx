@@ -3,14 +3,18 @@ import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import {TroopList} from "../troopList";
 import Dialog from "@material-ui/core/Dialog";
-import {UNIT_SHORTHAND} from "../../constants/general";
 import {Typography} from "@material-ui/core";
 import {
-    getMarchDestination, jinnTroopInCity,
-    jinnTroopInRegion, songTroopInCity,
+    getMarchDestination,
+    jinnTroopInCity,
+    jinnTroopInRegion,
+    songTroopInCity,
     songTroopInRegion,
-    stackLimitReached, troopIsArmy,
-    troopToString
+    stackLimitReached,
+    troopIsArmy,
+    troopToString,
+    troopToUnits,
+    unitsToTroop
 } from "../../auto/util";
 import {getRegionById} from "../../constants/regions";
 import {getCityByID} from "../../constants/cities";
@@ -41,66 +45,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export function unitsToTroop(units) {
-    let troop;
-    let validUnitID;
-    if(units.length===0) return {
-        units: [0, 0, 0, 0, 0, 0, 0],
-        general: [],
-        region: 0,
-        city: 0,
-    };
-    if (units[0].owner === 'song') {
-        validUnitID = [0, 1, 2, 3, 4, 5]
-        troop = {
-            units: [0, 0, 0, 0, 0, 0],
-            general: [],
-            region: 0,
-            city: 0,
-        }
-    } else {
-        validUnitID = [0, 1, 2, 3, 4, 5, 6]
-        troop = {
-            units: [0, 0, 0, 0, 0, 0, 0],
-            general: [],
-            region: 0,
-            city: 0,
-        }
-    }
-    for (let u of units) {
-        if (validUnitID.includes(u.type)) {
-            troop.units[u.type]++;
-        } else {
-            troop.general.push(u.name);
-        }
-    }
-    return troop
-}
-
-export function troopToUnits(troop) {
-    let units = [];
-    let names;
-    let owner;
-    if(troop.units.length ===7 ){
-        owner = 'jinn'
-        names = UNIT_SHORTHAND[1];
-    }else{
-        owner = 'song';
-        names = UNIT_SHORTHAND[0];
-    }
-    let uid = 0;
-    troop.units.forEach((i, idx) => {
-        for (let q = 0; q < i; q++) {
-            units.push({type:idx,id:uid,name:names[idx],owner:owner})
-            uid++;
-        }
-    })
-    troop.general.forEach((i)=>{
-        units.push({type:'general',id:uid,name:i});
-        uid++;
-    })
-    return units;
-}
 export function March(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);

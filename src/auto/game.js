@@ -14,7 +14,7 @@ import {
     siegeOrAttack,
     develop,
     combatCard,
-    showCombatCard, showPlanCard, takeDamage, resultOfDevelopment
+    showCombatCard, showPlanCard, takeDamage, resultOfDevelopment, beatGong
 } from "./moves";
 import * as util from "./util";
 import {PlayerView} from "boardgame.io/dist/esm/core";
@@ -38,6 +38,7 @@ export const SongJinn = {
         showCombatCard: showCombatCard,
         showPlanCard:showPlanCard,
         takeDamage:takeDamage,
+        beatGong: beatGong,
     },
     playerView: PlayerView.STRIP_SECRETS,
     phases: {
@@ -121,6 +122,7 @@ export const SongJinn = {
                     diplomacy: diplomacy,
                     combatCard: combatCard,
                     resultOfDevelopment:resultOfDevelopment,
+                    beatGong: beatGong,
                 },
                 order: {
                     first: (G, ctx) => 0,

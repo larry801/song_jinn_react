@@ -2,7 +2,6 @@ import {UNIT_FULL_NAME, UNIT_SHORTHAND} from "../constants/general";
 import {getCityByID} from "../constants/cities";
 import {FLATLAND, getRegionById, HILLS, MOUNTAINS, RAMPART, SWAMP} from "../constants/regions";
 import {combatResultTable} from "../constants/crt";
-import {func} from "prop-types";
 
 export const accumulator = (accumulator, currentValue) => accumulator + currentValue;
 
@@ -1120,4 +1119,116 @@ export function jinnCitySupply(G,ctx,cityID){
         sup++;
     }
     return sup;
+}
+
+export function jinnVassalCities(G,ctx,){
+    return jinnControlCities(G,ctx,).filter(id=>G.jinn.military>=getColonization(G,ctx,id));
+}
+
+export function unitsToTroop(units) {
+    let troop;
+    let validUnitID;
+    if (units.length === 0) return {
+        units: [0, 0, 0, 0, 0, 0, 0],
+        general: [],
+        region: 0,
+        city: 0,
+    };
+    if (units[0].owner === 'song') {
+        validUnitID = [0, 1, 2, 3, 4, 5]
+        troop = {
+            units: [0, 0, 0, 0, 0, 0],
+            general: [],
+            region: 0,
+            city: 0,
+        }
+    } else {
+        validUnitID = [0, 1, 2, 3, 4, 5, 6]
+        troop = {
+            units: [0, 0, 0, 0, 0, 0, 0],
+            general: [],
+            region: 0,
+            city: 0,
+        }
+    }
+    for (let u of units) {
+        if (validUnitID.includes(u.type)) {
+            troop.units[u.type]++;
+        } else {
+            troop.general.push(u.name);
+        }
+    }
+    return troop
+}
+
+export function troopToUnits(troop) {
+    let units = [];
+    let names;
+    let owner;
+    if (troop.units.length === 7) {
+        owner = 'jinn'
+        names = UNIT_SHORTHAND[1];
+    } else {
+        owner = 'song';
+        names = UNIT_SHORTHAND[0];
+    }
+    let uid = 0;
+    troop.units.forEach((i, idx) => {
+        for (let q = 0; q < i; q++) {
+            units.push({type: idx, id: uid, name: names[idx], owner: owner})
+            uid++;
+        }
+    })
+    troop.general.forEach((i) => {
+        units.push({type: 'general', id: uid, name: i});
+        uid++;
+    })
+    return units;
+}
+
+export function canTakeDamage(G, ctx, arg) {
+    let combatInfo;
+    let isSong;
+    if (arg.eliminated.length === 0 && arg.defeated.length === 0) {
+        return false;
+    } else {
+        let all = arg.eliminated.concat(arg.defeated)
+        if (all[0].owner === 'song') {
+            isSong = true;
+            combatInfo = G.combatInfo.song;
+        } else {
+            isSong = false;
+            combatInfo = G.combatInfo.jinn;
+        }
+        let eliminatedEndurance, defeatedEndurance, damage, endurance;
+        if (arg.eliminated.length > 0) {
+            let eTroop = unitsToTroop(arg.eliminated);
+            eTroop.region = combatInfo.troop.region;
+            eTroop.city = combatInfo.troop.city;
+            eliminatedEndurance = troopEndurance(G, ctx, eTroop);
+        } else {
+            eliminatedEndurance = 0;
+        }
+        if (arg.defeated.length > 0) {
+            let dTroop = unitsToTroop(arg.defeated);
+            dTroop.region = combatInfo.troop.region;
+            dTroop.city = combatInfo.troop.city;
+            defeatedEndurance = troopEndurance(G, ctx, unitsToTroop(arg.defeated));
+        } else {
+            defeatedEndurance = 0;
+        }
+        endurance = troopEndurance(G, ctx, combatInfo.troop);
+        damage = combatInfo.pendingDamage
+        damage = damage > endurance ? endurance : damage;
+        if (!isSong && G.combatInfo.isSiege && G.combatInfo.jinn.isAttacker && G.combatInfo.jinn.troop.units[4] > 0) {
+            if (eliminatedEndurance + defeatedEndurance >= damage) {
+                let count = arg.eliminated.length + arg.defeated.length
+                return count < 3 || eliminatedEndurance >= defeatedEndurance;
+            } else {
+                return false;
+            }
+        } else {
+            return (eliminatedEndurance + defeatedEndurance >= damage && eliminatedEndurance >= defeatedEndurance);
+        }
+    }
 }

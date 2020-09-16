@@ -1,4 +1,4 @@
-import {canTakeDamage} from "./takeDamage";
+import {canTakeDamage} from "../../auto/util";
 
 // noinspection JSUnresolvedFunction
 test("Er che",()=>{

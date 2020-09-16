@@ -17,12 +17,11 @@ import {
     splitTroopFrom,
     getSongRangeDamage,
     getJinnRangeDamage,
-    getJinnMeleeDamage, getSongMeleeDamage,
+    getJinnMeleeDamage, getSongMeleeDamage, getSongWuLinDamage, canTakeDamage,
 } from "./util";
 import {getRegionById} from "../constants/regions";
 import {getJinnCardById, getSongCardById} from "../constants/cards";
 import {canChoosePlan} from "../constants/plan";
-import {canTakeDamage} from "../components/modals/takeDamage";
 
 export const choosePlayerWhoMovesFirst = {
     move: (G, ctx, firstPlayerID) => {
@@ -164,7 +163,7 @@ export const forceRoundTwo = {
             G.combatInfo.stage = "combatCard";
             ctx.events.setStage("combatCard");
         }else{
-
+            ctx.setActivePlayers({current:"beatGong"})
         }
 
     }
@@ -321,9 +320,6 @@ export const march = {
                             G.combatInfo.song.troop = song;
                             // TODO 会战stage combatCard
                             ctx.events.setStage('combatCard');
-                            // ctx.events.setActivePlayers({
-                            //
-                            // })
                         } else {
                             removeTroop(G, ctx, song)
                         }
@@ -429,16 +425,19 @@ function rangeStage(G, ctx) {
         }
     }
     if(hasDamage){
-        // ctx.events.setActivePlayers({
-        //     all: 'takeDamage'
-        // });
-        G.combatInfo.stage = "takeDamage"
+        ctx.events.setActivePlayers({
+            all: 'takeDamage'
+        });
+        G.combatInfo.stage = "takeDamageRange"
     }
 }
 
 function wuLinStage(G, ctx) {
     let hasDamge = false;
-    let pairCount = 0;
+    let dmg = getSongWuLinDamage(G,ctx,);
+    if(dmg>0){
+        G.combatInfo.jinn.pendingDamage =  dmg;
+    }
 }
 
 function meleeStage(G, ctx) {
@@ -457,6 +456,8 @@ function meleeStage(G, ctx) {
                 hasDamage = true;
                 G.combatInfo.stage = "takeDamageZhuDuiShi2"
             } else {
+                G.combatInfo.jinn.dices =[];
+                G.combatInfo.song.dices =[];
                 G.combatInfo.stage = "beatGong"
                 ctx.events.setStage("beatGong")
             }
@@ -467,6 +468,8 @@ function meleeStage(G, ctx) {
         let jDmg = getJinnMeleeDamage(G, ctx);
         G.combatInfo.song.pendingDamage = jDmg;
         if (sDmg === 0 && jDmg === 0) {
+            G.combatInfo.jinn.dices =[];
+            G.combatInfo.song.dices =[];
             G.combatInfo.stage = "beatGong"
             ctx.events.setStage("beatGong")
         } else {
@@ -475,9 +478,9 @@ function meleeStage(G, ctx) {
     }
     if(hasDamage){
         G.combatInfo.stage = "takeDamageMelee"
-        // ctx.events.setActivePlayers({
-        //     all: 'takeDamage'
-        // });
+        ctx.events.setActivePlayers({
+            all: 'takeDamage'
+        });
     }
 }
 
@@ -624,6 +627,8 @@ export const takeDamage = {
                 meleeStage(G, ctx);
             }
             if (G.combatInfo.stage === "takeDamageMelee") {
+                G.combatInfo.jinn.dices =[];
+                G.combatInfo.song.dices =[];
                 G.combatInfo.stage = "beatGong"
             }
         }
@@ -636,12 +641,16 @@ export const beatGong = {
             let c = G.combatInfo.song;
             if(c.troop.general.includes("岳飞") && !c.isAttacker && arg.choice ==="forceRoundTwo") {
                 G.combatInfo.isRoundTwo = true;
-                ctx.events.setStage("combatCard");
+                ctx.events.setActivePlayers({all:"combatCard"});
             }
             G.combatInfo.song.beatGongChoice = arg.choice;
         }else{
             let c = G.combatInfo.jinn;
+            let o = G.combatInfo.song;
+            let canRoundTwo = c.isAttacker && (G.jinn.military > G.song.military || c.troop.general.includes("兀术") ) && !G.combatInfo.isRoundTwo
+            if(canRoundTwo && arg.choice === "roundTwo"){
 
+            }
         }
     },
 }

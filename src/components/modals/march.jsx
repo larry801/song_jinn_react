@@ -10,9 +10,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Grid from "@material-ui/core/Grid";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import {troopEndurance, troopToString} from "../../auto/util";
-import {unitsToTroop} from "./moveArmy";
-import {canTakeDamage} from "./takeDamage";
+import {canTakeDamage, troopEndurance, troopToString, unitsToTroop} from "../../auto/util";
 
 const useStyles = makeStyles((theme) => ({
     root: {

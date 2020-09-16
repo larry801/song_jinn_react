@@ -84,6 +84,10 @@ ChoiceDialog.propTypes = {
     toggleText: PropTypes.string.isRequired,
 };
 
+export const CheckBoxDialog =({G,ctx,})=>{
+
+};
+
 export const YueFeiForceRoundTwoDialog = ({G, ctx, moves, events, log, isActive, playerID })=>(
     <ChoiceDialog
         callback={moves.forceRoundTwo}

@@ -1,6 +1,7 @@
 import {getPolicy, jinnTroopInRegion, removeGeneral, removeTroop, songTroopInCity} from "../auto/util";
 import {getCityByID} from "./cities";
 import {getRegionById} from "./regions";
+import {changeStage} from "../auto/workaroundUtil";
 
 export const jinnCards = [
     {
@@ -218,7 +219,7 @@ export const jinnCards = [
             } else {
                 G.opForRecruitAndMarch = 3
             }
-            ctx.events.setStage('recruit')
+            changeStage(G,ctx,'recruit')
         },
     },
     {
@@ -329,7 +330,7 @@ export const jinnCards = [
         pre: (G, ctx) => G.turnMarker === 2 || G.roundMarker === 6,
         event: (G, ctx, arg) => {
             G.jinn.activeEvents.push("河面封冻")
-            ctx.events.setStage("march")
+            changeStage(G,ctx,"march")
         },
     },
     {
@@ -350,7 +351,7 @@ export const jinnCards = [
         pre: (G, ctx) => G.roundMarker === 4 || G.roundMarker === 5 || G.roundMarker === 8 || G.roundMarker === 1,
         event: (G, ctx, arg) => {
             G.jinn.activeEvents.push("掠夺")
-            ctx.events.setStage("march");
+            changeStage(G,ctx,"march");
         },
     },
     {
@@ -885,7 +886,7 @@ export const jinnCards = [
         event: (G, ctx, arg) =>  {
             if(G.song.policy > -3) G.song.policy --;
             G.opForRecruitAndMarch = 3;
-            ctx.events.setStage('recruitOrMarch')
+            changeStage(G,ctx,'recruitOrMarch')
         },
     },
     {

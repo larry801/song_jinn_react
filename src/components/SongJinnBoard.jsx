@@ -108,20 +108,19 @@ export class SongJinnBoard extends React.Component {
                         G={G} ctx={ctx} moves={moves} playerID={playerID}
                         isActive={isActive}
                     />
-                    {isActive && curPlayerInStage(ctx, "drawPlan") && G.combatInfo.stage === "showPlanCard" ?
-                        <Button onClick={() => moves.showPlanCard()}>展示计划牌</Button>
-                        : ""}
                     {isActive && curPlayerInStage(ctx, "combatCard") && G.combatInfo.stage === "showCombatCard" ?
                         <Button onClick={() => moves.showCombatCard()}>显示战斗牌</Button>
                         : ""}
                     <CombatPanel
                         G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                     />
-                    {isActive && playerID === ctx.currentPlayer ?
+                    {isActive && playerID === ctx.currentPlayer && G.pending.endStage ?
+                        <Button onClick={() => this.props.events.endTurn()}>结束本节</Button> : ""}
+                    {isActive && playerID === ctx.currentPlayer && G.pending.endTurn?
                         <Button onClick={() => this.props.events.endTurn()}>结束行动</Button> : ""}
-                    {isActive && playerID === ctx.currentPlayer ?
+                    {isActive && playerID === ctx.currentPlayer && G.pending.endPhase?
                         <Button onClick={() => this.props.events.endPhase()}>结束阶段</Button> : ""}
-                    {isActive && p.planChosen ?
+                    {isActive && p.planChosen && o.planChosen &&!p.planShown ?
                         <Button onClick={() => moves.showPlanCard(player.chosenPlans)}>展示计划</Button>
                         : ""}
                     {isActive && (curPlayerInStage(ctx, "takeDamage") ||

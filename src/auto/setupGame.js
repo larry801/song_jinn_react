@@ -18,7 +18,7 @@ export function setupGame(ctx, setupData) {
         songPlayer: '0',
         jinnPlayer: '1',
         // Full log https://github.com/boardgameio/boardgame.io/issues/795
-        workAroundIssue795:false,
+        logDiscrepancyWorkaround:true,
         pending:{
             endTurn:false,
             endPhase:false,
@@ -114,6 +114,7 @@ export function setupGame(ctx, setupData) {
               "吴璘":{present:false,hasSkill:false},
             },
             planChosen:false,
+            planShown:false,
             emperor:{exist:true,city:21},
             corruption: 2, military: 2, civil: 3, policy:-2,
             currentPlans: [],
@@ -158,6 +159,7 @@ export function setupGame(ctx, setupData) {
                 "奔睹":{present:false,hasSkill:true},
             },
             planChosen:false,
+            planShown:false,
             emperor:{exist:true,city:3},
             corruption: 0, military: 3, civil: 2, colonization:0,
             currentPlans: [],

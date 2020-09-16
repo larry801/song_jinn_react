@@ -25,12 +25,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d640c4b6-4363-4b63-8893-54cb419a8732" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/auto/workaroundUtil.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auto/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/game.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/moves.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/moves.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/auto/util.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/util.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/march.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/march.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/moveArmy.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/moveArmy.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/takeDamage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/takeDamage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auto/setupGame.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/setupGame.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SongJinnBoard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SongJinnBoard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/jinn.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/jinn.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants/song.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants/song.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -243,7 +245,7 @@
       <workItem from="1600128985551" duration="602000" />
       <workItem from="1600167198128" duration="63000" />
       <workItem from="1600167340875" duration="6478000" />
-      <workItem from="1600214436830" duration="16605000" />
+      <workItem from="1600214436830" duration="20878000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1599870956015</created>
@@ -385,7 +387,21 @@
       <option name="project" value="LOCAL" />
       <updated>1600227503821</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="Fix">
+      <created>1600243760433</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1600243760433</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Fix">
+      <created>1600243766485</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1600243766485</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -437,7 +453,8 @@
     <MESSAGE value="驻队矢 melee only" />
     <MESSAGE value="岳帅之来此间震恐" />
     <MESSAGE value="城防 六甲" />
-    <option name="LAST_COMMIT_MESSAGE" value="城防 六甲" />
+    <MESSAGE value="Fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix" />
   </component>
   <component name="WindowStateProjectService">
     <state x="0" y="0" key="#Live_Templates" timestamp="1599978269850">
@@ -460,10 +477,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="206" y="207" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1024.738@0.0.1024.738" timestamp="1599474344917" />
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600227503111">
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600243765799">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600227503111" />
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600243765799" />
     <state x="92" y="92" width="840" height="554" key="DiffContextDialog" timestamp="1599913050082">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
@@ -556,10 +573,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="64" y="14" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1024.738@0.0.1024.738" timestamp="1599487406965" />
-    <state x="0" y="0" width="1024" height="738" key="find.popup" timestamp="1600242947457">
+    <state x="0" y="0" width="1024" height="738" key="find.popup" timestamp="1600246842101">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600242947457" />
+    <state x="0" y="0" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600246842101" />
     <state x="168" y="159" key="run.anything.popup" timestamp="1599723802401">
       <screen x="0" y="0" width="1024" height="738" />
     </state>

@@ -20,6 +20,7 @@ import * as util from "./util";
 import {PlayerView} from "boardgame.io/dist/esm/core";
 import {drawPhaseForSong} from "./util";
 import {drawPhaseForJinn} from "./util";
+import {changePhase, signalEndPhase} from "./workaroundUtil";
 
 export const SongJinn = {
     name: "Conflict_Song_and_Jin",
@@ -48,7 +49,12 @@ export const SongJinn = {
                 takeCardFromDeck: takeCardFromDeck
             },
             onBegin: (G, ctx) => {
-                ctx.events.endPhase();
+                G.pending={
+                    endTurn:false,
+                    endPhase:false,
+                    endStage:false,
+                };
+                signalEndPhase(G,ctx);
             },
             onEnd: (G, ctx) => {
             },
@@ -60,15 +66,34 @@ export const SongJinn = {
                 takeCardFromDeck: takeCardFromDeck
             },
             onBegin: (G, ctx) => {
-                ctx.events.setPhase('chooseOrder');
+                G.pending={
+                    endTurn:false,
+                    endPhase:false,
+                    endStage:false,
+                };
+                changePhase(G,ctx,'chooseOrder');
             },
             onEnd: (G, ctx) => {
             },
             next: 'chooseOrder'
         },
         chooseOrder: {
-
+            start: true,
+            onBegin: (G, ctx) => {
+                G.pending={
+                    endTurn:false,
+                    endPhase:false,
+                    endStage:false,
+                };
+                drawPhaseForJinn(G, ctx);
+                drawPhaseForSong(G, ctx);
+            },
             onEnd: (G, ctx) => {
+                G.pending={
+                    endTurn:false,
+                    endPhase:false,
+                    endStage:false,
+                };
             },
             moves: {
                 choosePlayerWhoMovesFirst: choosePlayerWhoMovesFirst
@@ -87,12 +112,16 @@ export const SongJinn = {
                 chooseStrategicPlans: chooseStrategicPlans,
                 showPlanCard:showPlanCard,
             },
-            onEnd: (G, ctx) => {
-
-            },
             turn: {
                 onBegin: (G, ctx) => {
-                    util.drawStrategicPlans(G, ctx, ctx.currentPlayer)
+                    G.pending={
+                        endTurn:false,
+                        endPhase:false,
+                        endStage:false,
+                    };
+                    if(!G.song.planChosen||!G.jinn.planChosen){
+                        util.drawStrategicPlans(G, ctx, ctx.currentPlayer);
+                    }
                 },
                 order: {
                     first: (G, ctx) => 0,
@@ -103,16 +132,8 @@ export const SongJinn = {
             next: 'doOperations'
         },
         doOperations: {
-            start: true,
-            onBegin: (G, ctx) => {
-                drawPhaseForJinn(G, ctx);
-                drawPhaseForSong(G, ctx);
-            },
-            onEnd: (G, ctx) => G,
             turn: {
-                onBegin: (G, ctx) => G,
-                onEnd: (G, ctx) => G,
-                onMove: (G, ctx) => G,
+
                 moves: {
                     emptyRound: emptyRound,
                     playAsEvent: playAsEvent,
@@ -174,6 +195,11 @@ export const SongJinn = {
         },
         turnEnd: {
             onBegin: (G, ctx) => {
+                G.pending={
+                    endTurn:false,
+                    endPhase:false,
+                    endStage:false,
+                };
                 if (G.turnMarker === 2) {
                     util.addMidTermCard(G, ctx)
                 }
@@ -181,17 +207,22 @@ export const SongJinn = {
                     util.addLateTermCards(G, ctx)
                 }
                 if (G.turnMarker === 8) {
-                    ctx.events.setPhase('finalSettlement')
+                    changePhase(G,ctx,'finalSettlement')
                 }
                 G.turnMarker = G.turnMarker + 1;
                 //TODO 曲端
-                ctx.events.endPhase();
+                signalEndPhase(G,ctx);
             },
             moves: {},
             next: "chooseOrder"
         },
         finalSettlement: {
             onBegin: (G, ctx) => {
+                G.pending={
+                    endTurn:false,
+                    endPhase:false,
+                    endStage:false,
+                };
             }
         }
     },

@@ -1,5 +1,6 @@
 import {drawCardForSong, getPolicy, getSongBackupCount, removeGeneral} from "../auto/util";
 import {getCityByID} from "./cities";
+import {changeStage} from "../auto/workaroundUtil";
 
 export const songCards = [
     {
@@ -228,7 +229,7 @@ export const songCards = [
                     type: "kill-X-Units",
                     arg: 1,
                 }
-                ctx.events.setStage('killUnit');
+                changeStage(G,ctx,'killUnit');
             } else {
                 G.otherCountries["西辽"].state = 'song';
             }
@@ -251,7 +252,7 @@ export const songCards = [
         fullDesc: " 效果：在1座被围困的城市放置1个步兵，或者消灭围城军团的1个部队。",
         pre: (G, ctx) => true,
         event: (G, ctx, arg) => {
-            ctx.events.setStage("LiYanXian");
+            changeStage(G,ctx,"LiYanXian");
         },
     },
     {

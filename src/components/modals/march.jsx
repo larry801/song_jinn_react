@@ -143,11 +143,11 @@ export function TakeDamageTroopList({G,ctx,units,callback,damage}){
     </>
 }
 
-export function TransferTroopList({leftTroop,dispatch}){
+export function TransferUnitsList({leftUnits,dispatch}){
     const classes = useStyles();
 
     const [checked, setChecked] = React.useState([]);
-    const [left, setLeft] = React.useState(leftTroop);
+    const [left, setLeft] = React.useState(leftUnits);
     const [right, setRight] = React.useState([]);
 
     const leftChecked = intersection(checked, left);
@@ -261,7 +261,8 @@ export function TransferTroopList({leftTroop,dispatch}){
         disabled={right.length === 0}
         onClick={()=>dispatch({
         type:'targetTroop',
-        payload:right
+        payload:right,
+        origin:left,
     })}>下一步</Button>
     </>
 );

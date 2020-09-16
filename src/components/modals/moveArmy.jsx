@@ -18,7 +18,7 @@ import {
 } from "../../auto/util";
 import {getRegionById} from "../../constants/regions";
 import {getCityByID} from "../../constants/cities";
-import {TransferTroopList} from "./march";
+import {TransferUnitsList} from "./march";
 import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -114,8 +114,8 @@ export function March(props) {
             setState({step: 2});
         }}>全军进军</Button>
             <Button onClick={() => setState({step:0})}>上一步</Button>
-            <TransferTroopList
-                leftTroop={troopToUnits(arg.src)}
+            <TransferUnitsList
+                leftUnits={troopToUnits(arg.src)}
                 dispatch={marchReducer}/>
         </>
         const [region, setRegion] = useState(0);

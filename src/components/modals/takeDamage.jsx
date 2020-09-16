@@ -8,8 +8,8 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Dialog from "@material-ui/core/Dialog";
-import {TakeDamageTroopList, TransferTroopList} from "./march";
-import {troopEndurance, troopToUnits, unitsToString} from "../../auto/util";
+import {TakeDamageTroopList, TransferUnitsList} from "./march";
+import {canTakeDamage, troopEndurance, troopToUnits, unitsToString, unitsToTroop} from "../../auto/util";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,21 +33,48 @@ function getSteps() {
 }
 
 
-export const TakeDamageStepper = ({G, ctx, moves, events, log, isActive, playerID }) =>{
+export const TakeDamageStepper = ({G, ctx, moves, events, log, isActive, playerID}) => {
+    const classes = useStyles();
+    const [activeStep, setActiveStep] = React.useState(0);
+    const steps = getSteps();
 
-    const [troop,setTroop] = React.useState([])
-    const [e,setE] = React.useState([])
-    const [d,setD] = React.useState([])
+    const [e, setE] = React.useState([])
+    const [d, setD] = React.useState([])
+
+    const eliminateReducer = (action) => {
+        switch (action.type) {
+            case 'targetTroop':
+                setActiveStep(2);
+                setE(action.payload);
+                setD(action.origin);
+                break;
+            default:
+                throw Error();
+        }
+    }
+
+    const damageReducer = (action) => {
+        switch (action.type) {
+            case 'targetTroop':
+                setActiveStep(1);
+                setE(action.payload);
+                break;
+            default:
+                throw Error();
+        }
+    }
 
     function getStepContent(step) {
         switch (step) {
             case 0:
-                return <TransferTroopList
-                    leftTroop={info.troop}
+                return <TransferUnitsList
+                    leftUnits={troopToUnits(info.troop)}
+                    dispatch={damageReducer}
                 />;
             case 1:
-                return <TransferTroopList
-                    leftTroop={troop}
+                return <TransferUnitsList
+                    leftUnits={d}
+                    dispatch={eliminateReducer}
                 />;
             case 2:
                 return `死 ${unitsToString(e)} 溃 ${unitsToString(d)}`;
@@ -55,11 +82,9 @@ export const TakeDamageStepper = ({G, ctx, moves, events, log, isActive, playerI
                 return 'Unknown step';
         }
     }
-    const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
-    const steps = getSteps();
 
-    const info = G.songPlayer === playerID ? G.combatInfo.song: G.combatInfo.jinn;
+
+    const info = G.songPlayer === playerID ? G.combatInfo.song : G.combatInfo.jinn;
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -69,8 +94,13 @@ export const TakeDamageStepper = ({G, ctx, moves, events, log, isActive, playerI
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
+    const canProceed = canTakeDamage(G,ctx,arg);
+    const arg = {
+        eliminated:e,
+        defeated:d,
+    }
     const handleReset = () => {
-        setActiveStep(0);
+        moves.takeDamage(arg)
     };
 
     return (
@@ -107,7 +137,7 @@ export const TakeDamageStepper = ({G, ctx, moves, events, log, isActive, playerI
             </Stepper>
             {activeStep === steps.length && (
                 <Paper square elevation={0} className={classes.resetContainer}>
-                    <Typography>All steps completed - you&apos;re finished</Typography>
+                    <Typography>{getStepContent(activeStep)}</Typography>
                     <Button onClick={handleReset} className={classes.button}>
                         确定
                     </Button>
@@ -117,20 +147,20 @@ export const TakeDamageStepper = ({G, ctx, moves, events, log, isActive, playerI
     );
 }
 
-export function TakeDamageModal({G,ctx,playerID,moves,isActive}) {
+export function TakeDamageModal({G, ctx, playerID, moves, isActive}) {
     const [open, setOpen] = React.useState(true);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
-    const info = G.songPlayer === playerID?G.combatInfo.song:G.combatInfo.jinn
+    const info = G.songPlayer === playerID ? G.combatInfo.song : G.combatInfo.jinn
 
     const callback = (arg) => {
         moves.takeDamage(arg)
     }
 
-    const endurance = troopEndurance(G,ctx,info.troop);
-    const realDamage = info.pendingDamage>endurance?endurance:info.pendingDamage;
+    const endurance = troopEndurance(G, ctx, info.troop);
+    const realDamage = info.pendingDamage > endurance ? endurance : info.pendingDamage;
     return <div>
         <Button variant="outlined" color="primary" onClick={handleClickOpen}>
             受创
@@ -138,8 +168,8 @@ export function TakeDamageModal({G,ctx,playerID,moves,isActive}) {
         <Dialog open={open} onClose={() => setOpen(false)}>
             <DialogTitle>承受伤害：{realDamage}</DialogTitle>
             <TakeDamageTroopList
-                damage = {realDamage}
-                units={troopToUnits({...info.troop,general:[]})}
+                damage={realDamage}
+                units={troopToUnits({...info.troop, general: []})}
                 callback={callback}
                 G={G} ctx={ctx} playerID={playerID}
             />

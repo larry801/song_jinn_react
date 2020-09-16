@@ -56,7 +56,7 @@ export function setupGame(ctx, setupData) {
                 }
             }
         },
-
+        stage:"no",
         recruitCost: INITIAL_RECRUIT_COST,
         recruitPermission: INITIAL_RECRUIT_PERMISSION,
         opForRecruitAndMarch: 0,

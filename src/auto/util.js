@@ -830,6 +830,7 @@ export function getSongRangeStrength(G, ctx) {
             if (terrain === SWAMP) {
                 strength += t.units[3];
             }
+            strength -= getCityDefense(G, ctx, getRegionById(t.region).cityID);
         }
         if (G.combatInfo.song.troop.general.includes("吴璘")) {
             strength += t.units[1];
@@ -840,6 +841,13 @@ export function getSongRangeStrength(G, ctx) {
         }
         strength += getPolicy(G, ctx);
     } else {
+        if (G.combatInfo.isSiege) {
+            if (G.jinn.activeEvents.includes(12)) {
+                strength -= getCityDefense(G, ctx, getRegionById(t.region).cityID);
+            } else {
+                strength += getCityDefense(G, ctx, getRegionById(t.region).cityID);
+            }
+        }
         if (G.combatInfo.song.troop.general.includes("吴玠")) {
             strength += t.units[1];
             strength += t.units[5];
@@ -897,11 +905,19 @@ export function getJinnRangeStrength(G, ctx) {
                 strength += t.units[5];
                 strength += t.units[6];
             }
+            if (G.jinn.activeEvents.includes(12)) {
+                strength += getCityDefense(G, ctx, getRegionById(t.region).cityID);
+            } else {
+                strength -= getCityDefense(G, ctx, getRegionById(t.region).cityID);
+            }
         } else {
             strength = rangeStrength(G, ctx, t)
         }
     } else {
         strength = rangeStrength(G, ctx, t)
+        if (G.combatInfo.isSiege) {
+            strength += getCityDefense(G, ctx, getRegionById(t.region).cityID);
+        }
     }
     if (t.general.includes("兀术") && i.jinn.isAttacker) strength += 2;
     return strength;

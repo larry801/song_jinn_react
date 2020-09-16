@@ -111,7 +111,7 @@ export function setupGame(ctx, setupData) {
               "韩世忠":{present:false,hasSkill:false},
               "李显忠":{present:false,hasSkill:false},
               "吴玠":{present:false,hasSkill:false},
-              "吴磷":{present:false,hasSkill:false},
+              "吴璘":{present:false,hasSkill:false},
             },
             planChosen:false,
             emperor:{exist:true,city:21},

@@ -409,6 +409,9 @@ function rangeStage(G, ctx) {
             if (jDmg > 0) {
                 hasDamage = true;
             } else {
+                if(G.combatInfo.song.troop.general.includes("吴璘")){
+                    wuLinStage(G,ctx);
+                }
                 meleeStage(G, ctx);
             }
         }
@@ -419,6 +422,9 @@ function rangeStage(G, ctx) {
         let jDmg = getJinnRangeDamage(G, ctx);
         G.combatInfo.song.pendingDamage = jDmg;
         if (sDmg === 0 && jDmg === 0) {
+            if(G.combatInfo.song.troop.general.includes("吴璘")){
+                wuLinStage(G,ctx);
+            }
             meleeStage(G, ctx);
         } else {
             hasDamage = true;
@@ -433,10 +439,12 @@ function rangeStage(G, ctx) {
 }
 
 function wuLinStage(G, ctx) {
-    let hasDamge = false;
     let dmg = getSongWuLinDamage(G,ctx,);
     if(dmg>0){
         G.combatInfo.jinn.pendingDamage =  dmg;
+        G.combatInfo.stage = "takeDamageWuLin"
+    }else{
+        meleeStage(G,ctx);
     }
 }
 

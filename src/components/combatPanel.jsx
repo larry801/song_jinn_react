@@ -22,8 +22,8 @@ export function CombatPanel(props) {
         "range":"远程",
         "takeDamageMelee":"交锋受创",
         "melee":"交锋",
-        "takeDamageWuLin":"吴磷受创",
-        "wuLin":"吴磷",
+        "takeDamageWuLin":"吴璘受创",
+        "wuLin":"吴璘",
         "beatGong":"鸣金",
     }
 

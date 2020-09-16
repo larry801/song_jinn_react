@@ -26,6 +26,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import Tooltip from "@material-ui/core/Tooltip";
 import Grid from "@material-ui/core/Grid";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -114,7 +115,7 @@ export function March(props) {
         }}>全军进军</Button>
             <Button onClick={() => setState({step:0})}>上一步</Button>
             <TransferTroopList
-                left={troopToUnits(arg.src)}
+                leftTroop={troopToUnits(arg.src)}
                 dispatch={marchReducer}/>
         </>
         const [region, setRegion] = useState(0);
@@ -124,11 +125,12 @@ export function March(props) {
         let hasCity = getRegionById(region).hasCity;
         let city = getRegionById(region).cityID;
         if(region===0){
-            return ""
+            return "请选择"
         }else{
             let jinn = jinnTroopInRegion(props.G,props.ctx,region);
             let song = songTroopInRegion(props.G,props.ctx,region);
             if (props.playerID === props.G.songPlayer){
+                // TODO 渡河消灭部队
                 if(jinn!==false){
                     if(song!==false){
                         if(troopIsArmy(props.G,props.ctx,jinn)){
@@ -154,9 +156,9 @@ export function March(props) {
                 }else{
                     if(song!==false){
                         if(stackLimitReached(props.G,props.ctx,arg,region)){
-                            return "进军后超编"
+                            return "超编"
                         }else{
-                            return "有己方部队"
+                            return "合兵"
                         }
                     }else{
                         return "直接移动"
@@ -174,9 +176,9 @@ export function March(props) {
                         }
                     }else{
                         if(stackLimitReached(props.G,props.ctx,arg,region)){
-                            return "进军后超编"
+                            return "超编"
                         }else{
-                            return "有己方部队"
+                            return "合兵"
                         }
                     }
                 }else{
@@ -211,12 +213,10 @@ export function March(props) {
                         <Grid container>
                         {getMarchDestination(props.G, props.ctx, arg.src.region).map((id) =>
                             <Grid item key={id}>
-                            <Tooltip title={destinationHelperText(id)} key={id} leaveDelay={100}
-                            interactive={true} placement={'left'}>
                             <FormControlLabel key={id} value={id}
                                               control={<Radio/>}
                                               label={getRegionById(id).name}
-                            /></Tooltip></Grid>
+                            /></Grid>
 
                         )}
                         </Grid>
@@ -243,7 +243,7 @@ export function March(props) {
                 进军
             </Button>
             <Dialog open={open} onClose={()=>setOpen(false)}>
-            <Typography variant="h5" >{stepText}</Typography>
+            <Typography variant="h5" >{stepText + " " +destinationHelperText(region)}</Typography>
             {state.step === 0 ? troopList : ''}
             {state.step === 1 ? transferList : ''}
             {state.step === 2 ? regionsList : ''}

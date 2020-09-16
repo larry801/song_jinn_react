@@ -9,7 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Dialog from "@material-ui/core/Dialog";
 import {TakeDamageTroopList, TransferTroopList} from "./march";
-import {troopToUnits, unitsToString} from "../../auto/util";
+import {troopEndurance, troopToUnits, unitsToString} from "../../auto/util";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,11 +43,11 @@ export const TakeDamageStepper = ({G, ctx, moves, events, log, isActive, playerI
         switch (step) {
             case 0:
                 return <TransferTroopList
-                    units={info.troop}
+                    leftTroop={info.troop}
                 />;
             case 1:
                 return <TransferTroopList
-                    units={troop}
+                    leftTroop={troop}
                 />;
             case 2:
                 return `死 ${unitsToString(e)} 溃 ${unitsToString(d)}`;
@@ -116,28 +117,31 @@ export const TakeDamageStepper = ({G, ctx, moves, events, log, isActive, playerI
     );
 }
 
-export function TakeDamageModal(props) {
+export function TakeDamageModal({G,ctx,playerID,moves,isActive}) {
     const [open, setOpen] = React.useState(true);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
-
-    const info = props.G.songPlayer === props.playerID?props.G.combatInfo.song:props.G.combatInfo.jinn
+    const info = G.songPlayer === playerID?G.combatInfo.song:G.combatInfo.jinn
 
     const callback = (arg) => {
-        props.moves.takeDamage(arg)
+        moves.takeDamage(arg)
     }
 
+    const endurance = troopEndurance(G,ctx,info.troop);
+    const realDamage = info.pendingDamage>endurance?endurance:info.pendingDamage;
     return <div>
         <Button variant="outlined" color="primary" onClick={handleClickOpen}>
             受创
         </Button>
         <Dialog open={open} onClose={() => setOpen(false)}>
+            <DialogTitle>承受伤害：{realDamage}</DialogTitle>
             <TakeDamageTroopList
+                damage = {realDamage}
                 units={troopToUnits({...info.troop,general:[]})}
                 callback={callback}
-                G={props.G} ctx={props.ctx} playerID={props.playerID}
+                G={G} ctx={ctx} playerID={playerID}
             />
         </Dialog>
     </div>

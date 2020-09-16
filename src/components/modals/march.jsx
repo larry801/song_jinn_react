@@ -11,6 +11,7 @@ import Grid from "@material-ui/core/Grid";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import {canTakeDamage, troopEndurance, troopToString, unitsToTroop} from "../../auto/util";
+import {FormHelperText} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,7 +42,7 @@ function union(a, b) {
 }
 
 
-export function TakeDamageTroopList({G,ctx,units,callback}){
+export function TakeDamageTroopList({G,ctx,units,callback,damage}){
     const classes = useStyles();
     const [eliminated,setEliminated] = React.useState([])
     const [defeated,setDefeated] = React.useState([])
@@ -89,14 +90,19 @@ export function TakeDamageTroopList({G,ctx,units,callback}){
     // TODO 多受创问题
     const removeOneUnitCanProceed = false;
 
-    const canProceed = t(arg)
+    const totalEndurance = troopEndurance(G,ctx,unitsToTroop(units));
+    const eliminatedEndurance = troopEndurance(G,ctx,unitsToTroop(eliminated));
+    const defeatedEndurance = troopEndurance(G,ctx,unitsToTroop(defeated));
+
+
+    const canProceed = t(arg);
 
     const takeDamageList = (title, items, change) => (
         <Card>
             <CardHeader
                 className={classes.cardHeader}
                 title={title}
-                subheader={troopToString(unitsToTroop(items))} {}
+                subheader={troopToString(unitsToTroop(items)) + "耐久" + troopEndurance(G,ctx,unitsToTroop(items)) }
             />
             <Divider/>
             <List className={classes.list} dense component="div" role="list">
@@ -128,7 +134,8 @@ export function TakeDamageTroopList({G,ctx,units,callback}){
         <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
             <Grid item>{takeDamageList('消灭', eliminated,handleEliminate)}</Grid>
             <Grid item>{takeDamageList('击溃', defeated,handleDefeated)}</Grid>
-            <Grid item><Button variant={"outlined"}
+            <Grid item>
+                <Button variant={"outlined"}
            disabled={!canProceed}
                 onClick={()=>callback(arg)}
             >确定</Button></Grid>
@@ -136,11 +143,11 @@ export function TakeDamageTroopList({G,ctx,units,callback}){
     </>
 }
 
-export function TransferTroopList({left,dispatch}){
+export function TransferTroopList({leftTroop,dispatch}){
     const classes = useStyles();
 
     const [checked, setChecked] = React.useState([]);
-    const [left, setLeft] = React.useState(left);
+    const [left, setLeft] = React.useState(leftTroop);
     const [right, setRight] = React.useState([]);
 
     const leftChecked = intersection(checked, left);

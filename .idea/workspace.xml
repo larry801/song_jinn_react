@@ -25,13 +25,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d640c4b6-4363-4b63-8893-54cb419a8732" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/auto/moves.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/moves.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/modals/march.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/march.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/modals/moveArmy.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/moveArmy.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/settleDevelop.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/settleDevelop.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/modals/takeDamage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/takeDamage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/playerHand.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/playerHand.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -244,7 +240,7 @@
       <workItem from="1600128985551" duration="602000" />
       <workItem from="1600167198128" duration="63000" />
       <workItem from="1600167340875" duration="6478000" />
-      <workItem from="1600214436830" duration="7236000" />
+      <workItem from="1600214436830" duration="7677000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1599870956015</created>
@@ -344,7 +340,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600218330803</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="南人归南 北人归北">
+      <created>1600224382800</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1600224382800</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -390,7 +393,8 @@
     <MESSAGE value="Add get supply for city" />
     <MESSAGE value="refactor for server run" />
     <MESSAGE value="解构赋值" />
-    <option name="LAST_COMMIT_MESSAGE" value="解构赋值" />
+    <MESSAGE value="南人归南 北人归北" />
+    <option name="LAST_COMMIT_MESSAGE" value="南人归南 北人归北" />
   </component>
   <component name="WindowStateProjectService">
     <state x="0" y="0" key="#Live_Templates" timestamp="1599978269850">
@@ -413,10 +417,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="206" y="207" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1024.738@0.0.1024.738" timestamp="1599474344917" />
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600218330135">
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600224382079">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600218330135" />
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600224382079" />
     <state x="92" y="92" width="840" height="554" key="DiffContextDialog" timestamp="1599913050082">
       <screen x="0" y="0" width="1024" height="738" />
     </state>

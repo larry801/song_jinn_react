@@ -115,7 +115,7 @@ export class PlayerHand extends React.Component {
                                 disabled={!(isActive && inPhase && canPeaceTalk(G, ctx))}
                             >和议</Button> :
                             <Button
-                                disabled={!(isActive && inPhase && getJinnBackupCount() > 0)}
+                                disabled={!(isActive && inPhase && getJinnBackupCount(G,ctx) > 0)}
                             >贴军</Button>}
                     </AccordionDetails></Accordion>
                 )}

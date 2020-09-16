@@ -573,7 +573,15 @@ export const directRecruit = {
 
 export const resultOfDevelopment = {
     move: (G, ctx, arg) => {
-
+        if(arg.playerID === G.songPlayer){
+            G.song.military = arg.military;
+            G.song.civil = arg.civil;
+            G.song.policy = arg.special;
+        }else{
+            G.jinn.military = arg.military;
+            G.jinn.civil = arg.civil;
+            G.jinn.colonization = arg.special;
+        }
     },
     undoable: false,
 }

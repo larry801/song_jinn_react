@@ -386,7 +386,7 @@ export function getAdjacentRegion(G, ctx, id) {
     return land.concat(water);
 }
 
-export function getMarchDestination(G, ctx, id) {
+export function getMarchDestination(G, ctx, id,marchType="normal",noCombat=false,noSupplyShortage=false) {
     let regions = [];
     //console.log(id, getAdjacentRegion(G, ctx, id));
     for (let r of getAdjacentRegion(G, ctx, id)) {
@@ -418,7 +418,6 @@ export function canMarchWithHorse(G, ctx, arg) {
         u = arg.src.units;
     } else {
         u = arg.new.units;
-
     }
     if (u.length === 7) {
         return u[0] === 0 && u[3] === 0 && u[5] === 0 && u[6] === 0
@@ -993,8 +992,8 @@ export function meleeSong(G, ctx, diceCount, simulate = false) {
     }
     G.combatInfo.song.dices = dices;
     let addDamage = 0;
-    const i = G.combatInfo.song;
-    const t = i.troop;
+    const i = G.combatInfo;
+    const t = i.song.troop;
     let terrain = t.region === 0 ? RAMPART : getRegionById(t.region).terrainType;
     if (i.song.troop.general.includes("韩世忠") && terrain === SWAMP) addDamage++;
     if (i.song.troop.general.includes("岳飞")) addDamage++;

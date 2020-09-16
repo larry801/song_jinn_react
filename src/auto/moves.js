@@ -17,7 +17,7 @@ import {
     splitTroopFrom,
     getSongRangeDamage,
     getJinnRangeDamage,
-    getJinnMeleeDamage, getSongMeleeDamage, getSongWuLinDamage, canTakeDamage,
+    getJinnMeleeDamage, getSongMeleeDamage, getSongWuLinDamage, canTakeDamage, getSongMeleeOnlyDamage,
 } from "./util";
 import {getRegionById} from "../constants/regions";
 import {getJinnCardById, getSongCardById} from "../constants/cards";
@@ -455,31 +455,32 @@ function meleeStage(G, ctx) {
         G.combatInfo.jinn.pendingDamage = dmg;
         if (dmg > 0) {
             hasDamage = true;
-            G.combatInfo.stage = "takeDamageZhuDuiShi1"
+            G.combatInfo.stage = "takeDamageZhuDuiShiMelee1"
         } else {
-            // TODO song melee only damage
+            let sDmg = getSongMeleeOnlyDamage(G,ctx,);
             let jDmg = getJinnMeleeDamage(G, ctx);
             G.combatInfo.song.pendingDamage = jDmg;
-            if (jDmg > 0) {
-                hasDamage = true;
-                G.combatInfo.stage = "takeDamageZhuDuiShi2"
-            } else {
+            if (sDmg === 0 && jDmg ===0) {
                 G.combatInfo.jinn.dices =[];
                 G.combatInfo.song.dices =[];
                 G.combatInfo.stage = "beatGong"
                 ctx.events.setStage("beatGong")
+            } else {
+                hasDamage = true;
+                G.combatInfo.stage = "takeDamageZhuDuiShiMelee2"
             }
         }
     } else {
-        let sDmg = getSongMeleeDamage(G, ctx)
+        let sDmg = getSongMeleeDamage(G, ctx);
         G.combatInfo.jinn.pendingDamage = sDmg;
         let jDmg = getJinnMeleeDamage(G, ctx);
         G.combatInfo.song.pendingDamage = jDmg;
         if (sDmg === 0 && jDmg === 0) {
-            G.combatInfo.jinn.dices =[];
-            G.combatInfo.song.dices =[];
-            G.combatInfo.stage = "beatGong"
-            ctx.events.setStage("beatGong")
+            console.log(sDmg,jDmg)
+            // G.combatInfo.jinn.dices =[];
+            // G.combatInfo.song.dices =[];
+            // G.combatInfo.stage = "beatGong"
+            // ctx.events.setStage("beatGong")
         } else {
             hasDamage = true;
         }

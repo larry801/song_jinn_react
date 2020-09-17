@@ -1179,8 +1179,10 @@ export function songCitySupply(G, ctx, cityID) {
     if (G.song.emperor.exist && G.song.emperor.city === cityID) {
         sup++;
     }
-    const t = songTroopInCity(G, ctx, cityID);
-    if (t !== false && t.general.includes("宗泽")) sup++;
+    if (G.song.generals["宗泽"].present) {
+        const t = songTroopInCity(G, ctx, cityID);
+        if (t !== false && t.general.includes("宗泽")) sup++;
+    }
     return sup;
 }
 

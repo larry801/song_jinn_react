@@ -25,17 +25,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d640c4b6-4363-4b63-8893-54cb419a8732" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/auto/battleStateMachine.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/modals/reinforcement.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/auto/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/game.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/moves.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/moves.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/util.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/util.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SongJinnBoard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SongJinnBoard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/combatCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/combatCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/rearrangePlan.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/recruit.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/recruit.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/recruitOrMarch.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/recruitOrMarch.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/renforcement.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/renforcement.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/renforcement.jsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -251,7 +245,7 @@
       <workItem from="1600214436830" duration="23329000" />
       <workItem from="1600299533394" duration="478000" />
       <workItem from="1600302381912" duration="1858000" />
-      <workItem from="1600304288146" duration="4220000" />
+      <workItem from="1600304288146" duration="8101000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1599870956015</created>
@@ -428,7 +422,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600250124394</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Make log discrepancy workaround mode work">
+      <created>1600308925409</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1600308925409</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -484,7 +485,8 @@
     <MESSAGE value=" Fix An immer producer returned a new value *and* modified its draft. Either return a new value *or* modify the draft by remove start turn&amp;&amp; start phase hook of doOperations" />
     <MESSAGE value="rename dispatch" />
     <MESSAGE value="reinforcement first step" />
-    <option name="LAST_COMMIT_MESSAGE" value="reinforcement first step" />
+    <MESSAGE value="Make log discrepancy workaround mode work" />
+    <option name="LAST_COMMIT_MESSAGE" value="Make log discrepancy workaround mode work" />
   </component>
   <component name="WindowStateProjectService">
     <state x="0" y="0" key="#Live_Templates" timestamp="1599978269850">
@@ -507,10 +509,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="206" y="207" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1024.738@0.0.1024.738" timestamp="1599474344917" />
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600250123655">
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600308924065">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600250123655" />
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600308924065" />
     <state x="92" y="92" width="840" height="554" key="DiffContextDialog" timestamp="1599913050082">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
@@ -603,10 +605,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="64" y="14" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1024.738@0.0.1024.738" timestamp="1599487406965" />
-    <state x="-24" y="-1" width="1024" height="738" key="find.popup" timestamp="1600307654069">
+    <state x="-24" y="-1" width="1024" height="738" key="find.popup" timestamp="1600312170706">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="-24" y="-1" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600307654069" />
+    <state x="-24" y="-1" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600312170706" />
     <state x="337" y="117" key="refactoring.ChangeSignatureDialog" timestamp="1600305857939">
       <screen x="0" y="0" width="1024" height="738" />
     </state>

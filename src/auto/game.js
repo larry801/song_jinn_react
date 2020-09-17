@@ -14,7 +14,7 @@ import {
     siegeOrAttack,
     develop,
     combatCard,
-    showCombatCard, showPlanCard, takeDamage, resultOfDevelopment, beatGong, dispatchGeneral
+    showCombatCard, showPlanCard, takeDamage, resultOfDevelopment, beatGong, dispatchGeneral, reinforcement
 } from "./moves";
 import * as util from "./util";
 import {PlayerView} from "boardgame.io/dist/esm/core";
@@ -43,6 +43,7 @@ export const SongJinn = {
         march:march,
         recruitOrMarch:recruitOrMarch,
         recruit:recruit,
+        reinforcement:reinforcement,
     },
     playerView: PlayerView.STRIP_SECRETS,
     phases: {

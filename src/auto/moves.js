@@ -23,6 +23,7 @@ import {getRegionById} from "../constants/regions";
 import {getJinnCardById, getSongCardById} from "../constants/cards";
 import {canChoosePlan} from "../constants/plan";
 import {changeStage, signalEndPhase, signalEndStage, signalEndTurn} from "./workaroundUtil";
+import {getCityByID} from "../constants/cities";
 
 export const choosePlayerWhoMovesFirst = {
     move: (G, ctx, firstPlayerID) => {
@@ -169,7 +170,7 @@ export const forceRoundTwo = {
             G.combatInfo.stage = "combatCard";
             changeStage(G, ctx, "combatCard");
         } else {
-            ctx.setActivePlayers({current: "beatGong"})
+            ctx.events.setActivePlayers({current: "beatGong"})
         }
 
     }
@@ -496,6 +497,35 @@ function meleeStage(G, ctx) {
         ctx.events.setActivePlayers({
             all: 'takeDamage'
         });
+    }
+}
+
+export const reinforcement = {
+    move:(G,ctx,arg)=>{
+        let t,o,troops;
+        if(ctx.currentPlayer === G.songPlayer){
+            t = songTroopInCity;
+            o = jinnTroopInRegion;
+            troops = G.song.troops;
+        }else{
+            t= jinnTroopInCity;
+            o = songTroopInRegion;
+            troops = G.jinn.troops;
+        }
+
+        for(let r in arg){
+            let troop = t(G,ctx,r.id);
+            if(troop===false){
+                let region = getCityByID(r.id).region;
+                let opponentTroop = o(G,ctx,region);
+                if(opponentTroop===false){
+                    troop.region = region;
+                }
+                troops.push(troop);
+            }else{
+                mergeTroopTo(G,ctx,r.troop,troop)
+            }
+        }
     }
 }
 

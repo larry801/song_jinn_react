@@ -32,7 +32,6 @@ export const SongJinn = {
         useOp: useOp,
         diplomacy: diplomacy,
         develop: develop,
-        recruitOrMarch: recruitOrMarch,
         siegeOrAttack: siegeOrAttack,
         combatCard: combatCard,
         resultOfDevelopment: resultOfDevelopment,
@@ -40,6 +39,10 @@ export const SongJinn = {
         showPlanCard: showPlanCard,
         takeDamage: takeDamage,
         beatGong: beatGong,
+
+        march:march,
+        recruitOrMarch:recruitOrMarch,
+        recruit:recruit,
     },
     playerView: PlayerView.STRIP_SECRETS,
     phases: {
@@ -151,17 +154,6 @@ export const SongJinn = {
                         endPhase: false,
                         endStage: false,
                     };
-                },
-                moves: {
-                    emptyRound: emptyRound,
-                    playAsEvent: playAsEvent,
-                    useOp: useOp,
-                    recruitOrMarch: recruitOrMarch,
-                    siegeOrAttack: siegeOrAttack,
-                    diplomacy: diplomacy,
-                    combatCard: combatCard,
-                    resultOfDevelopment: resultOfDevelopment,
-                    beatGong: beatGong,
                 },
                 order: {
                     first: (G, ctx) => 0,

@@ -290,15 +290,19 @@ export function getJinnNationalPower(G, ctx) {
     return power;
 }
 
-export function curPlayerInStage(ctx, stage) {
-    if (ctx.activePlayers !== null) {
-        for (let pair of Object.entries(ctx.activePlayers)) {
-            if (pair[0] === ctx.currentPlayer && pair[1] === stage) {
-                return true
+export function curPlayerInStage(G, ctx, stage) {
+    if (G.logDiscrepancyWorkaround) {
+        return G.stage === stage;
+    } else {
+        if (ctx.activePlayers !== null) {
+            for (let pair of Object.entries(ctx.activePlayers)) {
+                if (pair[0] === ctx.currentPlayer && pair[1] === stage) {
+                    return true
+                }
             }
         }
+        return false
     }
-    return false
 }
 
 export function drawPhaseForJinn(G, ctx) {
@@ -354,10 +358,6 @@ export function playerInStage(ctx, player, stage) {
     return ctx.activePlayers !== null && ctx.activePlayers.hasOwnProperty(player) && ctx.activePlayers[player] === stage;
 }
 
-export function currentPlayerInStage(ctx, stage) {
-    return playerInStage(ctx, ctx.currentPlayer, stage);
-}
-
 export function getStateById(G, ctx, playerID) {
     if (G.songPlayer === playerID) {
         return G.song;
@@ -386,7 +386,7 @@ export function getAdjacentRegion(G, ctx, id) {
     return land.concat(water);
 }
 
-export function getMarchDestination(G, ctx, id,marchType="normal",noCombat=false,noSupplyShortage=false) {
+export function getMarchDestination(G, ctx, id, marchType = "normal", noCombat = false, noSupplyShortage = false) {
     let regions = [];
     //console.log(id, getAdjacentRegion(G, ctx, id));
     for (let r of getAdjacentRegion(G, ctx, id)) {
@@ -784,16 +784,16 @@ export function getColonization(G, ctx, cityID) {
     }
 }
 
-export function getCitySupply(G,ctx,cityID){
+export function getCitySupply(G, ctx, cityID) {
     let c = getCityByID(cityID);
     let supply = c.capital ? 2 : 1;
     if (G.jinn.emperor.city === cityID) {
         supply++;
     }
-    let t =songTroopInCity(G, ctx, cityID);
-    if(t !== false){
-        if(G.song.emperor.city === cityID) supply++;
-        if(t.general.includes("宗泽")) supply++;
+    let t = songTroopInCity(G, ctx, cityID);
+    if (t !== false) {
+        if (G.song.emperor.city === cityID) supply++;
+        if (t.general.includes("宗泽")) supply++;
     }
     return supply;
 }

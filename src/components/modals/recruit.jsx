@@ -67,7 +67,7 @@ export class RecruitModal extends React.Component {
         let playerID = this.props.playerID;
         let isActive = this.props.isActive;
         let G = this.props.G;
-        let showModal = curPlayerInStage(ctx, 'recruit') && isActive;
+        let showModal = curPlayerInStage(G, ctx, 'recruit') && isActive;
         const {owner, unitsToRecruit} = this.state;
         let recruitPermission = G.recruitPermission[playerID];
         let unitNames = UNIT_SHORTHAND[owner];

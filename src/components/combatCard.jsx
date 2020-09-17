@@ -10,7 +10,6 @@ import Checkbox from "@material-ui/core/Checkbox";
 //import {curPlayerInStage} from "../auto/util";
 
 export function CombatCard(props){
-    //const shown = curPlayerInStage(props.ctx,'combatCard') && props.isActive;
     const shown = props.G.combatInfo.stage ==='combatCard' && props.isActive;
     const chosen = props.G.songPlayer === props.playerID ? props.G.song.combatCardChosen : props.G.jinn.combatCardChosen
     const [open,setOpen] = React.useState(true);

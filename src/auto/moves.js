@@ -521,7 +521,11 @@ export const combatCard = {
                 G.jinn.combatCardChosen = false;
                 G.combatInfo.jinn.combatCards = G.player[G.jinnPlayer].combatCards;
                 G.player[G.jinnPlayer].combatCards = [];
-                rangeStage(G, ctx);
+                if(G.combatInfo.jinn.combatCards.includes(50)){
+                    changeStage(G,ctx,"retreat");
+                }else {
+                    rangeStage(G, ctx);
+                }
             }
         }
         signalEndTurn(G, ctx);

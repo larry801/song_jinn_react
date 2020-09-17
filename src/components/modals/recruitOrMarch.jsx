@@ -9,11 +9,12 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Radio from "@material-ui/core/Radio";
 
-export default function RecruitOrMarchModal(props) {
+export default function RecruitOrMarchModal({G,ctx,moves,isActive,playerID}) {
 
     const [operation, setOperation] = useState('recruit')
 
-    return <Dialog open={curPlayerInStage(props.ctx,'recruitOrMarch') && props.isActive}>
+    return <Dialog open={(curPlayerInStage(G, ctx, 'recruitOrMarch')||G.stage=== 'recruitOrMarch') && isActive}>
+
 
         <FormControl required error={false} component="fieldset">
             <FormGroup>
@@ -28,13 +29,13 @@ export default function RecruitOrMarchModal(props) {
                         key={1} value={'march'}
                         control={<Radio/>}
                         label="进军"/>
-                    {props.playerID === '1'? <FormControlLabel
+                    {playerID === '1'? <FormControlLabel
                         key={2} value={'recruitVassal'}
                         control={<Radio/>}
                         label="征募伪军"
                     />:""}
                 </RadioGroup>
-                <Button onClick={() => props.moves.recruitOrMarch(operation)}>确认</Button>
+                <Button onClick={() => moves.recruitOrMarch(operation)}>确认</Button>
             </FormGroup>
         </FormControl>
     </Dialog>

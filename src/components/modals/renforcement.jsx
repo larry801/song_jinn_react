@@ -7,6 +7,7 @@ import Accordion from "@material-ui/core/Accordion";
 import {getCityByID} from "../../constants/cities";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import {UNIT_SHORTHAND} from "../../constants/general";
+import Typography from "@material-ui/core/Typography";
 
 export const Renforcement = ({G, ctx, playerID, moves}) => {
     const isSong = playerID === G.songPlayer;
@@ -15,6 +16,10 @@ export const Renforcement = ({G, ctx, playerID, moves}) => {
 
     const [open, setOpen] = React.useState(true);
     const [expanded, setExpanded] = React.useState(0);
+
+    const reinforcementDispatch = (action)=>{
+
+    };
 
     return <>
         <Button onClick={() => setOpen(false)}>补充</Button>
@@ -26,7 +31,7 @@ export const Renforcement = ({G, ctx, playerID, moves}) => {
                     </AccordionSummary>
                     <AccordionDetails>
                         {supplementBank.slice(0,-1).map(uid=>
-                            <label>{UNIT_SHORTHAND[playerID][uid]}:</label>
+                            <Typography>{UNIT_SHORTHAND[playerID][uid]}:</Typography>
                         )}
                     </AccordionDetails>
                 </Accordion>

@@ -25,9 +25,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d640c4b6-4363-4b63-8893-54cb419a8732" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/auto/battleStateMachine.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auto/game.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/game.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/auto/moves.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/moves.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/auto/util.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto/util.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/modals/developCountry.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SongJinnBoard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SongJinnBoard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/combatCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/combatCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/rearrangePlan.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/recruit.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/recruit.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/modals/recruitOrMarch.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/recruitOrMarch.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/modals/renforcement.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/modals/renforcement.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,7 +76,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
     <property name="ts.external.directory.path" value="C:\Users\John\AppData\Local\JetBrains\Toolbox\apps\WebStorm\ch-0\202.6948.73\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -241,7 +248,10 @@
       <workItem from="1600128985551" duration="602000" />
       <workItem from="1600167198128" duration="63000" />
       <workItem from="1600167340875" duration="6478000" />
-      <workItem from="1600214436830" duration="23028000" />
+      <workItem from="1600214436830" duration="23329000" />
+      <workItem from="1600299533394" duration="478000" />
+      <workItem from="1600302381912" duration="1858000" />
+      <workItem from="1600304288146" duration="4220000" />
     </task>
     <task id="LOCAL-00001" summary="First commit">
       <created>1599870956015</created>
@@ -411,7 +421,14 @@
       <option name="project" value="LOCAL" />
       <updated>1600249360757</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="reinforcement first step">
+      <created>1600250124394</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1600250124394</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -466,7 +483,8 @@
     <MESSAGE value="Fix" />
     <MESSAGE value=" Fix An immer producer returned a new value *and* modified its draft. Either return a new value *or* modify the draft by remove start turn&amp;&amp; start phase hook of doOperations" />
     <MESSAGE value="rename dispatch" />
-    <option name="LAST_COMMIT_MESSAGE" value="rename dispatch" />
+    <MESSAGE value="reinforcement first step" />
+    <option name="LAST_COMMIT_MESSAGE" value="reinforcement first step" />
   </component>
   <component name="WindowStateProjectService">
     <state x="0" y="0" key="#Live_Templates" timestamp="1599978269850">
@@ -489,10 +507,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="206" y="207" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1024.738@0.0.1024.738" timestamp="1599474344917" />
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600249360125">
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2" timestamp="1600250123655">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600249360125" />
+    <state x="0" y="0" width="1024" height="738" key="CommitChangelistDialog2/0.0.1024.738@0.0.1024.738" timestamp="1600250123655" />
     <state x="92" y="92" width="840" height="554" key="DiffContextDialog" timestamp="1599913050082">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
@@ -501,22 +519,22 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="291" y="138" key="FileChooserDialogImpl/0.0.1024.738@0.0.1024.738" timestamp="1600214848198" />
-    <state width="1002" height="146" key="GridCell.Tab.0.bottom" timestamp="1600248555448">
+    <state width="1002" height="146" key="GridCell.Tab.0.bottom" timestamp="1600306487728">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state width="1002" height="146" key="GridCell.Tab.0.bottom/0.0.1024.738@0.0.1024.738" timestamp="1600248555448" />
-    <state width="1002" height="146" key="GridCell.Tab.0.center" timestamp="1600248555448">
+    <state width="1002" height="146" key="GridCell.Tab.0.bottom/0.0.1024.738@0.0.1024.738" timestamp="1600306487728" />
+    <state width="1002" height="146" key="GridCell.Tab.0.center" timestamp="1600306487728">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state width="1002" height="146" key="GridCell.Tab.0.center/0.0.1024.738@0.0.1024.738" timestamp="1600248555448" />
-    <state width="1002" height="146" key="GridCell.Tab.0.left" timestamp="1600248555448">
+    <state width="1002" height="146" key="GridCell.Tab.0.center/0.0.1024.738@0.0.1024.738" timestamp="1600306487728" />
+    <state width="1002" height="146" key="GridCell.Tab.0.left" timestamp="1600306487728">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state width="1002" height="146" key="GridCell.Tab.0.left/0.0.1024.738@0.0.1024.738" timestamp="1600248555448" />
-    <state width="1002" height="146" key="GridCell.Tab.0.right" timestamp="1600248555448">
+    <state width="1002" height="146" key="GridCell.Tab.0.left/0.0.1024.738@0.0.1024.738" timestamp="1600306487728" />
+    <state width="1002" height="146" key="GridCell.Tab.0.right" timestamp="1600306487728">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state width="1002" height="146" key="GridCell.Tab.0.right/0.0.1024.738@0.0.1024.738" timestamp="1600248555448" />
+    <state width="1002" height="146" key="GridCell.Tab.0.right/0.0.1024.738@0.0.1024.738" timestamp="1600306487728" />
     <state width="1002" height="262" key="GridCell.Tab.1.bottom" timestamp="1599920905352">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
@@ -565,10 +583,10 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state width="1002" height="262" key="GridCell.Tab.3.right/0.0.1024.738@0.0.1024.738" timestamp="1599920905352" />
-    <state x="13" y="0" key="SettingsEditor" timestamp="1600170510204">
+    <state x="13" y="0" key="SettingsEditor" timestamp="1600304752258">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="13" y="0" key="SettingsEditor/0.0.1024.738@0.0.1024.738" timestamp="1600170510204" />
+    <state x="13" y="0" key="SettingsEditor/0.0.1024.738@0.0.1024.738" timestamp="1600304752258" />
     <state x="104" y="96" key="Vcs.Push.Dialog.v2" timestamp="1600249367059">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
@@ -585,10 +603,14 @@
       <screen x="0" y="0" width="1024" height="738" />
     </state>
     <state x="64" y="14" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1024.738@0.0.1024.738" timestamp="1599487406965" />
-    <state x="0" y="0" width="1024" height="738" key="find.popup" timestamp="1600249434584">
+    <state x="-24" y="-1" width="1024" height="738" key="find.popup" timestamp="1600307654069">
       <screen x="0" y="0" width="1024" height="738" />
     </state>
-    <state x="0" y="0" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600249434584" />
+    <state x="-24" y="-1" width="1024" height="738" key="find.popup/0.0.1024.738@0.0.1024.738" timestamp="1600307654069" />
+    <state x="337" y="117" key="refactoring.ChangeSignatureDialog" timestamp="1600305857939">
+      <screen x="0" y="0" width="1024" height="738" />
+    </state>
+    <state x="337" y="117" key="refactoring.ChangeSignatureDialog/0.0.1024.738@0.0.1024.738" timestamp="1600305857939" />
     <state x="168" y="159" key="run.anything.popup" timestamp="1599723802401">
       <screen x="0" y="0" width="1024" height="738" />
     </state>

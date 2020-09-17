@@ -3,7 +3,7 @@ import {PubInfo} from './pubInfo';
 import {PlayerHand} from "./playerHand";
 import {TroopList} from "./troopList";
 import {RecruitModal} from "./modals/recruit";
-import {curPlayerInStage, playerInStage} from "../auto/util";
+import {curPlayerInStage} from "../auto/util";
 import ChoosePlanModal from "./modals/choosePlan";
 import {CombatCard} from "./combatCard";
 import ChoiceDialog from "./modals/base";
@@ -73,11 +73,11 @@ export class SongJinnBoard extends React.Component {
                         <ChoosePlanModal
                             G={G} ctx={ctx} moves={moves} playerID={playerID}
                             isActive={isActive}/> : ""}
-                    {curPlayerInStage(ctx, 'recruit') && isActive ?
+                    {curPlayerInStage(G, ctx, 'recruit') && isActive ?
                         <RecruitModal
                             G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                         /> : ""}
-                    {isActive && playerInStage(ctx, playerID, "march")
+                    {isActive && curPlayerInStage(G,ctx,"march")
                         ? <March
                             G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                         /> : ""}
@@ -89,7 +89,7 @@ export class SongJinnBoard extends React.Component {
                             {label: "征伪", value: 'recruitVassal', disabled: false, hidden: playerID === G.songPlayer,},
                         ]}
                         default="march"
-                        show={isActive && playerInStage(ctx, playerID, "recruitOrMarch")}
+                        show={isActive && curPlayerInStage(G,ctx, "recruitOrMarch")}
                         title="请选择要执行的操作"
                         toggleText="征募和进军"
                     />
@@ -100,7 +100,7 @@ export class SongJinnBoard extends React.Component {
                             {label: "围城", value: 'siege', disabled: false, hidden: false,},
                         ]}
                         default="attack"
-                        show={isActive && playerInStage(ctx, playerID, "siegeOrAttack")}
+                        show={isActive && curPlayerInStage(G,ctx, "siegeOrAttack")}
                         title="请选择要执行的操作"
                         toggleText="攻城或围城"
                     />
@@ -108,7 +108,7 @@ export class SongJinnBoard extends React.Component {
                         G={G} ctx={ctx} moves={moves} playerID={playerID}
                         isActive={isActive}
                     />
-                    {isActive && curPlayerInStage(ctx, "combatCard") && G.combatInfo.stage === "showCombatCard" ?
+                    {isActive && curPlayerInStage(G, ctx, "combatCard") && G.combatInfo.stage === "showCombatCard" ?
                         <Button onClick={() => moves.showCombatCard()}>显示战斗牌</Button>
                         : ""}
                     <CombatPanel
@@ -123,14 +123,14 @@ export class SongJinnBoard extends React.Component {
                     {isActive && p.planChosen && o.planChosen &&!p.planShown ?
                         <Button onClick={() => moves.showPlanCard(player.chosenPlans)}>展示计划</Button>
                         : ""}
-                    {isActive && (curPlayerInStage(ctx, "takeDamage") ||
+                    {isActive && (curPlayerInStage(G, ctx, "takeDamage") ||
                         G.combatInfo.stage.startsWith("takeDamage")
                     ) && c.pendingDamage > 0 ?
                         <TakeDamageModal
                             G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                         />
                         : ""}
-                    {isActive && ( curPlayerInStage(ctx, "beatGong") ||
+                    {isActive && ( curPlayerInStage(G, ctx, "beatGong") ||
                             G.combatInfo.stage === "beatGong")
                         ?
                         <ChoiceDialog

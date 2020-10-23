@@ -15,15 +15,29 @@ import {
     removeTroop,
     jinnTroopInCity,
     splitTroopFrom,
-    getSongRangeDamage,
-    getJinnRangeDamage,
-    getJinnMeleeDamage, getSongMeleeDamage, getSongWuLinDamage, canTakeDamage, getSongMeleeOnlyDamage,
+    canTakeDamage,
 } from "./util";
 import {getRegionById} from "../constants/regions";
 import {getJinnCardById, getSongCardById} from "../constants/cards";
 import {canChoosePlan} from "../constants/plan";
-import {changeStage, signalEndPhase, signalEndStage, signalEndTurn} from "./workaroundUtil";
+import {
+    changeBothStage, changeJinnStage, changeSongStage,
+    changeStage,
+    signalEndActivePlayer,
+    signalEndPhase,
+    signalEndStage,
+    signalEndTurn
+} from "./workaroundUtil";
 import {getCityByID} from "../constants/cities";
+import {
+    atkBeatGong, atkRetreat, canForceRoundTwo, confrontation, defBeatGong, defRetreat, doRoundTwo,
+    endMeleeStage,
+    endRangeStage,
+    meleeStage,
+    settleCombatCard,
+    startCombat,
+    stationedArcherRangeNormal
+} from "./battleStateMachine";
 
 export const choosePlayerWhoMovesFirst = {
     move: (G, ctx, firstPlayerID) => {
@@ -167,10 +181,9 @@ export const useOp = {
 export const forceRoundTwo = {
     move: (G, ctx, arg) => {
         if (arg === "yes") {
-            G.combatInfo.stage = "combatCard";
-            changeStage(G, ctx, "combatCard");
+            doRoundTwo(G, ctx);
         } else {
-            ctx.events.setActivePlayers({current: "beatGong"})
+            atkBeatGong(G, ctx);
         }
 
     }
@@ -263,9 +276,10 @@ export const march = {
                             G.combatInfo.song.isAttacker = true;
                             G.combatInfo.song.troop = mergeTroopTo(G, ctx, newTroop, song);
                             G.combatInfo.jinn.troop = jinn;
-                            // "两军对峙 进军触发会战"
+                            console.log("两军对峙 进军触发会战");
                             combatOrLimitReached = true;
                         } else {
+                            console.log(" 发展牌救援");
                             // TODO 发展牌救援
                             removeTroop(G, ctx, jinn);
                         }
@@ -273,14 +287,14 @@ export const march = {
                         if (troopIsArmy(G, ctx, jinn)) {
                             if (hasCity) {
                                 if (songTroopInCity(G, ctx, city)) {
-                                    // 解围
+                                    console.log("解围");
                                     G.combatInfo.song.troop = newTroop;
                                     G.combatInfo.song.isAttacker = true;
                                     G.combatInfo.jinn.troop = jinn;
                                     // TODO CUSTOM_FROM('order')
                                     changeStage(G, ctx, 'combatCard')
                                 } else {
-                                    // 攻城
+                                    console.log("攻城");
                                     combatOrLimitReached = true;
                                     G.combatInfo.song.troop = newTroop;
                                     G.combatInfo.song.isAttacker = true;
@@ -292,14 +306,23 @@ export const march = {
                                     }
                                 }
                             } else {
+                                startCombat(G, ctx, {
+                                    type: "field",
+                                    attacker: "song",
+                                    songTroop: newTroop,
+                                    jinnTroop: jinn,
+                                })
+
+                                console.log("野战");
+
+                                newTroop.region = region;
+                                newTroop.city = 0;
                                 combatOrLimitReached = true;
-                                G.combatInfo.song.isAttacker = true;
-                                G.combatInfo.song.troop = newTroop;
-                                G.combatInfo.jinn.troop = jinn;
-                                changeStage(G, ctx, 'combatCard');
                             }
                         } else {
-                            // "直接消灭敌方非军团部队"
+                            // ""
+                            console.log("直接消灭敌方非军团部队");
+
                             removeTroop(jinn);
                         }
                     }
@@ -310,9 +333,13 @@ export const march = {
                         if (stackLimitReached(G, ctx, arg, region)) {
                             changeStage(G, ctx, 'overStackLimit')
                         } else {
-                            // "有己方部队"
+                            //
+                            console.log("\"有己方部队\"");
+
                         }
                     } else {
+                        console.log("转移");
+
                         transfer();
                     }
                 }
@@ -321,6 +348,7 @@ export const march = {
                     if (song !== false) {
                         if (troopIsArmy(G, ctx, song)) {
                             //return "两军对峙 进军触发会战"
+                            console.log("Hui zhan")
                             combatOrLimitReached = true;
                             G.combatInfo.jinn.isAttacker = true;
                             G.combatInfo.jinn.troop = mergeTroopTo(G, ctx, newTroop, jinn);
@@ -328,6 +356,7 @@ export const march = {
                             // TODO 会战stage combatCard
                             changeStage(G, ctx, 'combatCard');
                         } else {
+                            console.log("rescue")
                             removeTroop(G, ctx, song)
                         }
                     } else {
@@ -339,19 +368,24 @@ export const march = {
                             combatOrLimitReached = true;
                             changeStage(G, ctx, 'overStackLimit')
                         }
+                        console.log("jiuyuan")
                     }
                 } else {
                     if (song !== false) {
                         if (troopIsArmy(G, ctx, jinn)) {
                             // enemy troop
+                            console.log("enemy troop")
                             if (hasCity) {
                                 if (jinnTroopInCity(G, ctx, city)) {
+                                    console.log("jie wei");
+
                                     combatOrLimitReached = true;
                                     G.combatInfo.jinn.isAttacker = true;
                                     G.combatInfo.jinn.troop = newTroop;
                                     G.combatInfo.song.troop = song;
                                     changeStage(G, ctx, 'combatCard')
                                 } else {
+                                    console.log("gongcheng")
                                     combatOrLimitReached = true;
                                     G.combatInfo.jinn.isAttacker = true;
                                     G.combatInfo.isSiege = true;
@@ -365,17 +399,20 @@ export const march = {
                                 }
                             } else {
                                 // field operation
+                                console.log("field operation")
                                 combatOrLimitReached = true;
                                 G.combatInfo.jinn.isAttacker = true;
                                 G.combatInfo.jinn.troop = newTroop;
                                 G.combatInfo.song.troop = song;
+                                G.combatInfo.isField = true;
                                 changeStage(G, ctx, 'combatCard');
                             }
                         } else {
-                            // "直接消灭敌方非军团部队"
+                            console.log("直接消灭敌方非军团部队")
                             removeTroop(G, ctx, song);
                         }
                     } else {
+                        console.log("transfer")
                         transfer();
                     }
                 }
@@ -384,12 +421,7 @@ export const march = {
 
         }
         G.opForRecruitAndMarch--;
-
-        if (combatOrLimitReached) {
-            G.combatInfo.stage = "combatCard"
-            G.combatInfo.pendingCombat = true;
-            changeStage(G, ctx, 'combatCard');
-        } else {
+        if (!combatOrLimitReached) {
             if (G.opForRecruitAndMarch > 0) {
                 changeStage(G, ctx, 'recruitOrMarch');
             } else {
@@ -400,130 +432,34 @@ export const march = {
 
 
     },
-    undoable: false
+    undoable: false,
+    client: false,
 };
 
-function rangeStage(G, ctx) {
-    let hasDamage = false;
-    if (G.combatInfo.song.combatCards.includes(37)) {
-        let dmg = getSongRangeDamage(G, ctx)
-        G.combatInfo.jinn.pendingDamage = dmg;
-        if (dmg > 0) {
-            hasDamage = true;
-        } else {
-            let jDmg = getJinnRangeDamage(G, ctx);
-            G.combatInfo.song.pendingDamage = jDmg;
-            if (jDmg > 0) {
-                hasDamage = true;
-            } else {
-                if (G.combatInfo.song.troop.general.includes("吴璘")) {
-                    wuLinStage(G, ctx);
-                }
-                meleeStage(G, ctx);
-            }
-        }
-    } else {
-        G.combatInfo.stage = "range";
-        let sDmg = getSongRangeDamage(G, ctx)
-        G.combatInfo.jinn.pendingDamage = sDmg;
-        let jDmg = getJinnRangeDamage(G, ctx);
-        G.combatInfo.song.pendingDamage = jDmg;
-        if (sDmg === 0 && jDmg === 0) {
-            if (G.combatInfo.song.troop.general.includes("吴璘")) {
-                wuLinStage(G, ctx);
-            }
-            meleeStage(G, ctx);
-        } else {
-            hasDamage = true;
-        }
-    }
-    if (hasDamage) {
-        ctx.events.setActivePlayers({
-            all: 'takeDamage'
-        });
-        G.combatInfo.stage = "takeDamageRange"
-    }
-}
-
-function wuLinStage(G, ctx) {
-    let dmg = getSongWuLinDamage(G, ctx,);
-    if (dmg > 0) {
-        G.combatInfo.jinn.pendingDamage = dmg;
-        G.combatInfo.stage = "takeDamageWuLin"
-    } else {
-        meleeStage(G, ctx);
-    }
-}
-
-function meleeStage(G, ctx) {
-    let hasDamage = false;
-    if (G.combatInfo.song.combatCards.includes(37)) {
-        let dmg = getSongRangeDamage(G, ctx)
-        G.combatInfo.jinn.pendingDamage = dmg;
-        if (dmg > 0) {
-            hasDamage = true;
-            G.combatInfo.stage = "takeDamageZhuDuiShiMelee1"
-        } else {
-            let sDmg = getSongMeleeOnlyDamage(G, ctx,);
-            let jDmg = getJinnMeleeDamage(G, ctx);
-            G.combatInfo.song.pendingDamage = jDmg;
-            if (sDmg === 0 && jDmg === 0) {
-                G.combatInfo.jinn.dices = [];
-                G.combatInfo.song.dices = [];
-                G.combatInfo.stage = "beatGong"
-                changeStage(G, ctx, "beatGong")
-            } else {
-                hasDamage = true;
-                G.combatInfo.stage = "takeDamageZhuDuiShiMelee2"
-            }
-        }
-    } else {
-        let sDmg = getSongMeleeDamage(G, ctx);
-        G.combatInfo.jinn.pendingDamage = sDmg;
-        let jDmg = getJinnMeleeDamage(G, ctx);
-        G.combatInfo.song.pendingDamage = jDmg;
-        if (sDmg === 0 && jDmg === 0) {
-            console.log(sDmg, jDmg)
-            // G.combatInfo.jinn.dices =[];
-            // G.combatInfo.song.dices =[];
-            // G.combatInfo.stage = "beatGong"
-            // changeStage(G,ctx,"beatGong")
-        } else {
-            hasDamage = true;
-        }
-    }
-    if (hasDamage) {
-        G.combatInfo.stage = "takeDamageMelee"
-        ctx.events.setActivePlayers({
-            all: 'takeDamage'
-        });
-    }
-}
-
 export const reinforcement = {
-    move:(G,ctx,arg)=>{
-        let t,o,troops;
-        if(ctx.currentPlayer === G.songPlayer){
+    move: (G, ctx, arg) => {
+        let t, o, troops;
+        if (ctx.currentPlayer === G.songPlayer) {
             t = songTroopInCity;
             o = jinnTroopInRegion;
             troops = G.song.troops;
-        }else{
-            t= jinnTroopInCity;
+        } else {
+            t = jinnTroopInCity;
             o = songTroopInRegion;
             troops = G.jinn.troops;
         }
 
-        for(let r in arg){
-            let troop = t(G,ctx,r.id);
-            if(troop===false){
+        for (let r in arg) {
+            let troop = t(G, ctx, r.id);
+            if (troop === false) {
                 let region = getCityByID(r.id).region;
-                let opponentTroop = o(G,ctx,region);
-                if(opponentTroop===false){
+                let opponentTroop = o(G, ctx, region);
+                if (opponentTroop === false) {
                     troop.region = region;
                 }
                 troops.push(troop);
-            }else{
-                mergeTroopTo(G,ctx,r.troop,troop)
+            } else {
+                mergeTroopTo(G, ctx, r.troop, troop)
             }
         }
     }
@@ -542,24 +478,37 @@ export const combatCard = {
         for (let card of cards) {
             hands.splice(hands.indexOf(card), 1);
         }
+
         if (G.song.combatCardChosen && G.jinn.combatCardChosen) {
-            G.combatInfo.stage = "showCombatCard";
-            if (!G.logDiscrepancyWorkaround) {
-                G.song.combatCardChosen = false;
-                G.combatInfo.song.combatCards = G.player[G.songPlayer].combatCards;
-                G.player[G.songPlayer].combatCards = [];
-                G.jinn.combatCardChosen = false;
-                G.combatInfo.jinn.combatCards = G.player[G.jinnPlayer].combatCards;
-                G.player[G.jinnPlayer].combatCards = [];
-                if(G.combatInfo.jinn.combatCards.includes(50)){
-                    changeStage(G,ctx,"retreat");
-                }else {
-                    rangeStage(G, ctx);
+            if (G.player[G.songPlayer].combatCards.length === 0 && G.player[G.jinnPlayer].combatCards.length === 0) {
+                settleCombatCard(G, ctx);
+            } else {
+                if (G.logDiscrepancyWorkaround) {
+                    changeBothStage(G, ctx, "showCombatCard");
+                } else {
+                    let i = G.combatInfo;
+                    G.song.combatCardChosen = false;
+                    i.song.combatCards = G.player[G.songPlayer].combatCards;
+                    G.player[G.songPlayer].combatCards = [];
+                    G.jinn.combatCardChosen = false;
+                    i.jinn.combatCards = G.player[G.jinnPlayer].combatCards;
+                    G.player[G.jinnPlayer].combatCards = [];
+                    settleCombatCard(G, ctx);
                 }
             }
+        }else {
+            if(G.song.combatCardChosen){
+                changeJinnStage(G,ctx,"combatCard");
+            }else {
+                changeSongStage(G,ctx,"combatCard");
+            }
         }
-        signalEndTurn(G, ctx);
+        if (ctx.currentPlayer !== player) {
+            signalEndActivePlayer(G, ctx);
+        }
     },
+    client: false,
+    redux: true,
 }
 
 export const showPlanCard = {
@@ -575,10 +524,10 @@ export const showPlanCard = {
         } else {
             p = G.jinn;
             p.currentPlans = cards;
-            p.planShown=true;
+            p.planShown = true;
             o = G.song;
         }
-        G.player[ctx.currentPlayer ].planChosen = [];
+        G.player[ctx.currentPlayer].planChosen = [];
         if (p.planShown && o.planShown) {
             signalEndPhase(G, ctx);
         } else {
@@ -588,21 +537,31 @@ export const showPlanCard = {
 }
 
 export const showCombatCard = {
-    move: (G, ctx,) => {
-        let p = ctx.currentPlayer;
-        if (p === G.songPlayer) {
+    move: (G, ctx, arg) => {
+        let opponentID;
+        if (arg.playerID === G.songPlayer) {
             G.song.combatCardChosen = false;
-            G.combatInfo.song.combatCards = G.player[p].combatCards;
+            G.combatInfo.song.combatCards = arg.cards;
+            opponentID = G.jinnPlayer;
         } else {
             G.jinn.combatCardChosen = false;
-            G.combatInfo.jinn.combatCards = G.player[p].combatCards;
+            G.combatInfo.jinn.combatCards = arg.cards;
+            opponentID = G.songPlayer;
         }
-        G.player[p].combatCards = [];
-        if (G.song.combatCardChosen === false && G.jinn.combatCardChosen === false) {
-            rangeStage(G, ctx);
+        G.player[arg.playerID].combatCards = [];
+        if (G.player[opponentID].combatCards.length === 0) {
+            settleCombatCard(G, ctx);
+        } else {
+            if (G.song.combatCardChosen === false && G.jinn.combatCardChosen === false) {
+                settleCombatCard(G, ctx);
+            } else {
+                if (ctx.currentPlayer !== arg.playerID) {
+                    signalEndActivePlayer(G, ctx);
+                }
+            }
         }
-        signalEndTurn(G, ctx);
     },
+    client: false,
 }
 
 export const moveOpponentArmy = {
@@ -661,6 +620,7 @@ export function takeCardFromDeck(G, ctx, cardID) {
 export const takeDamage = {
     move: (G, ctx, arg) => {
         if (!canTakeDamage(G, ctx, arg)) return INVALID_MOVE;
+        let i = G.combatInfo;
         let pub;
         let combatInfo;
         let opponentInfo;
@@ -670,12 +630,12 @@ export const takeDamage = {
             let all = arg.eliminated.concat(arg.defeated)
             if (all[0].owner === 'song') {
                 pub = G.song;
-                combatInfo = G.combatInfo.song;
-                opponentInfo = G.combatInfo.jinn;
+                combatInfo = i.song;
+                opponentInfo = i.jinn;
             } else {
                 pub = G.jinn
-                combatInfo = G.combatInfo.jinn;
-                opponentInfo = G.combatInfo.song;
+                combatInfo = i.jinn;
+                opponentInfo = i.song;
             }
         }
         arg.eliminated.forEach((i, idx, arr) => {
@@ -688,35 +648,78 @@ export const takeDamage = {
         })
         combatInfo.pendingDamage = 0;
         if (opponentInfo.pendingDamage === 0) {
-            if (G.combatInfo.stage === "takeDamageRange") {
+            if (i.stage === "takeDamageRange") {
+                endRangeStage(G, ctx);
+            }
+            if (i.stage === "takeDamageWuLin") {
                 meleeStage(G, ctx);
             }
-            if (G.combatInfo.stage === "takeDamageWuLin") {
-                meleeStage(G, ctx);
+            if (i.stage === "takeDamageMelee") {
+                endMeleeStage(G, ctx);
             }
-            if (G.combatInfo.stage === "takeDamageMelee") {
-                G.combatInfo.jinn.dices = [];
-                G.combatInfo.song.dices = [];
-                G.combatInfo.stage = "beatGong"
+            if (i.stage === "takeDamageStationedArcherRangeFirst") {
+                stationedArcherRangeNormal(G, ctx);
+            }
+            if (i.stage === "takeDamageStationedArcherMeleeFirst") {
+                stationedArcherRangeNormal(G, ctx);
             }
         }
     },
 }
 
+export const retreat = {
+    move:(G,ctx,arg)=>{
+        let i = G.combatInfo;
+        if(arg.playerID===G.songPlayer){
+            i.song.troop.units[arg.choice]--;
+            G.song.supplementBank[arg.choice]++;
+        }else{
+            i.jinn.troop.units[arg.choice]--;
+            G.jinn.supplementBank[arg.choice]++;
+    }
+
+    }
+}
+
 export const beatGong = {
     move: (G, ctx, arg) => {
+        let i = G.combatInfo;
+        let atk, def;
+
         if (arg.playerID === G.songPlayer) {
-            let c = G.combatInfo.song;
-            if (c.troop.general.includes("岳飞") && !c.isAttacker && arg.choice === "forceRoundTwo") {
-                G.combatInfo.isRoundTwo = true;
-                ctx.events.setActivePlayers({all: "combatCard"});
-            }
-            G.combatInfo.song.beatGongChoice = arg.choice;
+            let c = i.song;
+            i.song.beatGongChoice = arg.choice;
         } else {
-            let c = G.combatInfo.jinn;
-            let o = G.combatInfo.song;
-            let canRoundTwo = c.isAttacker && (G.jinn.military > G.song.military || c.troop.general.includes("兀术")) && !G.combatInfo.isRoundTwo
-            if (canRoundTwo && arg.choice === "roundTwo") {
+            let c = i.jinn;
+            c.beatGongChoice = arg.choice;
+            let o = i.song;
+            let canRoundTwo = c.isAttacker && (G.jinn.military > G.song.military || c.troop.general.includes("兀术")) && !i.isRoundTwo
+            if (canRoundTwo && arg.choice === "continue") {
+
+            }
+        }
+        if (i.song.isAttacker) {
+            atk = i.song.beatGongChoice;
+            def = i.jinn.beatGongChoice;
+        } else {
+            atk = i.jinn.beatGongChoice;
+            def = i.song.beatGongChoice;
+        }
+        if (atk === "retreat") {
+            atkRetreat(G, ctx);
+        } else {
+            if (def === "") {
+                defBeatGong(G, ctx);
+            }else{
+                if(def === "retreat"){
+                    defRetreat(G,ctx);
+                }
+                if(atk==="hold" && def==="hold"){
+                    confrontation(G,ctx);
+                }
+                if(atk==="continue" && def==="hold"){
+                    doRoundTwo(G,ctx);
+                }
 
             }
         }

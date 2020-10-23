@@ -1,5 +1,72 @@
 import {INITIAL_RECRUIT_COST, INITIAL_RECRUIT_PERMISSION} from "../constants/general";
 
+
+export function emptySongTroop(){
+    return {
+        units: [0, 0, 0, 0, 0, 0],
+        general: [],
+        region: 0,
+        city: 0,
+    }
+}
+export function emptyJinnTroop(){
+    return {
+        units: [0, 0, 0, 0, 0, 0, 0],
+        general: [],
+        region: 0,
+        city: 0,
+    }
+}
+export function emptyPlayer(){
+    return {
+        hands: [],
+        combatCards:[],
+        chosenPlans: [],
+        availablePlans: [],
+        developCardDetail:[],
+        letterOfCredenceDetail: {
+            '西辽': [],
+            '西夏': [],
+            '吐蕃': [],
+            '大理': [],
+            '高丽': []
+        }
+    }
+}
+export function initCombatInfo (){
+    return {
+        type:"",
+        mountainPass:0,
+        isRoundTwo:false,
+        pendingCombat:false,
+        stage:"noCombat",
+        isSiege:false,
+        isBreakthrough:false,
+        isField:false,
+        isRescue:false,
+        generalOneTimeSkill:[],
+        region:0,
+        city:0,
+        song:{
+            pendingDamage:0,
+            combatCards:[],
+            dices:[],
+            troop:{...emptySongTroop()},
+            isAttacker:false,
+            beatGongChoice:"",
+        },
+        jinn:{
+            pendingDamage:0,
+            combatCards:[],
+            dices:[],
+            troop: {...emptyJinnTroop()},
+            isAttacker:false,
+            beatGongChoice:"",
+        }
+    }
+}
+
+
 /*
 *
 * 宋：
@@ -20,6 +87,7 @@ export function setupGame(ctx, setupData) {
         // Full log https://github.com/boardgameio/boardgame.io/issues/795
         logDiscrepancyWorkaround:true,
         pending:{
+            endActivePlayer:false,
             endTurn:false,
             endPhase:false,
             endStage:false,
@@ -28,76 +96,14 @@ export function setupGame(ctx, setupData) {
         仅当前玩家可见状态 比如手牌
          */
         player: {
-            '0': {
-                hands: [],
-                combatCards:[],
-                chosenPlans: [],
-                availablePlans: [],
-                developCardDetail:[],
-                letterOfCredenceDetail: {
-                    '西辽': [],
-                    '西夏': [],
-                    '吐蕃': [],
-                    '大理': [],
-                    '高丽': []
-                }
-            }, '1': {
-                hands: [],
-                combatCards:[],
-                chosenPlans: [],
-                availablePlans: [],
-                developCardDetail:[],
-                letterOfCredenceDetail: {
-                    '西辽': [],
-                    '西夏': [],
-                    '吐蕃': [],
-                    '大理': [],
-                    '高丽': []
-                }
-            }
+            '0': {...emptyPlayer()}, '1': {...emptyPlayer()}
         },
         stage:"no",
         recruitCost: INITIAL_RECRUIT_COST,
         recruitPermission: INITIAL_RECRUIT_PERMISSION,
         opForRecruitAndMarch: 0,
         eventActionInfo: {},
-        combatInfo:{
-            mountainPass:0,
-            isRoundTwo:false,
-            pendingCombat:false,
-            stage:"noCombat",
-            isSiege:false,
-            isBreakthrough:false,
-            isField:false,
-            isRescue:false,
-            generalOneTimeSkill:[],
-            song:{
-                pendingDamage:3,
-                combatCards:[],
-                dices:[],
-                troop:{
-                    units: [2, 2, 0, 0, 0, 0],
-                    general: [],
-                    region: 0,
-                    city: 0,
-                },
-                isAttacker:false,
-                beatGongChoice:"",
-            },
-            jinn:{
-                pendingDamage:0,
-                combatCards:[],
-                dices:[],
-                troop:{
-                    units: [0, 0, 0, 0, 0, 0, 0],
-                    general: [],
-                    region: 0,
-                    city: 0,
-                },
-                isAttacker:false,
-                beatGongChoice:"",
-            }
-        },
+        combatInfo:initCombatInfo(),
         /*
         公开显示的状态
          */

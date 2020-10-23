@@ -20,7 +20,7 @@ import * as util from "./util";
 import {PlayerView} from "boardgame.io/dist/esm/core";
 import {drawPhaseForSong} from "./util";
 import {drawPhaseForJinn} from "./util";
-import {changePhase, signalEndPhase} from "./workaroundUtil";
+import {autoEventsOnMove, changePhase, cleanPendingSignal, signalEndPhase} from "./workaroundUtil";
 
 export const SongJinn = {
     name: "Conflict_Song_and_Jin",
@@ -40,10 +40,10 @@ export const SongJinn = {
         takeDamage: takeDamage,
         beatGong: beatGong,
 
-        march:march,
-        recruitOrMarch:recruitOrMarch,
-        recruit:recruit,
-        reinforcement:reinforcement,
+        march: march,
+        recruitOrMarch: recruitOrMarch,
+        recruit: recruit,
+        reinforcement: reinforcement,
     },
     playerView: PlayerView.STRIP_SECRETS,
     phases: {
@@ -53,11 +53,7 @@ export const SongJinn = {
                 takeCardFromDeck: takeCardFromDeck
             },
             onBegin: (G, ctx) => {
-                G.pending = {
-                    endTurn: false,
-                    endPhase: false,
-                    endStage: false,
-                };
+                cleanPendingSignal(G, ctx);
                 signalEndPhase(G, ctx);
             },
             onEnd: (G, ctx) => {
@@ -70,11 +66,7 @@ export const SongJinn = {
                 takeCardFromDeck: takeCardFromDeck
             },
             onBegin: (G, ctx) => {
-                G.pending = {
-                    endTurn: false,
-                    endPhase: false,
-                    endStage: false,
-                };
+                cleanPendingSignal(G, ctx);
                 changePhase(G, ctx, 'chooseOrder');
             },
             onEnd: (G, ctx) => {
@@ -82,22 +74,14 @@ export const SongJinn = {
             next: 'chooseOrder'
         },
         chooseOrder: {
-            start: true,
+            // start: true,
             onBegin: (G, ctx) => {
-                G.pending = {
-                    endTurn: false,
-                    endPhase: false,
-                    endStage: false,
-                };
-                drawPhaseForJinn(G, ctx);
-                drawPhaseForSong(G, ctx);
+                // drawPhaseForJinn(G, ctx);
+                // drawPhaseForSong(G, ctx);
+                cleanPendingSignal(G, ctx);
             },
             onEnd: (G, ctx) => {
-                G.pending = {
-                    endTurn: false,
-                    endPhase: false,
-                    endStage: false,
-                };
+                cleanPendingSignal(G, ctx);
             },
             moves: {
                 choosePlayerWhoMovesFirst: choosePlayerWhoMovesFirst
@@ -118,11 +102,7 @@ export const SongJinn = {
             },
             turn: {
                 onBegin: (G, ctx) => {
-                    G.pending = {
-                        endTurn: false,
-                        endPhase: false,
-                        endStage: false,
-                    };
+                    cleanPendingSignal(G, ctx);
                     if (!G.song.planChosen || !G.jinn.planChosen) {
                         util.drawStrategicPlans(G, ctx, ctx.currentPlayer);
                     }
@@ -136,25 +116,22 @@ export const SongJinn = {
             next: 'doOperations'
         },
         doOperations: {
+            start: true,
             onBegin: (G, ctx) => {
+                drawPhaseForJinn(G, ctx);
+                drawPhaseForSong(G, ctx);
                 G.song.planChosen = false;
                 G.jinn.planChosen = false;
                 G.song.planShown = false;
                 G.jinn.planShown = false;
-                G.pending.endPhase = false;
-                G.pending = {
-                    endTurn: false,
-                    endPhase: false,
-                    endStage: false,
-                };
+                cleanPendingSignal(G, ctx);
             },
             turn: {
                 onBegin: (G, ctx) => {
-                    G.pending = {
-                        endTurn: false,
-                        endPhase: false,
-                        endStage: false,
-                    };
+                    cleanPendingSignal(G, ctx);
+                },
+                onMove: (G, ctx) => {
+                    autoEventsOnMove(G, ctx);
                 },
                 order: {
                     first: (G, ctx) => 0,
@@ -206,11 +183,7 @@ export const SongJinn = {
         },
         turnEnd: {
             onBegin: (G, ctx) => {
-                G.pending = {
-                    endTurn: false,
-                    endPhase: false,
-                    endStage: false,
-                };
+                cleanPendingSignal(G, ctx);
                 if (G.turnMarker === 2) {
                     util.addMidTermCard(G, ctx)
                 }
@@ -229,11 +202,8 @@ export const SongJinn = {
         },
         finalSettlement: {
             onBegin: (G, ctx) => {
-                G.pending = {
-                    endTurn: false,
-                    endPhase: false,
-                    endStage: false,
-                };
+                cleanPendingSignal(G, ctx);
+
             }
         }
     },

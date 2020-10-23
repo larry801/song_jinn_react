@@ -112,7 +112,7 @@ export function TakeDamageTroopList({G,ctx,units,callback,damage}){
                         <ListItem key={value.id}
                                   role="listitem"
                                   button onClick={change(value)}
-                                  disabled={!items.includes(value) && canProceed}>
+                                  disabled={!items.includes(value) && (canProceed || defeatedEndurance >= damage)}>
                             <ListItemIcon>
                                 <Checkbox
                                     checked={items.includes(value)}

@@ -306,6 +306,7 @@ export function curPlayerInStage(G, ctx, stage) {
 }
 
 export function drawPhaseForJinn(G, ctx) {
+    console.log(JSON.stringify(G));
     let hands = G.player[G.jinnPlayer].hands;
     let handCount = hands.length;
     let power = getJinnNationalPower(G, ctx);
@@ -389,10 +390,14 @@ export function getAdjacentRegion(G, ctx, id) {
 export function getMarchDestination(G, ctx, id, marchType = "normal", noCombat = false, noSupplyShortage = false) {
     let regions = [];
     //console.log(id, getAdjacentRegion(G, ctx, id));
-    for (let r of getAdjacentRegion(G, ctx, id)) {
-        for (let rAdj of getAdjacentRegion(G, ctx, r)) {
-            if ((!regions.includes(rAdj)) && regions !== id) {
-                regions.push(rAdj);
+    if (marchType === "normal") {
+        regions = getAdjacentRegion(G, ctx, id);
+    } else {
+        for (let r of getAdjacentRegion(G, ctx, id)) {
+            for (let rAdj of getAdjacentRegion(G, ctx, r)) {
+                if ((!regions.includes(rAdj)) && regions !== id) {
+                    regions.push(rAdj);
+                }
             }
         }
     }

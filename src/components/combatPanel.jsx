@@ -19,6 +19,7 @@ export function CombatPanel(props) {
     const types = {
         "combatCard":"运筹",
         "takeDamageRange":"远程受创",
+        "takeDamageStationedArcherRangeFirst":"驻队矢远程受创",
         "range":"远程",
         "takeDamageMelee":"交锋受创",
         "melee":"交锋",

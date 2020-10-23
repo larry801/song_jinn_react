@@ -11,6 +11,7 @@ import {March} from "./modals/moveArmy";
 import {Button} from "@material-ui/core";
 import {CombatPanel} from "./combatPanel";
 import {TakeDamageModal} from "./modals/takeDamage";
+import {Stage} from "boardgame.io/core";
 
 export class SongJinnBoard extends React.Component {
 
@@ -19,6 +20,10 @@ export class SongJinnBoard extends React.Component {
             this.props.moves.playAsEvent(id);
         }
     };
+
+    beatGong = (choice)=>{
+        this.props.moves.beatGong({playerID:this.props.playerID,choice:choice})
+    }
 
     render() {
         let moves = this.props.moves;
@@ -58,6 +63,13 @@ export class SongJinnBoard extends React.Component {
         if (isActive) {
             return (
                 <div>
+                    {isActive && isSong ? <Button onClick={
+                        ()=>moves.march(
+                        {
+                            src:G.song.troops[7],dst:20,
+                            new:{units:[0,0,0,0,0,0,0],general:[],region:0,city:0},all:true
+                        }
+                        )}>一键斡离不炮</Button>:""}
                     <ChoiceDialog
                         callback={moves.choosePlayerWhoMovesFirst}
                         choices={[
@@ -108,18 +120,22 @@ export class SongJinnBoard extends React.Component {
                         G={G} ctx={ctx} moves={moves} playerID={playerID}
                         isActive={isActive}
                     />
-                    {isActive && curPlayerInStage(G, ctx, "combatCard") && G.combatInfo.stage === "showCombatCard" ?
-                        <Button onClick={() => moves.showCombatCard()}>显示战斗牌</Button>
+                    {isActive && G.combatInfo.stage === "showCombatCard"
+                    && p.combatCardChosen && player.combatCards.length > 0?
+                        <Button onClick={() => moves.showCombatCard({playerID:playerID,cards:player.combatCards})}
+                        >展示战斗牌</Button>
                         : ""}
                     <CombatPanel
                         G={G} ctx={ctx} moves={moves} playerID={playerID} isActive={isActive}
                     />
                     {isActive && playerID === ctx.currentPlayer && G.pending.endStage ?
-                        <Button onClick={() => this.props.events.endTurn()}>结束本节</Button> : ""}
+                        <Button onClick={() => this.props.events.endStage()}>结束本节</Button> : ""}
                     {isActive && playerID === ctx.currentPlayer && G.pending.endTurn?
                         <Button onClick={() => this.props.events.endTurn()}>结束行动</Button> : ""}
                     {isActive && playerID === ctx.currentPlayer && G.pending.endPhase?
                         <Button onClick={() => this.props.events.endPhase()}>结束阶段</Button> : ""}
+                    {isActive && ctx.currentPlayer !== playerID && G.pending.endActivePlayer ?
+                        <Button onClick={() => this.props.events.setActivePlayers({current:Stage.NULL})}>结束回合外行动</Button>:""}
                     {isActive && p.planChosen && o.planChosen &&!p.planShown ?
                         <Button onClick={() => moves.showPlanCard(player.chosenPlans)}>展示计划</Button>
                         : ""}
@@ -134,9 +150,9 @@ export class SongJinnBoard extends React.Component {
                             G.combatInfo.stage === "beatGong")
                         ?
                         <ChoiceDialog
-                            callback={moves.beatGong}
+                            callback={this.beatGong}
                             choices={[
-                                {label: "坚守", value: "defence", disabled: false, hidden: false,},
+                                {label: "坚守", value: "hold", disabled: false, hidden: false,},
                                 // TODO can retreat
                                 {label: "撤退", value: "retreat", disabled: false, hidden: false,},
                                 {
